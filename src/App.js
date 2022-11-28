@@ -26,19 +26,26 @@ class App extends Component {
 
     pickHero(hero) {
         if (!this.state.playerOne) {
-            this.setState({ playerOne: hero })
+            const playerOne = hero
+            playerOne['cards'] = this.state.cards
+            this.setState({ playerOne: playerOne })
         } else if (this.state.playerOne) {
-            this.setState({ playerTwo: hero })
+            const playerTwo = hero
+            playerTwo['cards'] = this.state.cards
+            this.setState({ playerTwo: playerTwo })
         }
     }
 
     render() {
         return (
-            <div className="game-container">
+            <>
                 <Header />
-                <HeroPick heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />
-                <GameBoard isHeroesPicked={this.state.isHeroesPicked} players={[this.state.playerOne, this.state.playerTwo]} />
-            </div>)
+                <div className="game-container">
+                    <HeroPick heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />
+                    <GameBoard isHeroesPicked={this.state.isHeroesPicked} players={[this.state.playerOne, this.state.playerTwo]} cards={this.state.cards} />
+                </div>
+            </>
+        )
 
     }
 }

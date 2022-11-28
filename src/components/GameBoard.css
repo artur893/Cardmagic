@@ -1,6 +1,4 @@
 .player {
-    position: absolute;
-    right: 200px;
     font-size: 2rem;
     width: 200px;
     height: 200px;
@@ -12,12 +10,24 @@
     align-items: center;
 }
 
-.player:first-of-type {
-    top: 200px;
+#player-one {
+    grid-column: 3;
+    grid-row: 4;
 }
 
-.player:last-of-type {
-    bottom: 100px;
+#player-two {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+#player-one-cards {
+    grid-column: 2;
+    grid-row: 5;
+}
+
+#player-two-cards {
+    grid-column: 2;
+    grid-row: 1;
 }
 
 .player-name {
@@ -25,14 +35,51 @@
 }
 
 .player-mana {
-    position: absolute;
-    right: 0px;
-    top: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(150, 210, 260);
+    background-color: rgb(150, 210, 255);
     height: 50px;
     width: 50px;
     border-radius: 50%;
+}
+
+.onhand-cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.onhand-card {
+    background-color: rgb(180, 240, 255);
+    height: 150px;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: 1s;
+}
+
+.onhand-card:hover {
+    transform: scale(1.1);
+}
+
+.onhand-card-top {
+    margin: 10px;
+    font-size: 1.2rem;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.onhand-card-bottom {
+    margin: 10px;
+    font-size: 1.2rem;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

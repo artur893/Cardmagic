@@ -1,8 +1,15 @@
 .game-container {
+    position: relative;
     background-color: rgb(90, 150, 200);
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100vw;
-    min-height: 100vh;
+    height: calc(100vh - 100px);
+}
+
+.game-container.game-mode {
+    display: grid;
+    grid-template-rows: 5fr 5fr 1fr 5fr 5fr;
+    grid-template-columns: 1fr 2fr 1fr;
 }

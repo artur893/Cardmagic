@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import './App.css'
 import { Header } from "./components/Header";
+import { HeroPick } from './components/HeroPick'
 
 class App extends Component {
     constructor(props) {
@@ -43,7 +44,12 @@ class App extends Component {
     }
 
     render() {
-        return <div className="game-container"><Header /></div>
+        return (
+            <div className="game-container">
+                <Header />
+                <HeroPick heroes={this.state.heroes}/>
+            </div>)
+
     }
 }
 

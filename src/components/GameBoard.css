@@ -1,0 +1,38 @@
+.player {
+    position: absolute;
+    right: 200px;
+    font-size: 2rem;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: rgb(130, 190, 240);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.player:first-of-type {
+    top: 200px;
+}
+
+.player:last-of-type {
+    bottom: 100px;
+}
+
+.player-name {
+    margin-top: 64px;
+}
+
+.player-mana {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(150, 210, 260);
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}

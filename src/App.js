@@ -4,6 +4,7 @@ import { Header } from "./components/Header";
 import { HeroPick } from './components/HeroPick'
 import { heroes } from "./components/heroesData";
 import { cards } from "./components/cardsData"
+import { GameBoard } from "./components/GameBoard";
 
 class App extends Component {
     constructor(props) {
@@ -35,7 +36,8 @@ class App extends Component {
         return (
             <div className="game-container">
                 <Header />
-                <HeroPick heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked}/>
+                <HeroPick heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />
+                <GameBoard isHeroesPicked={this.state.isHeroesPicked} players={[this.state.playerOne, this.state.playerTwo]} />
             </div>)
 
     }

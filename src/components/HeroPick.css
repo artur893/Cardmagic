@@ -21,6 +21,7 @@ h1 {
     height: 300px;
     width: 200px;
     transition: 1s;
+    cursor: default;
 }
 
 .heropick-card:hover {
@@ -31,4 +32,11 @@ h1 {
 .heropick-cards-container {
     display: flex;
     gap: 40px;
+}
+
+.heropick-card-avatar,
+.heropick-card-name,
+.heropick-card-description,
+.heropick-card-text {
+    pointer-events: none;
 }

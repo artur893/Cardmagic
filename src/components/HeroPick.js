@@ -6,20 +6,21 @@ class HeroPick extends Component {
 
     populateHeroes() {
         const heroes = this.props.heroes.map((hero) => {
-            return <Card hero={hero} key={hero.name} />
+            return <Card hero={hero} key={hero.name} pickHero={this.props.pickHero} />
         })
         return heroes
     }
 
     render() {
-        return (
-            <>
-                <h1>Wybierz bohatera</h1>
-                <div className="heropick-cards-container">
-                    {this.populateHeroes()}
-                </div>
-            </>
-        )
+        if (!this.props.isHeroesPicked)
+            return (
+                <>
+                    <h1>Wybierz bohatera</h1>
+                    <div className="heropick-cards-container">
+                        {this.populateHeroes()}
+                    </div>
+                </>
+            )
     }
 }
 
@@ -32,7 +33,7 @@ class Card extends Component {
 
     render() {
         return (
-            <div className="heropick-card">
+            <div className="heropick-card" onClick={() => this.props.pickHero(this.state)}>
                 <div className="heropick-card-avatar"></div>
                 <div className="heropick-card-text">
                     <p className="heropick-card-name">{this.state.name}</p>

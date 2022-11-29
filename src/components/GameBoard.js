@@ -33,24 +33,22 @@ class GameBoard extends Component {
         }
     }
 
-    pickCardToPlay(e) {
-        const allCards = document.querySelectorAll('.onhand-card')
-        allCards.forEach(card => card.classList.remove('inhand'))
-        e.target.classList.add('inhand')
-        const index = this.state.playerOne.onHand.findIndex(card => card.name === e.target.children[0].children[0].textContent)
-        const inHand = this.state.playerOne.onHand[index]
-
-        const playerClone = cloneDeep(this.state.playerOne)
+    pickCardToPlay(e, player) {
+        const index = this.state[player].onHand.findIndex(card => card.name === e.target.children[0].children[0].textContent)
+        const inHand = this.state[player].onHand[index]
+        const playerClone = cloneDeep(this.state[player])
         playerClone['inHand'] = inHand
-        this.setState({ playerOne: playerClone })
+        this.setState({ [player]: playerClone })
     }
 
-    putCardOnTable(e) {
-        if (this.state.playerOne.inHand) {
-            const clone = cloneDeep(this.state.playerOne)
-            console.log(e.target.getAttribute('index'))
-            clone.onTable[e.target.getAttribute('index')] = clone.inHand
-            this.setState({ playerOne: clone })
+    putCardOnTable(e, player, cardTable) {
+        if (this.state[player].inHand) {
+            const clone = cloneDeep(this.state[player])
+            console.log(e.target.parentElement.id)
+            if (e.target.parentElement.id === cardTable) {
+                clone.onTable[e.target.getAttribute('index')] = clone.inHand
+                this.setState({ [player]: clone })
+            }
         }
     }
 
@@ -99,12 +97,14 @@ class GameBoard extends Component {
             return (
                 <>
                     <button onClick={this.gameControl}>NEXT ROUND</button>
-                    <CardTable id='card-table-one' putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} />
-                    <CardTable id='card-table-two' putCardOnTable={this.putCardOnTable} />
+                    <CardTable id='card-table-one' putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} player={'playerOne'} />
+                    <CardTable id='card-table-two' putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable} player={'playerTwo'} />
                     <Player hero={this.state.playerOne} id='player-one' />
                     <Player hero={this.state.playerTwo} id='player-two' />
-                    <OnHandCards hero={this.state.playerOne} isHeroesPicked={this.props.isHeroesPicked} id='player-one-cards' pickCardToPlay={this.pickCardToPlay} />
-                    <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked} id='player-two-cards' pickCardToPlay={this.pickCardToPlay} />
+                    <OnHandCards hero={this.state.playerOne} isHeroesPicked={this.props.isHeroesPicked}
+                        id='player-one-cards' pickCardToPlay={this.pickCardToPlay} player={'playerOne'} />
+                    <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked}
+                        id='player-two-cards' pickCardToPlay={this.pickCardToPlay} player={'playerTwo'} />
                 </>
             )
         }
@@ -144,7 +144,7 @@ class OnHandCards extends Component {
         if (this.state.isHeroDataLoaded) {
             const onHand = this.props.hero.onHand.map((card) => {
                 return (
-                    <div className="onhand-card" key={uuid()} onClick={(e) => this.props.pickCardToPlay(e)}>
+                    <div className="onhand-card" key={uuid()} onClick={(e) => this.props.pickCardToPlay(e, this.props.player)}>
                         <div className="onhand-card-top">
                             <div className="onhand-name" key={uuid()}>{card.name}</div>
                             <div className="onhand-cost" key={uuid()}>{card.cost}</div>
@@ -195,12 +195,12 @@ class CardTable extends Component {
     render() {
         return (
             <div className="card-table" id={this.props.id}>
-                <div className="card-field" id="card-field-1" index='0' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(0)}</div>
-                <div className="card-field" id="card-field-2" index='1' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(1)}</div>
-                <div className="card-field" id="card-field-3" index='2' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(2)}</div>
-                <div className="card-field" id="card-field-4" index='3' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(3)}</div>
-                <div className="card-field" id="card-field-5" index='4' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(4)}</div>
-                <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(5)}</div>
+                <div className="card-field" id="card-field-1" index='0' onClick={(e) => this.props.putCardOnTable(e, this.props.player, this.props.id)}>{this.displayCard(0)}</div>
+                <div className="card-field" id="card-field-2" index='1' onClick={(e) => this.props.putCardOnTable(e, this.props.player, this.props.id)}>{this.displayCard(1)}</div>
+                <div className="card-field" id="card-field-3" index='2' onClick={(e) => this.props.putCardOnTable(e, this.props.player, this.props.id)}>{this.displayCard(2)}</div>
+                <div className="card-field" id="card-field-4" index='3' onClick={(e) => this.props.putCardOnTable(e, this.props.player, this.props.id)}>{this.displayCard(3)}</div>
+                <div className="card-field" id="card-field-5" index='4' onClick={(e) => this.props.putCardOnTable(e, this.props.player, this.props.id)}>{this.displayCard(4)}</div>
+                <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e, this.props.player, this.props.id)}>{this.displayCard(5)}</div>
             </div>)
     }
 }

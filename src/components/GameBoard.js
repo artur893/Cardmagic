@@ -1,5 +1,4 @@
 import { Component } from "react";
-import ReactDOM from 'react-dom';
 import './GameBoard.css'
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';
@@ -32,7 +31,6 @@ class GameBoard extends Component {
                 this.initStartCards('playerTwo')
             }
         }
-        this.displayCardsOnTable()
     }
 
     pickCardToPlay(e) {
@@ -95,44 +93,6 @@ class GameBoard extends Component {
             })
         }
     }
-
-    displayCardsOnTable() {
-        if (this.props.isHeroesPicked) {
-            const isEmptyArr = this.state.playerOne.onTable.every(value => value === null)
-            console.log(isEmptyArr)
-            const onTable = this.state.playerOne.onTable.map((card) => {
-                if (card) {
-                    return (
-                        <div className="onhand-card" key={uuid()}>
-                            <div className="onhand-card-top">
-                                <div className="onhand-name" key={uuid()}>{card.name}</div>
-                                <div className="onhand-cost" key={uuid()}>{card.cost}</div>
-                            </div>
-                            <p className="onhand-description" key={uuid()}>{ }</p>
-                            <div className="onhand-card-bottom">
-                                <div className="onhand-attack" key={uuid()}>{card.attack}</div>
-                                <div className="onhand-hp" key={uuid()}>{card.hp}</div>
-                            </div>
-                        </div>)
-                }
-                return card
-            })
-            if (!isEmptyArr) {
-                setTimeout(() => {
-
-                })
-                const field = document.querySelector('#card-field-1')
-                console.log(field)
-                console.log(onTable[0])
-                const div = document.createElement('div')
-                div.textContent = 'works'
-                console.log(div)
-                ReactDOM.createPortal(<div>CEUBLKA</div>, field)
-                console.log(onTable)
-            }
-        }
-    }
-
 
     render() {
         if (this.props.isHeroesPicked) {
@@ -213,27 +173,34 @@ class OnHandCards extends Component {
 
 class CardTable extends Component {
 
-    // displayCard() {
-    //     if (this.props.onTable) {
-    //         const isEmptyArr = this.props.onTable.every(value => value === null)
-    //         console.log(isEmptyArr)
-    //         if (!isEmptyArr) {
-    //             console.log(this.props.onTable[0])
-    //             console.log('have it')
-    //             return <div>{this.props.onTable[0].name}</div>
-    //         }
-    //     }
-    // }
+    displayCard(index) {
+        if (this.props.onTable) {
+            if (this.props.onTable[index]) {
+                return (
+                    <div className="onhand-card" key={uuid()}>
+                        <div className="onhand-card-top">
+                            <div className="onhand-name" key={uuid()}>{this.props.onTable[index].name}</div>
+                            <div className="onhand-cost" key={uuid()}>{this.props.onTable[index].cost}</div>
+                        </div>
+                        <p className="onhand-description" key={uuid()}>{ }</p>
+                        <div className="onhand-card-bottom">
+                            <div className="onhand-attack" key={uuid()}>{this.props.onTable[index].attack}</div>
+                            <div className="onhand-hp" key={uuid()}>{this.props.onTable[index].hp}</div>
+                        </div>
+                    </div>)
+            }
+        }
+    }
 
     render() {
         return (
             <div className="card-table" id={this.props.id}>
-                <div className="card-field" id="card-field-1" index='0' onClick={(e) => this.props.putCardOnTable(e)}></div>
-                <div className="card-field" id="card-field-2" index='1' onClick={(e) => this.props.putCardOnTable(e)}></div>
-                <div className="card-field" id="card-field-3" index='2' onClick={(e) => this.props.putCardOnTable(e)}></div>
-                <div className="card-field" id="card-field-4" index='3' onClick={(e) => this.props.putCardOnTable(e)}></div>
-                <div className="card-field" id="card-field-5" index='4' onClick={(e) => this.props.putCardOnTable(e)}></div>
-                <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e)}></div>
+                <div className="card-field" id="card-field-1" index='0' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(0)}</div>
+                <div className="card-field" id="card-field-2" index='1' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(1)}</div>
+                <div className="card-field" id="card-field-3" index='2' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(2)}</div>
+                <div className="card-field" id="card-field-4" index='3' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(3)}</div>
+                <div className="card-field" id="card-field-5" index='4' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(4)}</div>
+                <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e)}>{this.displayCard(5)}</div>
             </div>)
     }
 }

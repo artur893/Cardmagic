@@ -1,4 +1,5 @@
 import { Component } from "react";
+import ReactDOM from 'react-dom';
 import './GameBoard.css'
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';
@@ -16,6 +17,8 @@ class GameBoard extends Component {
         this.nextRound = this.nextRound.bind(this)
         this.addTotalMana = this.addTotalMana.bind(this)
         this.gameControl = this.gameControl.bind(this)
+        this.pickCardToPlay = this.pickCardToPlay.bind(this)
+        this.putCardOnTable = this.putCardOnTable.bind(this)
     }
 
     componentDidUpdate(prevProps) {
@@ -28,6 +31,28 @@ class GameBoard extends Component {
                 this.initStartCards('playerOne')
                 this.initStartCards('playerTwo')
             }
+        }
+        this.displayCardsOnTable()
+    }
+
+    pickCardToPlay(e) {
+        const allCards = document.querySelectorAll('.onhand-card')
+        allCards.forEach(card => card.classList.remove('inhand'))
+        e.target.classList.add('inhand')
+        const index = this.state.playerOne.onHand.findIndex(card => card.name === e.target.children[0].children[0].textContent)
+        const inHand = this.state.playerOne.onHand[index]
+
+        const playerClone = cloneDeep(this.state.playerOne)
+        playerClone['inHand'] = inHand
+        this.setState({ playerOne: playerClone })
+    }
+
+    putCardOnTable(e) {
+        if (this.state.playerOne.inHand) {
+            const clone = cloneDeep(this.state.playerOne)
+            console.log(e.target.getAttribute('index'))
+            clone.onTable[e.target.getAttribute('index')] = clone.inHand
+            this.setState({ playerOne: clone })
         }
     }
 
@@ -71,15 +96,55 @@ class GameBoard extends Component {
         }
     }
 
+    displayCardsOnTable() {
+        if (this.props.isHeroesPicked) {
+            const isEmptyArr = this.state.playerOne.onTable.every(value => value === null)
+            console.log(isEmptyArr)
+            const onTable = this.state.playerOne.onTable.map((card) => {
+                if (card) {
+                    return (
+                        <div className="onhand-card" key={uuid()}>
+                            <div className="onhand-card-top">
+                                <div className="onhand-name" key={uuid()}>{card.name}</div>
+                                <div className="onhand-cost" key={uuid()}>{card.cost}</div>
+                            </div>
+                            <p className="onhand-description" key={uuid()}>{ }</p>
+                            <div className="onhand-card-bottom">
+                                <div className="onhand-attack" key={uuid()}>{card.attack}</div>
+                                <div className="onhand-hp" key={uuid()}>{card.hp}</div>
+                            </div>
+                        </div>)
+                }
+                return card
+            })
+            if (!isEmptyArr) {
+                setTimeout(() => {
+
+                })
+                const field = document.querySelector('#card-field-1')
+                console.log(field)
+                console.log(onTable[0])
+                const div = document.createElement('div')
+                div.textContent = 'works'
+                console.log(div)
+                ReactDOM.createPortal(<div>CEUBLKA</div>, field)
+                console.log(onTable)
+            }
+        }
+    }
+
+
     render() {
         if (this.props.isHeroesPicked) {
             return (
                 <>
                     <button onClick={this.gameControl}>NEXT ROUND</button>
+                    <CardTable id='card-table-one' putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} />
+                    <CardTable id='card-table-two' putCardOnTable={this.putCardOnTable} />
                     <Player hero={this.state.playerOne} id='player-one' />
                     <Player hero={this.state.playerTwo} id='player-two' />
-                    <OnHandCards hero={this.state.playerOne} isHeroesPicked={this.props.isHeroesPicked} id='player-one-cards' />
-                    <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked} id='player-two-cards' />
+                    <OnHandCards hero={this.state.playerOne} isHeroesPicked={this.props.isHeroesPicked} id='player-one-cards' pickCardToPlay={this.pickCardToPlay} />
+                    <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked} id='player-two-cards' pickCardToPlay={this.pickCardToPlay} />
                 </>
             )
         }
@@ -119,12 +184,12 @@ class OnHandCards extends Component {
         if (this.state.isHeroDataLoaded) {
             const onHand = this.props.hero.onHand.map((card) => {
                 return (
-                    <div className="onhand-card" key={uuid()}>
+                    <div className="onhand-card" key={uuid()} onClick={(e) => this.props.pickCardToPlay(e)}>
                         <div className="onhand-card-top">
                             <div className="onhand-name" key={uuid()}>{card.name}</div>
                             <div className="onhand-cost" key={uuid()}>{card.cost}</div>
                         </div>
-                        <p className="onhand-description" key={uuid()}>{}</p>
+                        <p className="onhand-description" key={uuid()}>{ }</p>
                         <div className="onhand-card-bottom">
                             <div className="onhand-attack" key={uuid()}>{card.attack}</div>
                             <div className="onhand-hp" key={uuid()}>{card.hp}</div>
@@ -143,6 +208,33 @@ class OnHandCards extends Component {
                 </div>
             )
         }
+    }
+}
+
+class CardTable extends Component {
+
+    // displayCard() {
+    //     if (this.props.onTable) {
+    //         const isEmptyArr = this.props.onTable.every(value => value === null)
+    //         console.log(isEmptyArr)
+    //         if (!isEmptyArr) {
+    //             console.log(this.props.onTable[0])
+    //             console.log('have it')
+    //             return <div>{this.props.onTable[0].name}</div>
+    //         }
+    //     }
+    // }
+
+    render() {
+        return (
+            <div className="card-table" id={this.props.id}>
+                <div className="card-field" id="card-field-1" index='0' onClick={(e) => this.props.putCardOnTable(e)}></div>
+                <div className="card-field" id="card-field-2" index='1' onClick={(e) => this.props.putCardOnTable(e)}></div>
+                <div className="card-field" id="card-field-3" index='2' onClick={(e) => this.props.putCardOnTable(e)}></div>
+                <div className="card-field" id="card-field-4" index='3' onClick={(e) => this.props.putCardOnTable(e)}></div>
+                <div className="card-field" id="card-field-5" index='4' onClick={(e) => this.props.putCardOnTable(e)}></div>
+                <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e)}></div>
+            </div>)
     }
 }
 

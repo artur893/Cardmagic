@@ -28,10 +28,12 @@ class App extends Component {
         if (!this.state.playerOne) {
             const playerOne = hero
             playerOne['cards'] = this.state.cards
+            playerOne['onTable'] = new Array(6).fill(null)
             this.setState({ playerOne: playerOne })
         } else if (this.state.playerOne) {
             const playerTwo = hero
             playerTwo['cards'] = this.state.cards
+            playerTwo['onTable'] = new Array(6).fill(null)
             this.setState({ playerTwo: playerTwo })
         }
     }

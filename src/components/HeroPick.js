@@ -1,6 +1,5 @@
 import { Component } from "react";
 import './HeroPick.css'
-import { v4 as uuid } from 'uuid';
 
 class HeroPick extends Component {
 

@@ -33,25 +33,6 @@ class GameBoard extends Component {
         }
     }
 
-    pickCardToPlay(e, player) {
-        const index = this.state[player].onHand.findIndex(card => card.name === e.target.children[0].children[0].textContent)
-        const inHand = this.state[player].onHand[index]
-        const playerClone = cloneDeep(this.state[player])
-        playerClone['inHand'] = inHand
-        this.setState({ [player]: playerClone })
-    }
-
-    putCardOnTable(e, player, cardTable) {
-        if (this.state[player].inHand) {
-            const clone = cloneDeep(this.state[player])
-            console.log(e.target.parentElement.id)
-            if (e.target.parentElement.id === cardTable) {
-                clone.onTable[e.target.getAttribute('index')] = clone.inHand
-                this.setState({ [player]: clone })
-            }
-        }
-    }
-
     initStartCards(player) {
         const playerClone = cloneDeep(this.state[player])
         const onHand = []
@@ -89,6 +70,35 @@ class GameBoard extends Component {
                 playerOne: playerOne,
                 playerTwo: playerTwo
             })
+        }
+    }
+
+    pickCardToPlay(e, player) {
+        const index = this.state[player].onHand.findIndex(card => card.name === e.target.children[0].children[0].textContent)
+        const inHand = this.state[player].onHand[index]
+        const playerClone = cloneDeep(this.state[player])
+        playerClone['inHand'] = inHand
+        this.setState({ [player]: playerClone })
+    }
+
+    removeCardOnTableFromHand(player) {
+        console.log(player)
+        const index = player.onHand.findIndex(card => card.name === player.inHand.name)
+        player.onHand.splice(index, 1)
+    }
+
+    putCardOnTable(e, player, cardTable) {
+        if (this.state[player].inHand) {
+            const clone = cloneDeep(this.state[player])
+            console.log('STATE:', this.state[player])
+            console.log('CLONE:', clone)
+            console.log(e.target.parentElement.id)
+            if (e.target.parentElement.id === cardTable) {
+                clone.onTable[e.target.getAttribute('index')] = clone.inHand
+                this.removeCardOnTableFromHand(clone)
+                clone['inHand'] = null
+                this.setState({ [player]: clone })
+            }
         }
     }
 

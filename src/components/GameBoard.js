@@ -96,10 +96,13 @@ class GameBoard extends Component {
             console.log('CLONE:', clone)
             console.log(e.target.parentElement.id)
             if (e.target.parentElement.id === cardTable) {
-                clone.onTable[e.target.getAttribute('index')] = clone.inHand
-                this.removeCardOnTableFromHand(clone)
-                clone['inHand'] = null
-                this.setState({ [player]: clone })
+                if (clone.inHand.cost <= clone.mana) {
+                    clone.onTable[e.target.getAttribute('index')] = clone.inHand
+                    clone['mana'] = clone.mana - clone.inHand.cost
+                    this.removeCardOnTableFromHand(clone)
+                    clone['inHand'] = null
+                    this.setState({ [player]: clone })
+                }
             }
         }
     }
@@ -107,7 +110,7 @@ class GameBoard extends Component {
     spinArrow() {
         const arrow = document.querySelector('img')
         if (Number.isInteger(this.state.numberOfRound % 1)) {
-            arrow.classList.add('spin') 
+            arrow.classList.add('spin')
         } else {
             arrow.classList.remove('spin')
         }

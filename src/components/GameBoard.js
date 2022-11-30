@@ -151,29 +151,28 @@ class GameBoard extends Component {
         }
     }
 
+    targetEnemy(e, player, enemy) {
+        const enemyClone = cloneDeep(this.state[enemy])
+        const index = this.state[enemy].onTable.findIndex(card => {
+            if (card) {
+                return card.name === e.target.children[0].children[0].textContent
+            }
+            return card
+        })
+        this.state[player].cardToAttack.attackEnemy(enemyClone.onTable[index])
+        this.setState({ [enemy]: enemyClone })
+    }
+
     targetAttackedEnemy(e) {
         if (Number.isInteger(this.state.numberOfRound % 1)) {
-            const enemyClone = cloneDeep(this.state.playerTwo)
-            const index = this.state.playerTwo.onTable.findIndex(card => {
-                if (card) {
-                    return card.name === e.target.children[0].children[0].textContent
-                }
-                return card
-            })
-            this.state.playerOne.cardToAttack.attackEnemy(enemyClone.onTable[index])
-            this.setState({ playerTwo: enemyClone })
+            const player = 'playerOne'
+            const enemy = 'playerTwo'
+            this.targetEnemy(e, player, enemy)
         } else {
-            const enemyClone = cloneDeep(this.state.playerOne)
-            const index = this.state.playerOne.onTable.findIndex(card => {
-                if (card) {
-                    return card.name === e.target.children[0].children[0].textContent
-                }
-                return card
-            })
-            this.state.playerTwo.cardToAttack.attackEnemy(enemyClone.onTable[index])
-            this.setState({ playerOne: enemyClone })
+            const player = 'playerTwo'
+            const enemy = 'playerOne'
+            this.targetEnemy(e, player, enemy)
         }
-
     }
 
     render() {

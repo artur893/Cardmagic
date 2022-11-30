@@ -2,6 +2,7 @@ import { Component } from "react";
 import './GameBoard.css'
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';
+import arrowImg from './images/arrow.svg'
 
 class GameBoard extends Component {
     constructor(props) {
@@ -48,6 +49,7 @@ class GameBoard extends Component {
     async gameControl() {
         await this.nextRound()
         this.addTotalMana()
+        this.spinArrow()
     }
 
     async nextRound() {
@@ -102,11 +104,23 @@ class GameBoard extends Component {
         }
     }
 
+    spinArrow() {
+        const arrow = document.querySelector('img')
+        if (Number.isInteger(this.state.numberOfRound % 1)) {
+            arrow.classList.add('spin') 
+        } else {
+            arrow.classList.remove('spin')
+        }
+    }
+
     render() {
         if (this.props.isHeroesPicked) {
             return (
                 <>
-                    <button onClick={this.gameControl}>NEXT ROUND</button>
+                    <div className="round-control">
+                        <img src={arrowImg} alt='arrow' className="spin"></img>
+                        <button onClick={this.gameControl}>NEXT ROUND</button>
+                    </div>
                     <CardTable id='card-table-one' putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} player={'playerOne'} />
                     <CardTable id='card-table-two' putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable} player={'playerTwo'} />
                     <Player hero={this.state.playerOne} id='player-one' />

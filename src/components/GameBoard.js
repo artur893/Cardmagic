@@ -10,6 +10,8 @@ class GameBoard extends Component {
 
         this.state = {
             numberOfRound: 1,
+            playerOnMove: 'PlayerOne',
+            playerTarget: 'PlayerTwo',
             playerOne: null,
             playerTwo: null
         }
@@ -51,8 +53,24 @@ class GameBoard extends Component {
 
     async gameControl() {
         await this.nextRound()
-        this.addTotalMana()
+        await this.switchPlayerOnMove()
+        await this.addTotalMana()
         this.spinArrow()
+        this.clearMadeMove()
+    }
+
+    async switchPlayerOnMove() {
+        if (Number.isInteger(this.state.numberOfRound)) {
+            this.setState({
+                playerOnMove: 'playerOne',
+                playerTarget: 'playerTwo'
+            })
+        } else {
+            this.setState({
+                playerOnMove: 'playerTwo',
+                playerTarget: 'playerOne'
+            })
+        }
     }
 
     async nextRound() {
@@ -61,9 +79,7 @@ class GameBoard extends Component {
         this.setState({ numberOfRound: round })
     }
 
-    addTotalMana() {
-        console.log(this.state.numberOfRound)
-        console.log(Number.isInteger(this.state.numberOfRound))
+    async addTotalMana() {
         if (Number.isInteger(this.state.numberOfRound)) {
             const playerOne = cloneDeep(this.state.playerOne)
             playerOne['totalMana'] = playerOne.totalMana + 1
@@ -75,6 +91,27 @@ class GameBoard extends Component {
                 playerOne: playerOne,
                 playerTwo: playerTwo
             })
+        }
+    }
+
+    clearMove(player) {
+        const clone = cloneDeep(this.state[player])
+        console.log(clone)
+        clone.onTable.forEach((card) => {
+            if (card) {
+                card['isMadeMove'] = false
+            }
+        })
+        this.setState({ [player]: clone })
+    }
+
+    clearMadeMove() {
+        if (Number.isInteger(this.state.numberOfRound % 1)) {
+            const player = 'playerOne'
+            this.clearMove(player)
+        } else {
+            const player = 'playerTwo'
+            this.clearMove(player)
         }
     }
 
@@ -106,15 +143,18 @@ class GameBoard extends Component {
         }
     }
 
-    putCardOnTable(e) {
-        if (Number.isInteger(this.state.numberOfRound % 1)) {
-            const player = 'playerOne'
-            const cardTable = 'card-table-one'
-            this.putCard(e, cardTable, player)
-        } else {
-            const player = 'playerTwo'
-            const cardTable = 'card-table-two'
-            this.putCard(e, cardTable, player)
+    putCardOnTable(e, player, cardTable) {
+        if (this.state[player].inHand) {
+            const clone = cloneDeep(this.state[player])
+            if (e.target.parentElement.id === cardTable) {
+                if (clone.inHand.cost <= clone.mana) {
+                    clone.onTable[e.target.getAttribute('index')] = clone.inHand
+                    clone['mana'] = clone.mana - clone.inHand.cost
+                    this.removeCardOnHand(clone)
+                    clone['inHand'] = null
+                    this.setState({ [player]: clone })
+                }
+            }
         }
     }
 
@@ -183,9 +223,11 @@ class GameBoard extends Component {
                         <img src={arrowImg} alt='arrow' className="spin"></img>
                         <button onClick={this.gameControl}>NEXT ROUND</button>
                     </div>
-                    <CardTable id='card-table-one' putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable}
+                    <CardTable id='card-table-one' playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
+                        putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
-                    <CardTable id='card-table-two' putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable}
+                    <CardTable id='card-table-two' playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
+                        putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
                     <Player hero={this.state.playerOne} id='player-one' />
                     <Player hero={this.state.playerTwo} id='player-two' />
@@ -286,12 +328,18 @@ class CardTable extends Component {
     render() {
         return (
             <div className="card-table" id={this.props.id}>
-                <div className="card-field" id="card-field-1" index='0' onClick={(e) => this.props.putCardOnTable(e, this.props.player)}>{this.displayCard(0)}</div>
-                <div className="card-field" id="card-field-2" index='1' onClick={(e) => this.props.putCardOnTable(e, this.props.player)}>{this.displayCard(1)}</div>
-                <div className="card-field" id="card-field-3" index='2' onClick={(e) => this.props.putCardOnTable(e, this.props.player)}>{this.displayCard(2)}</div>
-                <div className="card-field" id="card-field-4" index='3' onClick={(e) => this.props.putCardOnTable(e, this.props.player)}>{this.displayCard(3)}</div>
-                <div className="card-field" id="card-field-5" index='4' onClick={(e) => this.props.putCardOnTable(e, this.props.player)}>{this.displayCard(4)}</div>
-                <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e, this.props.player)}>{this.displayCard(5)}</div>
+                <div className="card-field" id="card-field-1" index='0' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
+                    {this.displayCard(0)}</div>
+                <div className="card-field" id="card-field-2" index='1' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
+                    {this.displayCard(1)}</div>
+                <div className="card-field" id="card-field-3" index='2' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
+                    {this.displayCard(2)}</div>
+                <div className="card-field" id="card-field-4" index='3' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
+                    {this.displayCard(3)}</div>
+                <div className="card-field" id="card-field-5" index='4' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
+                    {this.displayCard(4)}</div>
+                <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
+                    {this.displayCard(5)}</div>
             </div>)
     }
 }

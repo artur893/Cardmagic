@@ -20,6 +20,8 @@ class GameBoard extends Component {
         this.pickCardToPlay = this.pickCardToPlay.bind(this)
         this.putCardOnTable = this.putCardOnTable.bind(this)
         this.putCard = this.putCard.bind(this)
+        this.pickCardToAttack = this.pickCardToAttack.bind(this)
+        this.targetAttackedEnemy = this.targetAttackedEnemy.bind(this)
     }
 
     componentDidUpdate(prevProps) {
@@ -84,7 +86,7 @@ class GameBoard extends Component {
         this.setState({ [player]: playerClone })
     }
 
-    removeCardOnTableFromHand(player) {
+    removeCardOnHand(player) {
         const index = player.onHand.findIndex(card => card.name === player.inHand.name)
         player.onHand.splice(index, 1)
     }
@@ -92,12 +94,11 @@ class GameBoard extends Component {
     putCard(e, cardTable, player) {
         if (this.state[player].inHand) {
             const clone = cloneDeep(this.state[player])
-            console.log(e.target.parentElement.id, cardTable)
             if (e.target.parentElement.id === cardTable) {
                 if (clone.inHand.cost <= clone.mana) {
                     clone.onTable[e.target.getAttribute('index')] = clone.inHand
                     clone['mana'] = clone.mana - clone.inHand.cost
-                    this.removeCardOnTableFromHand(clone)
+                    this.removeCardOnHand(clone)
                     clone['inHand'] = null
                     this.setState({ [player]: clone })
                 }
@@ -127,6 +128,31 @@ class GameBoard extends Component {
         }
     }
 
+    pickCardToAttack(e) {
+        const index = this.state.playerOne.onTable.findIndex(card => {
+            if (card) {
+                return card.name === e.target.children[0].children[0].textContent
+            }
+            return card
+        })
+        const cardToAttack = this.state.playerOne.onTable[index]
+        const playerClone = cloneDeep(this.state.playerOne)
+        playerClone['cardToAttack'] = cardToAttack
+        this.setState({ playerOne: playerClone })
+    }
+
+    targetAttackedEnemy(e) {
+        const enemyClone = cloneDeep(this.state.playerTwo)
+        const index = this.state.playerTwo.onTable.findIndex(card => {
+            if (card) {
+                return card.name === e.target.children[0].children[0].textContent
+            }
+            return card
+        })
+        this.state.playerOne.cardToAttack.attackEnemy(enemyClone.onTable[index])
+        this.setState({ playerTwo: enemyClone })
+    }
+
     render() {
         if (this.props.isHeroesPicked) {
             return (
@@ -135,8 +161,10 @@ class GameBoard extends Component {
                         <img src={arrowImg} alt='arrow' className="spin"></img>
                         <button onClick={this.gameControl}>NEXT ROUND</button>
                     </div>
-                    <CardTable id='card-table-one' putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} />
-                    <CardTable id='card-table-two' putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable} />
+                    <CardTable id='card-table-one' putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable}
+                        pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
+                    <CardTable id='card-table-two' putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable}
+                        pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
                     <Player hero={this.state.playerOne} id='player-one' />
                     <Player hero={this.state.playerTwo} id='player-two' />
                     <OnHandCards hero={this.state.playerOne} isHeroesPicked={this.props.isHeroesPicked}
@@ -215,7 +243,9 @@ class CardTable extends Component {
         if (this.props.onTable) {
             if (this.props.onTable[index]) {
                 return (
-                    <div className="onhand-card" key={uuid()}>
+                    <div className="onhand-card" key={uuid()} onClick={(e) => {
+                        this.props.pickCardToAttack(e)
+                        this.props.targetAttackedEnemy(e)}}>
                         <div className="onhand-card-top">
                             <div className="onhand-name" key={uuid()}>{this.props.onTable[index].name}</div>
                             <div className="onhand-cost" key={uuid()}>{this.props.onTable[index].cost}</div>

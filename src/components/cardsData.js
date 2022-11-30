@@ -1,4 +1,29 @@
-const cards = [{
+class Mob {
+    constructor(name, attack, hp, cost, skill, type) {
+        this.name = name
+        this.attack = attack
+        this.hp = hp
+        this.cost = cost
+        this.skill = skill
+        this.type = type
+    }
+
+    attackEnemy(enemy) {
+        const result = enemy.hp - this.attack
+        enemy.hp = result
+    }
+}
+
+const cards = []
+
+function populateCards() {
+    rawCards.forEach((card) => {
+        const mob = new Mob(card.name, card.attack, card.hp, card.cost, card.skill, card.type)
+        cards.push(mob)
+    })
+}
+
+const rawCards = [{
     name: 'Goblin',
     attack: 1,
     hp: 1,
@@ -105,5 +130,7 @@ const cards = [{
     skill: null,
     type: 'mob'
 }]
+
+populateCards()
 
 export { cards }

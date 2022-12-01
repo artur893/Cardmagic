@@ -18,7 +18,7 @@ class GameBoard extends Component {
 
         this.nextRound = this.nextRound.bind(this)
         this.addTotalMana = this.addTotalMana.bind(this)
-        this.gameControl = this.gameControl.bind(this)
+        this.gameFlow = this.gameFlow.bind(this)
         this.pickCardToPlay = this.pickCardToPlay.bind(this)
         this.putCardOnTable = this.putCardOnTable.bind(this)
         this.pickCardToAttack = this.pickCardToAttack.bind(this)
@@ -50,10 +50,11 @@ class GameBoard extends Component {
         this.setState({ [player]: playerClone })
     }
 
-    async gameControl() {
+    async gameFlow() {
         await this.nextRound()
         await this.switchPlayerOnMove()
         await this.addTotalMana()
+        await this.getNewCard()
         this.spinArrow()
         this.clearMove(this.state.playerOnMove)
     }
@@ -78,6 +79,16 @@ class GameBoard extends Component {
         this.setState({ numberOfRound: round })
     }
 
+    async getNewCard() {
+        if (this.state[this.state.playerOnMove].onHand.length < 7) {
+            const playerClone = cloneDeep(this.state[this.state.playerOnMove])
+            const random = Math.random() * (playerClone.cards.length - 1)
+            const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
+            playerClone.onHand.push(randomCard)
+            this.setState({ [this.state.playerOnMove]: playerClone })
+        }
+    }
+
     async addTotalMana() {
         if (Number.isInteger(this.state.numberOfRound)) {
             const playerOne = cloneDeep(this.state.playerOne)
@@ -95,7 +106,6 @@ class GameBoard extends Component {
 
     clearMove(player) {
         const clone = cloneDeep(this.state[player])
-        console.log(clone)
         clone.onTable.forEach((card) => {
             if (card) {
                 card['isMadeMove'] = false
@@ -155,16 +165,16 @@ class GameBoard extends Component {
     }
 
     targetAttackedEnemy(e) {
-            const enemyClone = cloneDeep(this.state[this.state.playerTarget])
-            const index = this.state[this.state.playerTarget].onTable.findIndex(card => {
-                if (card) {
-                    return card.name === e.target.children[0].children[0].textContent
-                }
-                return card
-            })
-            this.state[this.state.playerOnMove].cardToAttack.attackEnemy(enemyClone.onTable[index])
-            this.setState({ [this.state.playerTarget]: enemyClone })
-        }
+        const enemyClone = cloneDeep(this.state[this.state.playerTarget])
+        const index = this.state[this.state.playerTarget].onTable.findIndex(card => {
+            if (card) {
+                return card.name === e.target.children[0].children[0].textContent
+            }
+            return card
+        })
+        this.state[this.state.playerOnMove].cardToAttack.attackEnemy(enemyClone.onTable[index])
+        this.setState({ [this.state.playerTarget]: enemyClone })
+    }
 
     render() {
         if (this.props.isHeroesPicked) {
@@ -172,7 +182,7 @@ class GameBoard extends Component {
                 <>
                     <div className="round-control">
                         <img src={arrowImg} alt='arrow' className="spin"></img>
-                        <button onClick={this.gameControl}>NEXT ROUND</button>
+                        <button onClick={this.gameFlow}>NEXT ROUND</button>
                     </div>
                     <CardTable id='card-table-one' playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
                         putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable}

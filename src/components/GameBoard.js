@@ -11,7 +11,9 @@ class GameBoard extends Component {
         this.state = {
             numberOfRound: 1,
             playerOnMove: 'PlayerOne',
+            tableToPick: 'card-table-one',
             playerTarget: 'PlayerTwo',
+            tableToAttack: 'card-table-two',
             playerOne: null,
             playerTwo: null
         }
@@ -63,12 +65,16 @@ class GameBoard extends Component {
         if (Number.isInteger(this.state.numberOfRound)) {
             this.setState({
                 playerOnMove: 'playerOne',
-                playerTarget: 'playerTwo'
+                playerTarget: 'playerTwo',
+                tableToPick: 'card-table-one',
+                tableToAttack: 'card-table-two'
             })
         } else {
             this.setState({
                 playerOnMove: 'playerTwo',
-                playerTarget: 'playerOne'
+                playerTarget: 'playerOne',
+                tableToPick: 'card-table-two',
+                tableToAttack: 'card-table-one'
             })
         }
     }
@@ -152,7 +158,8 @@ class GameBoard extends Component {
         }
     }
 
-    pickCardToAttack(e) {
+    pickCardToAttack(e, table) {
+        if (table === this.state.tableToPick) {
             const index = this.state[this.state.playerOnMove].onTable.findIndex(card => {
                 if (card) {
                     return card.id === e.target.id
@@ -163,18 +170,33 @@ class GameBoard extends Component {
             const playerClone = cloneDeep(this.state[this.state.playerOnMove])
             playerClone['cardToAttack'] = cardToAttack
             this.setState({ [this.state.playerOnMove]: playerClone })
+        }
     }
 
-    targetAttackedEnemy(e) {
-        const enemyClone = cloneDeep(this.state[this.state.playerTarget])
-        const index = this.state[this.state.playerTarget].onTable.findIndex(card => {
-            if (card) {
-                return card.id === e.target.id
+    targetAttackedEnemy(e, table) {
+        if (table === this.state.tableToAttack) {
+            const enemyClone = cloneDeep(this.state[this.state.playerTarget])
+            const playerClone = cloneDeep(this.state[this.state.playerOnMove])
+            const index = this.state[this.state.playerTarget].onTable.findIndex(card => {
+                if (card) {
+                    return card.id === e.target.id
+                }
+                return card
+            })
+            if (!this.state[this.state.playerOnMove].cardToAttack.isMadeMove) {
+                this.state[this.state.playerOnMove].cardToAttack.attackEnemy(enemyClone.onTable[index])
             }
-            return card
-        })
-        this.state[this.state.playerOnMove].cardToAttack.attackEnemy(enemyClone.onTable[index])
-        this.setState({ [this.state.playerTarget]: enemyClone })
+            this.setState({ [this.state.playerTarget]: enemyClone })
+            const attackerIndex = playerClone.onTable.findIndex((card) => {
+                if (card) {
+                    return card.id === playerClone.cardToAttack.id
+                }
+                return card
+            })
+            console.log(attackerIndex)
+            playerClone.onTable[attackerIndex]['isMadeMove'] = true
+            this.setState({ [this.state.playerOnMove]: playerClone })
+        }
     }
 
     render() {
@@ -270,8 +292,8 @@ class CardTable extends Component {
             if (this.props.onTable[index]) {
                 return (
                     <div className="onhand-card" id={this.props.onTable[index].id} key={uuid()} onClick={(e) => {
-                        this.props.pickCardToAttack(e)
-                        this.props.targetAttackedEnemy(e)
+                        this.props.pickCardToAttack(e, this.props.id)
+                        this.props.targetAttackedEnemy(e, this.props.id)
                     }}>
                         <div className="onhand-card-top">
                             <div className="onhand-name" key={uuid()}>{this.props.onTable[index].name}</div>

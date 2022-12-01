@@ -1,5 +1,8 @@
+import { v4 as uuid } from 'uuid';
+
 class Mob {
     constructor(name, attack, hp, cost, skill, type) {
+        this.id = uuid()
         this.name = name
         this.attack = attack
         this.hp = hp

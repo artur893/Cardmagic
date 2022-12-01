@@ -4,8 +4,8 @@ const heroes = [{
     skillName: 'Szarża',
     skillText: 'Zadaj 2pkt obrażeń',
     skill: 'method here',
-    totalMana: 1,
-    mana: 1
+    totalMana: 10,
+    mana: 10
 }, {
     name: 'Czarodziej',
     hp: 30,

@@ -287,6 +287,19 @@ class OnHandCards extends Component {
 
 class CardTable extends Component {
 
+    componentDidUpdate() {
+        this.hideUsedCards()
+    }
+
+    hideUsedCards() {
+        this.props.onTable.forEach((card) => {
+            if (card?.isMadeMove) {
+                const cardToHide = document.getElementById(card.id)
+                cardToHide.classList.add('used')
+            }
+        })
+    }
+
     displayCard(index) {
         if (this.props.onTable) {
             if (this.props.onTable[index]) {

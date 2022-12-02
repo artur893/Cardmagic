@@ -63,6 +63,10 @@
     transition: 1s;
 }
 
+.onhand-card.used {
+    background-color: gray;
+}
+
 .onhand-card.inhand {
     background-color: lightgreen;
 }
@@ -105,6 +109,13 @@
 #card-table-two {
     grid-column: 2;
     grid-row: 2;
+}
+
+.card-field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px;
 }
 
 .round-control {

@@ -25,6 +25,7 @@ class GameBoard extends Component {
         this.putCardOnTable = this.putCardOnTable.bind(this)
         this.pickCardToAttack = this.pickCardToAttack.bind(this)
         this.targetAttackedEnemy = this.targetAttackedEnemy.bind(this)
+        this.killCard = this.killCard.bind(this)
     }
 
     componentDidUpdate(prevProps) {
@@ -193,10 +194,15 @@ class GameBoard extends Component {
                 }
                 return card
             })
-            console.log(attackerIndex)
             playerClone.onTable[attackerIndex]['isMadeMove'] = true
             this.setState({ [this.state.playerOnMove]: playerClone })
         }
+    }
+
+    killCard(index) {
+        const clone = cloneDeep(this.state[this.state.playerTarget])
+        clone.onTable[index] = null
+        this.setState({ [this.state.playerTarget]: clone })
     }
 
     render() {
@@ -208,10 +214,10 @@ class GameBoard extends Component {
                         <button onClick={this.gameFlow}>NEXT ROUND</button>
                     </div>
                     <CardTable id='card-table-one' playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
-                        putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable}
+                        putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} killCard={this.killCard}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
                     <CardTable id='card-table-two' playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
-                        putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable}
+                        putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable} killCard={this.killCard}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
                     <Player hero={this.state.playerOne} id='player-one' />
                     <Player hero={this.state.playerTwo} id='player-two' />
@@ -289,6 +295,7 @@ class CardTable extends Component {
 
     componentDidUpdate() {
         this.hideUsedCards()
+        this.killCard()
     }
 
     hideUsedCards() {
@@ -296,6 +303,15 @@ class CardTable extends Component {
             if (card?.isMadeMove) {
                 const cardToHide = document.getElementById(card.id)
                 cardToHide.classList.add('used')
+            }
+        })
+    }
+
+    killCard() {
+        this.props.onTable.forEach((card) => {
+            if (card?.hp <= 0) {
+                const index = this.props.onTable.findIndex(cardToIndex => cardToIndex?.id === card.id)
+                this.props.killCard(index)
             }
         })
     }

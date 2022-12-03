@@ -304,6 +304,23 @@ class OnHandCards extends Component {
         this.screenGameMode()
     }
 
+    componentDidUpdate() {
+        this.markCardInHand()
+    }
+
+    markCardInHand() {
+        this.props.hero.onHand.forEach((card) => {
+            if (card?.id === this.props.hero?.inHand?.id && this.props.hero.mana >= card?.cost) {
+                const cardToMark = document.getElementById(card.id)
+                cardToMark.classList.add('inhand')
+            }
+            if (card?.id === this.props.hero?.inHand?.id && this.props.hero.mana < card?.cost) {
+                const cardToMark = document.getElementById(card.id)
+                cardToMark.classList.add('inhand-red')
+            }
+        })
+    }
+
     screenGameMode() {
         const gameContainer = document.querySelector('.game-container')
         gameContainer.classList.add('game-mode')

@@ -155,6 +155,10 @@
     background-color: lightgreen;
 }
 
+.onhand-card.inhand-red {
+    background-color: lightcoral;
+}
+
 .onhand-card:hover {
     border: solid 2px white;
 }

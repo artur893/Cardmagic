@@ -28,7 +28,7 @@ class GameBoard extends Component {
         this.killCards = this.killCards.bind(this)
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.setState({
                 playerOne: this.props.players[0],
@@ -135,7 +135,7 @@ class GameBoard extends Component {
     }
 
     putCardOnTable(e, player, cardTable) {
-        if (this.state[player].inHand) {
+        if (this.state[player]?.inHand) {
             const clone = cloneDeep(this.state[player])
             if (e.target.parentElement.id === cardTable) {
                 if (clone.inHand.cost <= clone.mana) {
@@ -175,8 +175,8 @@ class GameBoard extends Component {
     }
 
     attackEnemyHero(enemyClone, playerClone) {
-        if (!this.state[this.state.playerOnMove].cardToAttack.isMadeMove) {
-            this.state[this.state.playerOnMove].cardToAttack.attackEnemy(enemyClone)
+        if (!playerClone.cardToAttack.isMadeMove) {
+            playerClone.cardToAttack.attackEnemy(enemyClone)
             this.setState({ [this.state.playerTarget]: enemyClone })
             const attackerIndex = playerClone.onTable.findIndex((card) => {
                 if (card) {
@@ -190,28 +190,28 @@ class GameBoard extends Component {
     }
 
     async attackEnemyCard(e, enemyClone, playerClone) {
-        const index = this.state[this.state.playerTarget].onTable.findIndex(card => {
+        const index = enemyClone.onTable.findIndex(card => {
             if (card) {
                 return card.id === e.target.id
             }
             return card
         })
-        if (!this.state[this.state.playerOnMove].cardToAttack.isMadeMove) {
+        if (!playerClone.cardToAttack.isMadeMove) {
             playerClone.cardToAttack.attackEnemy(enemyClone.onTable[index])
+            const attackerIndex = playerClone.onTable.findIndex((card) => {
+                if (card) {
+                    return card.id === playerClone.cardToAttack.id
+                }
+                return card
+            })
+            playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+            playerClone.onTable[attackerIndex]['isMadeMove'] = true
+            await this.setState({
+                [this.state.playerTarget]: enemyClone,
+                [this.state.playerOnMove]: playerClone
+            })
+            this.killCards()
         }
-        const attackerIndex = playerClone.onTable.findIndex((card) => {
-            if (card) {
-                return card.id === playerClone.cardToAttack.id
-            }
-            return card
-        })
-        playerClone.onTable[attackerIndex] = playerClone.cardToAttack
-        playerClone.onTable[attackerIndex]['isMadeMove'] = true
-        await this.setState({
-            [this.state.playerTarget]: enemyClone,
-            [this.state.playerOnMove]: playerClone
-        })
-        this.killCards()
     }
 
     targetAttackedEnemy(e, table) {

@@ -61,6 +61,7 @@ class GameBoard extends Component {
         await this.switchPlayerOnMove()
         await this.addTotalMana()
         await this.getNewCard()
+        await this.clearHands()
         this.spinArrow()
         this.clearMove(this.state.playerOnMove)
     }
@@ -97,6 +98,19 @@ class GameBoard extends Component {
             playerClone.onHand.push(randomCard)
             this.setState({ [this.state.playerOnMove]: playerClone })
         }
+    }
+
+    async clearHands() {
+        const playerOne = cloneDeep(this.state.playerOne)
+        const playerTwo = cloneDeep(this.state.playerTwo)
+        playerOne.cardToAttack = null
+        playerOne.inHand = null
+        playerTwo.inHand = null
+        playerTwo.cardToAttack = null
+        this.setState({
+            playerOne: playerOne,
+            playerTwo: playerTwo
+        })
     }
 
     async addTotalMana() {
@@ -256,10 +270,10 @@ class GameBoard extends Component {
                         <img src={arrowImg} alt='arrow'></img>
                         <button onClick={this.gameFlow}>NEXT ROUND</button>
                     </div>
-                    <CardTable id='card-table-one' playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
+                    <CardTable id='card-table-one' hero={this.state.playerOne} playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
                         putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} killCard={this.killCard}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
-                    <CardTable id='card-table-two' playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
+                    <CardTable id='card-table-two' hero={this.state.playerTwo} playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
                         putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable} killCard={this.killCard}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
                     <Player hero={this.state.playerOne} id='player-one' table='card-table-one' targetAttackedEnemy={this.targetAttackedEnemy} />
@@ -361,6 +375,7 @@ class CardTable extends Component {
 
     componentDidUpdate() {
         this.hideUsedCards()
+        this.markCardToAttack()
     }
 
     hideUsedCards() {
@@ -368,6 +383,15 @@ class CardTable extends Component {
             if (card?.isMadeMove) {
                 const cardToHide = document.getElementById(card.id)
                 cardToHide.classList.add('used')
+            }
+        })
+    }
+
+    markCardToAttack() {
+        this.props.hero.onTable.forEach((card) => {
+            if (card?.id === this.props?.hero?.cardToAttack?.id && !card?.isMadeMove &&card !== null) {
+                const cardToMark = document.getElementById(card.id)
+                cardToMark.classList.add('inhand')
             }
         })
     }

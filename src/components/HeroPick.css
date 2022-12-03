@@ -13,7 +13,9 @@ h1 {
 }
 
 .heropick-card-description {
-    margin: 20px;
+    margin: 30px 20px;
+    font-family: 'Roboto';
+    font-weight: 500;
 }
 
 .heropick-card {
@@ -34,6 +36,16 @@ h1 {
     transform: scale(1.2);
     box-shadow: 0 0px 30px 0px;
     border: solid 2px white;
+}
+
+.heropick-card-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.heropick-card-avatar>img {
+    width: 50%;
 }
 
 .heropick-cards-container {

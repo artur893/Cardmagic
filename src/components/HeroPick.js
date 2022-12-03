@@ -33,11 +33,9 @@ class Card extends Component {
     render() {
         return (
             <div className="heropick-card" onClick={() => this.props.pickHero(this.state)}>
-                <div className="heropick-card-avatar"></div>
-                <div className="heropick-card-text">
-                    <p className="heropick-card-name">{this.state.name}</p>
-                    <p className="heropick-card-description">{this.state.skillText}</p>
-                </div>
+                <p className="heropick-card-name">{this.state.name}</p>
+                <div className="heropick-card-avatar"><img src={this.state.icon} alt={this.state.name}></img></div>
+                <p className="heropick-card-description">{this.state.skillText}</p>
             </div>
         )
     }

@@ -281,9 +281,12 @@ class Player extends Component {
                 onClick={(e) => {
                     this.props.targetAttackedEnemy(e, this.props.table)
                 }}>
-                <div className="player-name">{this.props.hero.name}</div>
-                <div className="player-hp">{this.props.hero.hp}</div>
-                <div className="player-mana">{this.props.hero.mana}</div>
+
+                <div className="player-icon"><img src={this.props.hero.icon} alt={this.props.hero.name}></img></div>
+                <div className='player-bottom'>
+                    <div className="player-hp">{this.props.hero.hp}<img src={hpIcon} alt='heart'></img></div>
+                    <div className="player-mana">{this.props.hero.mana}<img src={costIcon} alt='mana'></img></div>
+                </div>
             </div>
         )
     }

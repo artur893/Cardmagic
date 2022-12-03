@@ -174,47 +174,55 @@ class GameBoard extends Component {
         }
     }
 
-    async targetAttackedEnemy(e, table) {
+    attackEnemyHero(enemyClone, playerClone) {
+        if (!this.state[this.state.playerOnMove].cardToAttack.isMadeMove) {
+            this.state[this.state.playerOnMove].cardToAttack.attackEnemy(enemyClone)
+            this.setState({ [this.state.playerTarget]: enemyClone })
+            const attackerIndex = playerClone.onTable.findIndex((card) => {
+                if (card) {
+                    return card.id === playerClone.cardToAttack.id
+                }
+                return card
+            })
+            playerClone.onTable[attackerIndex]['isMadeMove'] = true
+            this.setState({ [this.state.playerOnMove]: playerClone })
+        }
+    }
+
+    async attackEnemyCard(e, enemyClone, playerClone) {
+        const index = this.state[this.state.playerTarget].onTable.findIndex(card => {
+            if (card) {
+                return card.id === e.target.id
+            }
+            return card
+        })
+        if (!this.state[this.state.playerOnMove].cardToAttack.isMadeMove) {
+            playerClone.cardToAttack.attackEnemy(enemyClone.onTable[index])
+        }
+        const attackerIndex = playerClone.onTable.findIndex((card) => {
+            if (card) {
+                return card.id === playerClone.cardToAttack.id
+            }
+            return card
+        })
+        playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+        playerClone.onTable[attackerIndex]['isMadeMove'] = true
+        await this.setState({
+            [this.state.playerTarget]: enemyClone,
+            [this.state.playerOnMove]: playerClone
+        })
+        this.killCards()
+    }
+
+    targetAttackedEnemy(e, table) {
+        const event = e
         if (table === this.state.tableToAttack) {
             const enemyClone = cloneDeep(this.state[this.state.playerTarget])
             const playerClone = cloneDeep(this.state[this.state.playerOnMove])
             if (e.target.id === 'player-one' || e.target.id === 'player-two') {
-                if (!this.state[this.state.playerOnMove].cardToAttack.isMadeMove) {
-                    this.state[this.state.playerOnMove].cardToAttack.attackEnemy(enemyClone)
-                    this.setState({ [this.state.playerTarget]: enemyClone })
-                    const attackerIndex = playerClone.onTable.findIndex((card) => {
-                        if (card) {
-                            return card.id === playerClone.cardToAttack.id
-                        }
-                        return card
-                    })
-                    playerClone.onTable[attackerIndex]['isMadeMove'] = true
-                    this.setState({ [this.state.playerOnMove]: playerClone })
-                }
-
+                this.attackEnemyHero(enemyClone, playerClone)
             } else {
-                const index = this.state[this.state.playerTarget].onTable.findIndex(card => {
-                    if (card) {
-                        return card.id === e.target.id
-                    }
-                    return card
-                })
-                if (!this.state[this.state.playerOnMove].cardToAttack.isMadeMove) {
-                    playerClone.cardToAttack.attackEnemy(enemyClone.onTable[index])
-                }
-                const attackerIndex = playerClone.onTable.findIndex((card) => {
-                    if (card) {
-                        return card.id === playerClone.cardToAttack.id
-                    }
-                    return card
-                })
-                playerClone.onTable[attackerIndex] = playerClone.cardToAttack
-                playerClone.onTable[attackerIndex]['isMadeMove'] = true
-                await this.setState({
-                    [this.state.playerTarget]: enemyClone,
-                    [this.state.playerOnMove]: playerClone
-                })
-                this.killCards()
+                this.attackEnemyCard(event, enemyClone, playerClone)
             }
         }
     }

@@ -1,10 +1,10 @@
 .player {
     margin: 0 0 0 30px;
     font-size: 2rem;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
-    background-color: rgb(130, 190, 240);
+    background-color: var(--color4);
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -12,18 +12,20 @@
 }
 
 #player-one {
+    justify-self: center;
     grid-column: 1;
-    grid-row: 4;
+    grid-row: 3 / 5;
 }
 
 #player-two {
+    justify-self: center;
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 1 / 3;
 }
 
 #player-one-cards {
     grid-column: 2;
-    grid-row: 5;
+    grid-row: 4;
 }
 
 #player-two-cards {
@@ -52,15 +54,31 @@
     gap: 10px;
 }
 
+.onhand-name {
+    font-size: 1.2rem;
+    font-family: 'Rakkas';
+}
+
+.onhand-attack,
+.onhand-hp,
+.onhand-cost {
+    align-self: flex-start;
+    font-size: 1.2rem;
+    font-family: 'Roboto';
+    font-weight: 900;
+}
+
 .onhand-card {
-    background-color: var(--color4);
-    height: 150px;
-    width: 100px;
+    background-color: var(--cardBg);
+    border: solid 2px black;
+    border-radius: 10px;
+    height: 180px;
+    width: 130px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    transition: 1s;
+    transition: 200ms;
 }
 
 .onhand-card.used {
@@ -72,7 +90,7 @@
 }
 
 .onhand-card:hover {
-    transform: scale(1.1);
+    border: solid 2px white;
 }
 
 .onhand-card-top {
@@ -81,7 +99,7 @@
     width: 80%;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .onhand-card-bottom {
@@ -94,35 +112,44 @@
 }
 
 .card-table {
+    border: solid 1px;
+    border-radius: 20px;
     height: 100%;
-    background-color: rgb(120, 160, 180);
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
+    background: linear-gradient(to right, hsl(60, 10%, 50%), hsl(60, 10%, 60%), hsl(60, 10%, 50%));
 }
 
 #card-table-one {
     grid-column: 2;
-    grid-row: 4;
+    grid-row: 3;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 #card-table-two {
     grid-column: 2;
     grid-row: 2;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .card-field {
+    border-right: solid 1px hsl(0, 0%, 10%);
     display: flex;
     justify-content: center;
     align-items: center;
-    border: solid 1px;
+}
+
+.card-field:last-child {
+    border: none;
 }
 
 .round-control {
     display: flex;
     align-items: center;
     grid-column: 3;
-    grid-row: 3;
+    grid-row: 2 / 4;
 }
 
 .round-control>button {

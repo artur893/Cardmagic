@@ -87,7 +87,7 @@ class GameBoard extends Component {
     }
 
     async getNewCard() {
-        if (this.state[this.state.playerOnMove].onHand.length < 7) {
+        if (this.state[this.state.playerOnMove].onHand.length < 6) {
             const playerClone = cloneDeep(this.state[this.state.playerOnMove])
             const random = Math.random() * (playerClone.cards.length - 1)
             const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]

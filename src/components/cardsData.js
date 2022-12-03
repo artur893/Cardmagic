@@ -17,12 +17,17 @@ class Mob {
     }
 }
 
-const cards = []
+const cardsOne = []
+const cardsTwo = []
 
 function populateCards() {
     rawCards.forEach((card) => {
         const mob = new Mob(card.name, card.attack, card.hp, card.cost, card.skill, card.type)
-        cards.push(mob)
+        cardsOne.push(mob)
+    })
+    rawCards.forEach((card) => {
+        const mob = new Mob(card.name, card.attack, card.hp, card.cost, card.skill, card.type)
+        cardsTwo.push(mob)
     })
 }
 
@@ -136,4 +141,4 @@ const rawCards = [{
 
 populateCards()
 
-export { cards }
+export { cardsOne, cardsTwo }

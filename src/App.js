@@ -3,7 +3,7 @@ import './App.css'
 import { Header } from "./components/Header";
 import { HeroPick } from './components/HeroPick'
 import { heroes } from "./components/heroesData";
-import { cards } from "./components/cardsData"
+import { cardsOne, cardsTwo } from "./components/cardsData"
 import { GameBoard } from "./components/GameBoard";
 
 class App extends Component {
@@ -12,7 +12,8 @@ class App extends Component {
 
         this.state = {
             heroes: heroes,
-            cards: cards
+            cardsPlayerTwo: cardsTwo,
+            cardsPlayerOne: cardsOne
         }
 
         this.pickHero = this.pickHero.bind(this)
@@ -27,12 +28,12 @@ class App extends Component {
     pickHero(hero) {
         if (!this.state.playerOne) {
             const playerOne = hero
-            playerOne['cards'] = this.state.cards
+            playerOne['cards'] = this.state.cardsPlayerOne
             playerOne['onTable'] = new Array(6).fill(null)
             this.setState({ playerOne: playerOne })
         } else if (this.state.playerOne) {
             const playerTwo = hero
-            playerTwo['cards'] = this.state.cards
+            playerTwo['cards'] = this.state.cardsPlayerTwo
             playerTwo['onTable'] = new Array(6).fill(null)
             this.setState({ playerTwo: playerTwo })
         }

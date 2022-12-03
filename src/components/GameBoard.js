@@ -3,6 +3,9 @@ import './GameBoard.css'
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import arrowImg from './images/arrow.svg'
+import hpIcon from './images/heart.png'
+import costIcon from './images/mana.png'
+import attackIcon from './images/sword.png'
 
 class GameBoard extends Component {
     constructor(props) {
@@ -309,13 +312,13 @@ class OnHandCards extends Component {
                 return (
                     <div className="onhand-card" id={card.id} key={uuid()} onClick={(e) => this.props.pickCardToPlay(e, this.props.player)}>
                         <div className="onhand-card-top">
-                            <div className="onhand-name" key={uuid()}>{card.name}</div>
-                            <div className="onhand-cost" key={uuid()}>{card.cost}</div>
+                            <div className="onhand-cost" key={uuid()}>{card.cost} <img src={costIcon} alt='mana'></img></div>
                         </div>
+                        <div className="onhand-name" key={uuid()}>{card.name}</div>
                         <p className="onhand-description" key={uuid()}>{ }</p>
                         <div className="onhand-card-bottom">
-                            <div className="onhand-attack" key={uuid()}>{card.attack}</div>
-                            <div className="onhand-hp" key={uuid()}>{card.hp}</div>
+                            <div className="onhand-attack" key={uuid()}>{card.attack}<img src={attackIcon} alt='sword'></img></div>
+                            <div className="onhand-hp" key={uuid()}>{card.hp}<img src={hpIcon} alt='heart'></img></div>
                         </div>
                     </div>)
             })

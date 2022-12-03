@@ -62,10 +62,36 @@
 .onhand-attack,
 .onhand-hp,
 .onhand-cost {
-    align-self: flex-start;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-family: 'Roboto';
     font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.onhand-cost>img {
+    margin: 0 0 5px 5px;
+    width: 24px;
+}
+
+.onhand-hp>img {
+    width: 24px;
+    margin: 0 0 0 5px;
+}
+
+.onhand-attack>img {
+    width: 24px;
+    margin: 0 0 0 2px;
+}
+
+.onhand-cost {
+    font-size: 1.3rem;
+    font-family: 'Roboto';
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .onhand-card {
@@ -94,18 +120,18 @@
 }
 
 .onhand-card-top {
-    margin: 10px;
+    margin: 10px 0;
     font-size: 1.2rem;
-    width: 80%;
+    width: 90%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 }
 
 .onhand-card-bottom {
-    margin: 10px;
+    margin: 10px 0;
     font-size: 1.2rem;
-    width: 80%;
+    width: 90%;
     display: flex;
     justify-content: space-between;
     align-items: center;

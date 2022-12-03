@@ -12,8 +12,8 @@ class Mob {
     }
 
     attackEnemy(enemy) {
-        const result = enemy.hp - this.attack
-        enemy.hp = result
+        enemy.hp = enemy.hp - this.attack
+        this.hp = this.hp - enemy.attack
     }
 }
 

@@ -364,13 +364,13 @@ class CardTable extends Component {
                         this.props.targetAttackedEnemy(e, this.props.id)
                     }}>
                         <div className="onhand-card-top">
-                            <div className="onhand-name" key={uuid()}>{this.props.onTable[index].name}</div>
-                            <div className="onhand-cost" key={uuid()}>{this.props.onTable[index].cost}</div>
+                            <div className="onhand-cost" key={uuid()}>{this.props.onTable[index].cost}<img src={costIcon} alt='mana'></img></div>
                         </div>
+                        <div className="onhand-name" key={uuid()}>{this.props.onTable[index].name}</div>
                         <p className="onhand-description" key={uuid()}>{ }</p>
                         <div className="onhand-card-bottom">
-                            <div className="onhand-attack" key={uuid()}>{this.props.onTable[index].attack}</div>
-                            <div className="onhand-hp" key={uuid()}>{this.props.onTable[index].hp}</div>
+                            <div className="onhand-attack" key={uuid()}>{this.props.onTable[index].attack}<img src={attackIcon} alt='sword'></img></div>
+                            <div className="onhand-hp" key={uuid()}>{this.props.onTable[index].hp}<img src={hpIcon} alt='heart'></img></div>
                         </div>
                     </div>)
             }

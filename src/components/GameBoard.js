@@ -14,9 +14,9 @@ class GameBoard extends Component {
         this.state = {
             isGameOver: false,
             numberOfRound: 0.5,
-            playerOnMove: 'PlayerOne',
+            playerOnMove: 'playerOne',
             tableToPick: 'card-table-one',
-            playerTarget: 'PlayerTwo',
+            playerTarget: 'playerTwo',
             tableToAttack: 'card-table-two',
             playerOne: null,
             playerTwo: null
@@ -32,7 +32,7 @@ class GameBoard extends Component {
         this.killCards = this.killCards.bind(this)
     }
 
-    componentDidUpdate(prevProps) {
+    async componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.setState({
                 playerOne: this.props.players[0],
@@ -41,9 +41,14 @@ class GameBoard extends Component {
             if (this.props.isHeroesPicked) {
                 this.initStartCards('playerOne')
                 this.initStartCards('playerTwo')
+                this.spinArrow()
+                setTimeout(async () => this.gameFlow(), 3000)
+                setTimeout(async () => this.gameFlow(), 6000)
+                setTimeout(async () => this.gameFlow(), 9000)
             }
         }
         this.isGameOver()
+        this.spinArrow()
     }
 
     isGameOver() {
@@ -70,20 +75,19 @@ class GameBoard extends Component {
         await this.addTotalMana()
         await this.getNewCard()
         await this.clearHands()
-        this.spinArrow()
-        this.clearMove(this.state.playerOnMove)
+        await this.clearMove(this.state.playerOnMove)
     }
 
     async switchPlayerOnMove() {
-        if (Number.isInteger(this.state.numberOfRound)) {
-            this.setState({
+        if (this.state.playerOnMove === 'playerTwo') {
+            await this.setState({
                 playerOnMove: 'playerOne',
                 playerTarget: 'playerTwo',
                 tableToPick: 'card-table-one',
                 tableToAttack: 'card-table-two'
             })
         } else {
-            this.setState({
+            await this.setState({
                 playerOnMove: 'playerTwo',
                 playerTarget: 'playerOne',
                 tableToPick: 'card-table-two',
@@ -95,16 +99,18 @@ class GameBoard extends Component {
     async nextRound() {
         let round = this.state.numberOfRound
         round += 0.5
-        this.setState({ numberOfRound: round })
+        await this.setState({ numberOfRound: round })
     }
 
     async getNewCard() {
+        console.log('get card')
         if (this.state[this.state.playerOnMove].onHand.length < 6) {
             const playerClone = cloneDeep(this.state[this.state.playerOnMove])
             const random = Math.random() * (playerClone.cards.length - 1)
             const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
             playerClone.onHand.push(randomCard)
-            this.setState({ [this.state.playerOnMove]: playerClone })
+            console.log(playerClone)
+            await this.setState({ [this.state.playerOnMove]: playerClone })
         }
     }
 
@@ -115,10 +121,10 @@ class GameBoard extends Component {
         playerOne.inHand = null
         playerTwo.inHand = null
         playerTwo.cardToAttack = null
-        this.setState({
+        this.setState(prevState => ({
             playerOne: playerOne,
             playerTwo: playerTwo
-        })
+        }))
     }
 
     async addTotalMana() {
@@ -129,21 +135,21 @@ class GameBoard extends Component {
             const playerTwo = cloneDeep(this.state.playerTwo)
             playerTwo['totalMana'] = playerTwo.totalMana + 1
             playerTwo['mana'] = playerTwo.totalMana
-            this.setState({
+            await this.setState({
                 playerOne: playerOne,
                 playerTwo: playerTwo
             })
         }
     }
 
-    clearMove(player) {
+    async clearMove(player) {
         const clone = cloneDeep(this.state[player])
         clone.onTable.forEach((card) => {
             if (card) {
                 card['isMadeMove'] = false
             }
         })
-        this.setState({ [player]: clone })
+        await this.setState({ [player]: clone })
     }
 
     pickCardToPlay(e, player) {
@@ -177,7 +183,7 @@ class GameBoard extends Component {
 
     spinArrow() {
         const arrow = document.querySelector('img')
-        if (Number.isInteger(this.state.numberOfRound % 1)) {
+        if (this.state.playerOnMove === 'playerOne') {
             arrow.classList.add('spin')
         } else {
             arrow.classList.remove('spin')

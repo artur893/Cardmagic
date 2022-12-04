@@ -225,7 +225,7 @@
 }
 
 .round-control>button {
-    margin: 0 0 0 100px;
+    margin: 0 0 0 140px;
     height: 40px;
     width: 140px;
     background-color: var(--color4);
@@ -248,12 +248,18 @@
 
 .round-control>img {
     position: absolute;
+    left: 25px;
     height: 140px;
     grid-column: 3;
     grid-row: 3;
     transition: 1s;
 }
 
+.round-control>img.nospin {
+    height: 100px;
+    transform: rotate(-45deg);
+}
+
 .round-control>img.spin {
-    transform: rotate(-180deg);
+    transform: rotate(-225deg);
 }

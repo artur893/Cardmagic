@@ -2,7 +2,7 @@ import { Component } from "react";
 import './GameBoard.css'
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';
-import arrowImg from './images/arrow.svg'
+import arrowImg from './images/arrow.png'
 import hpIcon from './images/heart.png'
 import costIcon from './images/mana.png'
 import attackIcon from './images/sword.png'
@@ -267,7 +267,7 @@ class GameBoard extends Component {
             return (
                 <>
                     <div className="round-control">
-                        <img src={arrowImg} alt='arrow'></img>
+                        <img src={arrowImg} alt='arrow' className="nospin"></img>
                         <button onClick={this.gameFlow}>NEXT ROUND</button>
                     </div>
                     <CardTable id='card-table-one' hero={this.state.playerOne} playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}

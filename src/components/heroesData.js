@@ -5,7 +5,7 @@ import vampireIcon from './images/vampire.png'
 
 const heroes = [{
     name: 'Wojownik',
-    hp: 30,
+    hp: 5,
     skillName: 'Szarża',
     skillText: 'Zadaj 2pkt obrażeń wybranej karcie',
     skill: 'method here',

@@ -12,6 +12,7 @@ class GameBoard extends Component {
         super(props)
 
         this.state = {
+            isGameOver: false,
             numberOfRound: 0.5,
             playerOnMove: 'PlayerOne',
             tableToPick: 'card-table-one',
@@ -41,6 +42,13 @@ class GameBoard extends Component {
                 this.initStartCards('playerOne')
                 this.initStartCards('playerTwo')
             }
+        }
+        this.isGameOver()
+    }
+
+    isGameOver() {
+        if ((this.state.playerOne?.hp <= 0 && !this.state.isGameOver) || (this.state.playerTwo?.hp <= 0 && !this.state.isGameOver)) {
+            this.setState({ isGameOver: true })
         }
     }
 
@@ -262,8 +270,16 @@ class GameBoard extends Component {
         this.setState({ [this.state.playerTarget]: cloneTarget, [this.state.playerOnMove]: clonePlayer })
     }
 
+    showWinner() {
+        if (this.state.playerOne.hp > 0) {
+            return this.state.playerOne.name
+        } else {
+            return this.state.playerTwo.name
+        }
+    }
+
     render() {
-        if (this.props.isHeroesPicked) {
+        if (this.props.isHeroesPicked && !this.state.isGameOver) {
             return (
                 <>
                     <div className="round-control">
@@ -282,6 +298,12 @@ class GameBoard extends Component {
                         id='player-one-cards' pickCardToPlay={this.pickCardToPlay} player={'playerOne'} />
                     <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked}
                         id='player-two-cards' pickCardToPlay={this.pickCardToPlay} player={'playerTwo'} />
+                </>
+            )
+        } if (this.props.isHeroesPicked && this.state.isGameOver) {
+            return (
+                <>
+                    <div className="winner">{`The winner is ${this.showWinner()}`}</div>
                 </>
             )
         }
@@ -389,7 +411,7 @@ class CardTable extends Component {
 
     markCardToAttack() {
         this.props.hero.onTable.forEach((card) => {
-            if (card?.id === this.props?.hero?.cardToAttack?.id && !card?.isMadeMove &&card !== null) {
+            if (card?.id === this.props?.hero?.cardToAttack?.id && !card?.isMadeMove && card !== null) {
                 const cardToMark = document.getElementById(card.id)
                 cardToMark.classList.add('inhand')
             }

@@ -263,3 +263,14 @@
 .round-control>img.spin {
     transform: rotate(-225deg);
 }
+
+.winner {
+    color: var(--colorFont);
+    grid-column: 2;
+    grid-row: 2;
+    font-family: 'Rakkas';
+    font-size: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

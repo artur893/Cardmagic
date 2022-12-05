@@ -12,6 +12,7 @@ class GameBoard extends Component {
         super(props)
 
         this.state = {
+            isAiTurn: false,
             isGameOver: false,
             numberOfRound: 0.5,
             playerOnMove: 'playerTwo',
@@ -48,6 +49,55 @@ class GameBoard extends Component {
         }
         this.isGameOver()
         this.spinArrow()
+        this.aiModule()
+    }
+
+    aiModule() {
+        if (this.state.isAiTurn) {
+            this.setState({ isAiTurn: false })
+            console.log('test')
+            setTimeout(() => this.aiPickCard(), 1000)
+            setTimeout(() => this.aiPutCardOnTable(), 2000)
+            setTimeout(() => this.gameFlow(), 3000)
+        }
+    }
+
+    aiPickCard() {
+        let i = -1
+        const indexes = []
+        this.state.playerTwo?.onHand.forEach((card) => {
+            i += 1
+            if (card.cost <= this.state.playerTwo.mana) {
+                indexes.push(i)
+            }
+        })
+        const index = Math.floor(Math.random() * indexes.length)
+        const inHand = this.state.playerTwo.onHand[indexes[index]]
+        const playerClone = cloneDeep(this.state.playerTwo)
+        playerClone['inHand'] = inHand
+        this.setState({ playerTwo: playerClone })
+    }
+
+    aiPutCardOnTable() {
+        if (this.state.playerTwo?.inHand) {
+            const clone = cloneDeep(this.state.playerTwo)
+            let i = -1
+            const indexes = []
+            this.state.playerTwo?.onTable.forEach((field) => {
+                i += 1
+                if (!field) {
+                    indexes.push(i)
+                }
+            })
+            console.log(indexes)
+            const index = Math.floor(Math.random() * indexes.length)
+            clone.onTable[indexes[index]] = clone.inHand
+            clone.onTable[indexes[index]]['isMadeMove'] = true
+            clone['mana'] = clone.mana - clone.inHand.cost
+            this.removeCardOnHand(clone)
+            clone['inHand'] = null
+            this.setState({ playerTwo: clone })
+        }
     }
 
     isGameOver() {
@@ -75,6 +125,15 @@ class GameBoard extends Component {
         this.getNewCard()
         this.clearHands()
         this.clearMove()
+        this.setAiTurn()
+    }
+
+    setAiTurn() {
+        this.setState((state) => {
+            if (state.playerOnMove === 'playerTwo') {
+                return { isAiTurn: true }
+            }
+        })
     }
 
     switchPlayerOnMove() {

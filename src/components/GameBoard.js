@@ -14,9 +14,9 @@ class GameBoard extends Component {
         this.state = {
             isGameOver: false,
             numberOfRound: 0.5,
-            playerOnMove: 'playerOne',
+            playerOnMove: 'playerTwo',
             tableToPick: 'card-table-one',
-            playerTarget: 'playerTwo',
+            playerTarget: 'playerOne',
             tableToAttack: 'card-table-two',
             playerOne: null,
             playerTwo: null
@@ -32,7 +32,7 @@ class GameBoard extends Component {
         this.killCards = this.killCards.bind(this)
     }
 
-    async componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.setState({
                 playerOne: this.props.players[0],
@@ -42,9 +42,9 @@ class GameBoard extends Component {
                 this.initStartCards('playerOne')
                 this.initStartCards('playerTwo')
                 this.spinArrow()
-                setTimeout(async () => this.gameFlow(), 3000)
-                setTimeout(async () => this.gameFlow(), 6000)
-                setTimeout(async () => this.gameFlow(), 9000)
+                setTimeout(this.gameFlow, 500)
+                // setTimeout(this.gameFlow, 6000)
+                // setTimeout(this.gameFlow, 9000)
             }
         }
         this.isGameOver()
@@ -69,87 +69,93 @@ class GameBoard extends Component {
         this.setState({ [player]: playerClone })
     }
 
-    async gameFlow() {
-        await this.nextRound()
-        await this.switchPlayerOnMove()
-        await this.addTotalMana()
-        await this.getNewCard()
-        await this.clearHands()
-        await this.clearMove(this.state.playerOnMove)
+    gameFlow() {
+        this.nextRound()
+        this.switchPlayerOnMove()
+        this.addTotalMana()
+        this.getNewCard()
+        this.clearHands()
+        this.clearMove()
     }
 
-    async switchPlayerOnMove() {
-        if (this.state.playerOnMove === 'playerTwo') {
-            await this.setState({
-                playerOnMove: 'playerOne',
-                playerTarget: 'playerTwo',
-                tableToPick: 'card-table-one',
-                tableToAttack: 'card-table-two'
-            })
-        } else {
-            await this.setState({
-                playerOnMove: 'playerTwo',
-                playerTarget: 'playerOne',
-                tableToPick: 'card-table-two',
-                tableToAttack: 'card-table-one'
-            })
-        }
-    }
-
-    async nextRound() {
-        let round = this.state.numberOfRound
-        round += 0.5
-        await this.setState({ numberOfRound: round })
-    }
-
-    async getNewCard() {
-        console.log('get card')
-        if (this.state[this.state.playerOnMove].onHand.length < 6) {
-            const playerClone = cloneDeep(this.state[this.state.playerOnMove])
-            const random = Math.random() * (playerClone.cards.length - 1)
-            const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
-            playerClone.onHand.push(randomCard)
-            console.log(playerClone)
-            await this.setState({ [this.state.playerOnMove]: playerClone })
-        }
-    }
-
-    async clearHands() {
-        const playerOne = cloneDeep(this.state.playerOne)
-        const playerTwo = cloneDeep(this.state.playerTwo)
-        playerOne.cardToAttack = null
-        playerOne.inHand = null
-        playerTwo.inHand = null
-        playerTwo.cardToAttack = null
-        this.setState(prevState => ({
-            playerOne: playerOne,
-            playerTwo: playerTwo
-        }))
-    }
-
-    async addTotalMana() {
-        if (Number.isInteger(this.state.numberOfRound)) {
-            const playerOne = cloneDeep(this.state.playerOne)
-            playerOne['totalMana'] = playerOne.totalMana + 1
-            playerOne['mana'] = playerOne.totalMana
-            const playerTwo = cloneDeep(this.state.playerTwo)
-            playerTwo['totalMana'] = playerTwo.totalMana + 1
-            playerTwo['mana'] = playerTwo.totalMana
-            await this.setState({
-                playerOne: playerOne,
-                playerTwo: playerTwo
-            })
-        }
-    }
-
-    async clearMove(player) {
-        const clone = cloneDeep(this.state[player])
-        clone.onTable.forEach((card) => {
-            if (card) {
-                card['isMadeMove'] = false
+    switchPlayerOnMove() {
+        this.setState((state) => {
+            if (state.playerOnMove === 'playerTwo') {
+                return {
+                    playerOnMove: 'playerOne',
+                    playerTarget: 'playerTwo',
+                    tableToPick: 'card-table-one',
+                    tableToAttack: 'card-table-two'
+                }
+            } else {
+                return {
+                    playerOnMove: 'playerTwo',
+                    playerTarget: 'playerOne',
+                    tableToPick: 'card-table-two',
+                    tableToAttack: 'card-table-one'
+                }
             }
         })
-        await this.setState({ [player]: clone })
+    }
+
+    nextRound() {
+        this.setState((state) => ({ numberOfRound: state.numberOfRound + 0.5 }))
+    }
+
+    getNewCard() {
+        this.setState((state) => {
+            if (state[state.playerOnMove].onHand.length < 6) {
+                const playerClone = cloneDeep(state[state.playerOnMove])
+                const random = Math.random() * (playerClone.cards.length - 1)
+                const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
+                playerClone.onHand.push(randomCard)
+                return { [state.playerOnMove]: playerClone }
+            }
+        })
+    }
+
+    clearHands() {
+        this.setState((state) => {
+            const playerOne = cloneDeep(state.playerOne)
+            const playerTwo = cloneDeep(state.playerTwo)
+            playerOne.cardToAttack = null
+            playerOne.inHand = null
+            playerTwo.inHand = null
+            playerTwo.cardToAttack = null
+            return {
+                playerOne: playerOne,
+                playerTwo: playerTwo
+            }
+        })
+    }
+
+    addTotalMana() {
+        this.setState((state) => {
+            if (state.playerOnMove === 'playerOne') {
+                const playerOne = cloneDeep(state.playerOne)
+                playerOne['totalMana'] = playerOne.totalMana + 1
+                playerOne['mana'] = playerOne.totalMana
+                const playerTwo = cloneDeep(state.playerTwo)
+                playerTwo['totalMana'] = playerTwo.totalMana + 1
+                playerTwo['mana'] = playerTwo.totalMana
+                return {
+                    playerOne: playerOne,
+                    playerTwo: playerTwo
+                }
+            }
+        })
+    }
+
+    clearMove() {
+        this.setState((state) => {
+            const clone = cloneDeep(state[state.playerOnMove])
+            clone.onTable.forEach((card) => {
+                if (card) {
+                    card['isMadeMove'] = false
+                }
+            })
+            return { [state.playerOnMove]: clone }
+        })
     }
 
     pickCardToPlay(e, player) {
@@ -220,7 +226,7 @@ class GameBoard extends Component {
         }
     }
 
-    async attackEnemyCard(e, enemyClone, playerClone) {
+    attackEnemyCard(e, enemyClone, playerClone) {
         const index = enemyClone.onTable.findIndex(card => {
             if (card) {
                 return card.id === e.target.id
@@ -237,7 +243,7 @@ class GameBoard extends Component {
             })
             playerClone.onTable[attackerIndex] = playerClone.cardToAttack
             playerClone.onTable[attackerIndex]['isMadeMove'] = true
-            await this.setState({
+            this.setState({
                 [this.state.playerTarget]: enemyClone,
                 [this.state.playerOnMove]: playerClone
             })

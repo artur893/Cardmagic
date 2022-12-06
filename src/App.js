@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import './App.css'
+import { Menu } from "./components/Menu";
 import { Header } from "./components/Header";
 import { HeroPick } from './components/HeroPick'
 import { heroes } from "./components/heroesData";
@@ -11,12 +12,18 @@ class App extends Component {
         super(props)
 
         this.state = {
+            activeView: 'menu',
             heroes: heroes,
             cardsPlayerTwo: cardsTwo,
             cardsPlayerOne: cardsOne
         }
 
         this.pickHero = this.pickHero.bind(this)
+        this.setActiveView = this.setActiveView.bind(this)
+    }
+
+    setActiveView(value) {
+        this.setState({activeView: value})
     }
 
     componentDidUpdate() {
@@ -44,7 +51,8 @@ class App extends Component {
             <>
                 <Header />
                 <div className="game-container">
-                    <HeroPick heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />
+                    <Menu activeView={this.state.activeView} setActiveView={this.setActiveView} />
+                    <HeroPick activeView={this.state.activeView} heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />
                     <GameBoard isHeroesPicked={this.state.isHeroesPicked} players={[this.state.playerOne, this.state.playerTwo]} cards={this.state.cards} />
                 </div>
             </>

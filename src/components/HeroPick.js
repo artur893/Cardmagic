@@ -12,14 +12,16 @@ class HeroPick extends Component {
 
     render() {
         if (!this.props.isHeroesPicked)
-            return (
-                <>
-                    <h1>Wybierz bohatera</h1>
-                    <div className="heropick-cards-container">
-                        {this.populateHeroes()}
-                    </div>
-                </>
-            )
+            if (this.props.activeView === 'heroPick') {
+                return (
+                    <>
+                        <h1>Wybierz bohatera</h1>
+                        <div className="heropick-cards-container">
+                            {this.populateHeroes()}
+                        </div>
+                    </>
+                )
+            }
     }
 }
 

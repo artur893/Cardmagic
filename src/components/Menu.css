@@ -1,0 +1,32 @@
+.menu {
+    margin-top: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.menu-button {
+    height: 60px;
+    width: 300px;
+    color: var(--colorFont);
+    font-family: 'Bungee';
+    font-size: 1.4rem;
+    border: none;
+    background-color: var(--color1);
+    border: solid 2px black;
+}
+
+.menu-button:hover {
+    border: solid 2px white;
+}
+
+.menu-button.unactive {
+    background-color: hsl(0, 0%, 20%);
+    color: hsl(0, 0%, 50%);
+}
+
+.menu-button.unactive:hover {
+    border: solid 2px black;
+}

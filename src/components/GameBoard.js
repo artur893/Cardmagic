@@ -36,6 +36,13 @@ class GameBoard extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.setState({
+                isAiTurn: false,
+                isGameOver: false,
+                numberOfRound: 0.5,
+                playerOnMove: 'playerTwo',
+                tableToPick: 'card-table-one',
+                playerTarget: 'playerOne',
+                tableToAttack: 'card-table-two',
                 playerOne: this.props.players[0],
                 playerTwo: this.props.players[1]
             })
@@ -400,7 +407,7 @@ class GameBoard extends Component {
     }
 
     render() {
-        if (this.props.isHeroesPicked && !this.state.isGameOver) {
+        if (this.props.isHeroesPicked && !this.state.isGameOver && this.props.activeView === 'gameBoard') {
             return (
                 <>
                     <div className="round-control">

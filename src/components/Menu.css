@@ -30,3 +30,9 @@
 .menu-button.unactive:hover {
     border: solid 2px black;
 }
+
+.back-to-menu {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}

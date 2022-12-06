@@ -17,5 +17,25 @@ class Menu extends Component {
     }
 }
 
+class BackToMenu extends Component {
+    constructor(props) {
+        super(props)
 
-export { Menu }
+        this.disableGameMode = this.disableGameMode.bind(this)
+    }
+
+    disableGameMode() {
+        const gameContainer = document.querySelector('.game-container')
+        gameContainer.classList.remove('game-mode')
+    }
+
+    render() {
+        return <button className="back-to-menu" onClick={() => {
+            this.props.setActiveView('menu')
+            this.props.cleanHeroes()
+            this.disableGameMode()
+        }}>Back to main menu</button>
+    }
+}
+
+export { Menu, BackToMenu }

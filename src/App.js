@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import './App.css'
-import { Menu } from "./components/Menu";
+import { BackToMenu, Menu } from "./components/Menu";
 import { Header } from "./components/Header";
 import { HeroPick } from './components/HeroPick'
 import { heroes } from "./components/heroesData";
@@ -20,10 +20,15 @@ class App extends Component {
 
         this.pickHero = this.pickHero.bind(this)
         this.setActiveView = this.setActiveView.bind(this)
+        this.cleanHeroes = this.cleanHeroes.bind(this)
     }
 
     setActiveView(value) {
-        this.setState({activeView: value})
+        this.setState({ activeView: value })
+    }
+
+    cleanHeroes() {
+        this.setState({ isHeroesPicked: false, playerOne: null, playerTwo: null })
     }
 
     componentDidUpdate() {
@@ -43,6 +48,7 @@ class App extends Component {
             playerTwo['cards'] = this.state.cardsPlayerTwo
             playerTwo['onTable'] = new Array(6).fill(null)
             this.setState({ playerTwo: playerTwo })
+            this.setState({ activeView: 'gameBoard' })
         }
     }
 
@@ -53,7 +59,9 @@ class App extends Component {
                 <div className="game-container">
                     <Menu activeView={this.state.activeView} setActiveView={this.setActiveView} />
                     <HeroPick activeView={this.state.activeView} heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />
-                    <GameBoard isHeroesPicked={this.state.isHeroesPicked} players={[this.state.playerOne, this.state.playerTwo]} cards={this.state.cards} />
+                    <GameBoard activeView={this.state.activeView} isHeroesPicked={this.state.isHeroesPicked}
+                        players={[this.state.playerOne, this.state.playerTwo]} />
+                    <BackToMenu setActiveView={this.setActiveView} cleanHeroes={this.cleanHeroes} />
                 </div>
             </>
         )

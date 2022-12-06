@@ -11,7 +11,6 @@ class HeroPick extends Component {
     }
 
     render() {
-        if (!this.props.isHeroesPicked)
             if (this.props.activeView === 'heroPick') {
                 return (
                     <>

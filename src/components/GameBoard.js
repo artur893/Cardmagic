@@ -127,8 +127,17 @@ class GameBoard extends Component {
                     if (enemyIndexes.length > 0) {
                         playerClone.cardToAttack.attackEnemy(enemyClone.onTable[enemyIndexes[index]])
                         const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
-                        playerClone.onTable[attackerIndex]['isMadeMove'] = true
                         playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+                        playerClone.onTable[attackerIndex]['isMadeMove'] = true
+                        return {
+                            playerOne: enemyClone,
+                            playerTwo: playerClone
+                        }
+                    } else {
+                        playerClone.cardToAttack.attackEnemy(enemyClone)
+                        const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
+                        playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+                        playerClone.onTable[attackerIndex]['isMadeMove'] = true
                         return {
                             playerOne: enemyClone,
                             playerTwo: playerClone

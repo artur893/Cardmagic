@@ -11,7 +11,8 @@ const heroes = [{
     skill: 'method here',
     totalMana: 0,
     mana: 0,
-    icon: warriorIcon
+    icon: warriorIcon,
+    attack: 0
 }, {
     name: 'Czarodziej',
     hp: 30,
@@ -20,7 +21,8 @@ const heroes = [{
     skill: 'method here',
     totalMana: 0,
     mana: 0,
-    icon: wizardIcon
+    icon: wizardIcon,
+    attack: 0
 }, {
     name: 'Mnich',
     hp: 30,
@@ -29,7 +31,8 @@ const heroes = [{
     skill: 'method here',
     totalMana: 0,
     mana: 0,
-    icon: monkIcon
+    icon: monkIcon,
+    attack: 0
 }, {
     name: 'Wampir',
     hp: 30,
@@ -38,7 +41,8 @@ const heroes = [{
     skill: 'method here',
     totalMana: 0,
     mana: 0,
-    icon: vampireIcon
+    icon: vampireIcon,
+    attack: 0
 }]
 
 export { heroes }

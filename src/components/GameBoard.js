@@ -53,10 +53,11 @@ class GameBoard extends Component {
     aiModule() {
         if (this.state.isAiTurn) {
             this.setState({ isAiTurn: false })
-            setTimeout(() => this.aiPickCard(), 500)
-            setTimeout(() => this.aiPutCardOnTable(), 1000)
-            setTimeout(() => this.aiAttack(), 1500)
-            setTimeout(() => this.gameFlow(), 4000)
+            setTimeout(() => this.aiPickCard(), 300)
+            setTimeout(() => this.aiPutCardOnTable(), 600)
+            setTimeout(() => this.aiAttack(), 900)
+            setTimeout(() => this.killCards(), 2500)
+            setTimeout(() => this.gameFlow(), 3000)
         }
     }
 
@@ -136,7 +137,6 @@ class GameBoard extends Component {
                 })
             }, i * 200 + 100)
         })
-
     }
 
     isGameOver() {
@@ -344,7 +344,7 @@ class GameBoard extends Component {
                 [this.state.playerTarget]: enemyClone,
                 [this.state.playerOnMove]: playerClone
             })
-            this.killCards()
+            setTimeout(() => this.killCards(), 1000)
         }
     }
 

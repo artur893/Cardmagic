@@ -328,6 +328,7 @@ class GameBoard extends Component {
                 return card
             })
             playerClone.onTable[attackerIndex]['isMadeMove'] = true
+            playerClone.cardToAttack = null
             this.setState({ [this.state.playerOnMove]: playerClone })
         }
     }

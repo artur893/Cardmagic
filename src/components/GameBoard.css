@@ -276,6 +276,7 @@
 }
 
 .deck {
+    position: relative;
     margin: 0 0 0 50px;
     background-color: var(--cardBg);
     border: solid 2px black;
@@ -289,16 +290,30 @@
     font-family: 'Roboto';
 }
 
-.deck-left {
+.deck>img {
+    position: absolute;
+    height: 180px;
+    width: 130px;
+}
+
+.deck:hover>.deck-left {
+    color: var(--colorFont);
+    position: absolute;
     font-weight: 700;
+    width: 120px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: default;
 }
 
-#player-one-deck{
-grid-column: 3;
-grid-row: 4;
+#player-one-deck {
+    grid-column: 3;
+    grid-row: 4;
 }
 
-#player-two-deck{
-grid-column: 3;
-grid-row: 1;
+#player-two-deck {
+    grid-column: 3;
+    grid-row: 1;
 }

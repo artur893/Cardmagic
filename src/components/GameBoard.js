@@ -6,6 +6,7 @@ import arrowImg from './images/arrow.png'
 import hpIcon from './images/heart.png'
 import costIcon from './images/mana.png'
 import attackIcon from './images/sword.png'
+import cardReverse from './images/cardReverse.jpg'
 
 class GameBoard extends Component {
     constructor(props) {
@@ -426,8 +427,8 @@ class GameBoard extends Component {
                         id='player-one-cards' pickCardToPlay={this.pickCardToPlay} player={'playerOne'} />
                     <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked}
                         id='player-two-cards' pickCardToPlay={this.pickCardToPlay} player={'playerTwo'} />
-                        <Deck hero={this.state.playerOne} id='player-one-deck'/>
-                        <Deck hero={this.state.playerTwo} id='player-two-deck'/>
+                    <Deck hero={this.state.playerOne} id='player-one-deck' />
+                    <Deck hero={this.state.playerTwo} id='player-two-deck' />
                 </>
             )
         } if (this.props.isHeroesPicked && this.state.isGameOver) {
@@ -591,7 +592,11 @@ class CardTable extends Component {
 
 class Deck extends Component {
     render() {
-        return <div className="deck" id={this.props.id}>Cards left:&nbsp;<div className="deck-left"> {this.props.hero.cards.length}</div></div>
+        return (
+            <div className="deck" id={this.props.id}>
+                <img src={cardReverse} alt='card reverse'></img>
+                <div className="deck-left">Cards left:&nbsp;{this.props.hero.cards.length}</div>
+            </div>)
     }
 }
 

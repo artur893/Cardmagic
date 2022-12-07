@@ -426,6 +426,8 @@ class GameBoard extends Component {
                         id='player-one-cards' pickCardToPlay={this.pickCardToPlay} player={'playerOne'} />
                     <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked}
                         id='player-two-cards' pickCardToPlay={this.pickCardToPlay} player={'playerTwo'} />
+                        <Deck hero={this.state.playerOne} id='player-one-deck'/>
+                        <Deck hero={this.state.playerTwo} id='player-two-deck'/>
                 </>
             )
         } if (this.props.isHeroesPicked && this.state.isGameOver) {
@@ -584,6 +586,12 @@ class CardTable extends Component {
                 <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
                     {this.displayCard(5)}</div>
             </div>)
+    }
+}
+
+class Deck extends Component {
+    render() {
+        return <div className="deck" id={this.props.id}>Cards left:&nbsp;<div className="deck-left"> {this.props.hero.cards.length}</div></div>
     }
 }
 

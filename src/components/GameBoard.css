@@ -274,3 +274,31 @@
     justify-content: center;
     align-items: center;
 }
+
+.deck {
+    margin: 0 0 0 50px;
+    background-color: var(--cardBg);
+    border: solid 2px black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0;
+    height: 180px;
+    width: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto';
+}
+
+.deck-left {
+    font-weight: 700;
+}
+
+#player-one-deck{
+grid-column: 3;
+grid-row: 4;
+}
+
+#player-two-deck{
+grid-column: 3;
+grid-row: 1;
+}

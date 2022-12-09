@@ -55,17 +55,34 @@ class GameBoard extends Component {
         }
         this.isGameOver()
         this.spinArrow()
-        // this.aiModule()
+        this.aiModule()
     }
+
+    initStartCards(player) {
+        const playerClone = cloneDeep(this.state[player])
+        const onHand = []
+        for (let i = 0; i < 3; i++) {
+            const random = Math.random() * (playerClone.cards.length - 1)
+            const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
+            onHand.push(randomCard)
+        }
+        playerClone['onHand'] = onHand
+        this.setState({ [player]: playerClone })
+        this.randomNextCard(player)
+    }
+
+    //**************************************************************************
+    //******************************** AI MODULE *******************************
+    //**************************************************************************
 
     aiModule() {
         if (this.state.isAiTurn) {
             this.setState({ isAiTurn: false })
-            setTimeout(() => this.aiPickCard(), 300)
-            setTimeout(() => this.aiPutCardOnTable(), 600)
-            setTimeout(() => this.aiAttack(), 900)
-            setTimeout(() => this.killCards(), 2500)
-            setTimeout(() => this.gameFlow(), 3000)
+            setTimeout(() => this.aiPickCard(), 3000)
+            setTimeout(() => this.aiPutCardOnTable(), 3600)
+            setTimeout(() => this.aiAttack(), 3900)
+            setTimeout(() => this.killCards(), 5500)
+            setTimeout(() => this.gameFlow(), 6000)
         }
     }
 
@@ -155,25 +172,9 @@ class GameBoard extends Component {
             }, i * 200 + 100)
         })
     }
-
-    isGameOver() {
-        if ((this.state.playerOne?.hp <= 0 && !this.state.isGameOver) || (this.state.playerTwo?.hp <= 0 && !this.state.isGameOver)) {
-            this.setState({ isGameOver: true })
-        }
-    }
-
-    initStartCards(player) {
-        const playerClone = cloneDeep(this.state[player])
-        const onHand = []
-        for (let i = 0; i < 3; i++) {
-            const random = Math.random() * (playerClone.cards.length - 1)
-            const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
-            onHand.push(randomCard)
-        }
-        playerClone['onHand'] = onHand
-        this.setState({ [player]: playerClone })
-        this.randomNextCard(player)
-    }
+    //*************************************************************************
+    //******************************** GAMEFLOW *******************************
+    //*************************************************************************
 
     gameFlow() {
         this.nextRound()
@@ -186,12 +187,14 @@ class GameBoard extends Component {
         this.setAiTurn()
     }
 
-    setAiTurn() {
-        this.setState((state) => {
-            if (state.playerOnMove === 'playerTwo') {
-                return { isAiTurn: true }
-            }
-        })
+    isGameOver() {
+        if ((this.state.playerOne?.hp <= 0 && !this.state.isGameOver) || (this.state.playerTwo?.hp <= 0 && !this.state.isGameOver)) {
+            this.setState({ isGameOver: true })
+        }
+    }
+
+    nextRound() {
+        this.setState((state) => ({ numberOfRound: state.numberOfRound + 0.5 }))
     }
 
     switchPlayerOnMove() {
@@ -214,18 +217,32 @@ class GameBoard extends Component {
         })
     }
 
-    nextRound() {
-        this.setState((state) => ({ numberOfRound: state.numberOfRound + 0.5 }))
+    addTotalMana() {
+        this.setState((state) => {
+            if (state.playerOnMove === 'playerOne') {
+                const playerOne = cloneDeep(state.playerOne)
+                playerOne['totalMana'] = playerOne.totalMana + 1
+                playerOne['mana'] = playerOne.totalMana
+                const playerTwo = cloneDeep(state.playerTwo)
+                playerTwo['totalMana'] = playerTwo.totalMana + 1
+                playerTwo['mana'] = playerTwo.totalMana
+                return {
+                    playerOne: playerOne,
+                    playerTwo: playerTwo
+                }
+            }
+        })
     }
 
-    randomNextCard(player) {
+    getNewCard() {
         this.setState((state) => {
-            const playerClone = cloneDeep(state[player])
-            const random = Math.random() * (playerClone.cards.length - 1)
-            const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
-            playerClone['nextCard'] = randomCard
-            return { [player]: playerClone }
+            if (state[state.playerOnMove].onHand.length < 6) {
+                const playerClone = cloneDeep(state[state.playerOnMove])
+                playerClone.onHand.push(state[state.playerOnMove].nextCard)
+                return { [state.playerOnMove]: playerClone }
+            }
         })
+        this.randomNextCard(this.state.playerOnMove)
     }
 
     getCardAnimation(player) {
@@ -248,15 +265,14 @@ class GameBoard extends Component {
         }
     }
 
-    getNewCard() {
+    randomNextCard(player) {
         this.setState((state) => {
-            if (state[state.playerOnMove].onHand.length < 6) {
-                const playerClone = cloneDeep(state[state.playerOnMove])
-                playerClone.onHand.push(state[state.playerOnMove].nextCard)
-                return { [state.playerOnMove]: playerClone }
-            }
+            const playerClone = cloneDeep(state[player])
+            const random = Math.random() * (playerClone.cards.length - 1)
+            const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
+            playerClone['nextCard'] = randomCard
+            return { [player]: playerClone }
         })
-        this.randomNextCard(this.state.playerOnMove)
     }
 
     clearHands() {
@@ -274,23 +290,6 @@ class GameBoard extends Component {
         })
     }
 
-    addTotalMana() {
-        this.setState((state) => {
-            if (state.playerOnMove === 'playerOne') {
-                const playerOne = cloneDeep(state.playerOne)
-                playerOne['totalMana'] = playerOne.totalMana + 1
-                playerOne['mana'] = playerOne.totalMana
-                const playerTwo = cloneDeep(state.playerTwo)
-                playerTwo['totalMana'] = playerTwo.totalMana + 1
-                playerTwo['mana'] = playerTwo.totalMana
-                return {
-                    playerOne: playerOne,
-                    playerTwo: playerTwo
-                }
-            }
-        })
-    }
-
     clearMove() {
         this.setState((state) => {
             const clone = cloneDeep(state[state.playerOnMove])
@@ -303,17 +302,61 @@ class GameBoard extends Component {
         })
     }
 
+    setAiTurn() {
+        this.setState((state) => {
+            if (state.playerOnMove === 'playerTwo') {
+                return { isAiTurn: true }
+            }
+        })
+    }
+
+    killCards() {
+        this.setState((state) => {
+            const clonePlayer = cloneDeep(state[state.playerOnMove])
+            const cloneTarget = cloneDeep(state[state.playerTarget])
+            cloneTarget?.onTable.forEach((card) => {
+                if (card?.hp <= 0) {
+                    const index = cloneTarget.onTable.findIndex(cardToIndex => cardToIndex?.id === card.id)
+                    cloneTarget.onTable[index] = null
+                }
+            })
+            clonePlayer?.onTable.forEach((card) => {
+                if (card?.hp <= 0) {
+                    const index = clonePlayer.onTable.findIndex(cardToIndex => cardToIndex?.id === card.id)
+                    clonePlayer.onTable[index] = null
+                }
+            })
+            return { [state.playerTarget]: cloneTarget, [state.playerOnMove]: clonePlayer }
+        })
+    }
+
+    spinArrow() {
+        const arrow = document.querySelector('img')
+        if (this.state.playerOnMove === 'playerOne' && arrow) {
+            arrow.classList.add('spin')
+        } else if (arrow) {
+            arrow.classList.remove('spin')
+        }
+    }
+
+    showWinner() {
+        if (this.state.playerOne.hp > 0) {
+            return this.state.playerOne.name
+        } else {
+            return this.state.playerTwo.name
+        }
+    }
+
+    //*************************************************************************
+    //************************** PLAYER GAME CONTROL **************************
+    //*************************************************************************
+
     pickCardToPlay(e, player) {
         const index = this.state[player].onHand.findIndex(card => card.id === e.target.id)
         const inHand = this.state[player].onHand[index]
         const playerClone = cloneDeep(this.state[player])
         playerClone['inHand'] = inHand
         this.setState({ [player]: playerClone })
-    }
-
-    removeCardOnHand(player) {
-        const index = player.onHand.findIndex(card => card.id === player.inHand.id)
-        player.onHand.splice(index, 1)
     }
 
     putCardOnTable(e, player, cardTable) {
@@ -332,13 +375,9 @@ class GameBoard extends Component {
         }
     }
 
-    spinArrow() {
-        const arrow = document.querySelector('img')
-        if (this.state.playerOnMove === 'playerOne' && arrow) {
-            arrow.classList.add('spin')
-        } else if (arrow) {
-            arrow.classList.remove('spin')
-        }
+    removeCardOnHand(player) {
+        const index = player.onHand.findIndex(card => card.id === player.inHand.id)
+        player.onHand.splice(index, 1)
     }
 
     pickCardToAttack(e, table) {
@@ -407,34 +446,6 @@ class GameBoard extends Component {
             } else {
                 this.attackEnemyCard(event, enemyClone, playerClone)
             }
-        }
-    }
-
-    killCards() {
-        this.setState((state) => {
-            const clonePlayer = cloneDeep(state[state.playerOnMove])
-            const cloneTarget = cloneDeep(state[state.playerTarget])
-            cloneTarget?.onTable.forEach((card) => {
-                if (card?.hp <= 0) {
-                    const index = cloneTarget.onTable.findIndex(cardToIndex => cardToIndex?.id === card.id)
-                    cloneTarget.onTable[index] = null
-                }
-            })
-            clonePlayer?.onTable.forEach((card) => {
-                if (card?.hp <= 0) {
-                    const index = clonePlayer.onTable.findIndex(cardToIndex => cardToIndex?.id === card.id)
-                    clonePlayer.onTable[index] = null
-                }
-            })
-            return { [state.playerTarget]: cloneTarget, [state.playerOnMove]: clonePlayer }
-        })
-    }
-
-    showWinner() {
-        if (this.state.playerOne.hp > 0) {
-            return this.state.playerOne.name
-        } else {
-            return this.state.playerTwo.name
         }
     }
 

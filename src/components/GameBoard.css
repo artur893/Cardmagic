@@ -277,8 +277,7 @@
 
 .deck {
     position: relative;
-    margin: 0 0 0 50px;
-    background-color: var(--cardBg);
+    margin: 0 0 3px 50px;
     border: solid 2px black;
     border-radius: 10px;
     box-shadow: 0 0 10px 0;
@@ -316,4 +315,52 @@
 #player-two-deck {
     grid-column: 3;
     grid-row: 1;
+}
+
+.deck-animate {
+    border: solid 2px black;
+    border-radius: 10px;
+    height: 180px;
+    width: 130px;
+}
+
+.deck-animate,
+.deck-animate-back>img,
+.deck-animate-front,
+.deck-animate-back {
+    position: absolute;
+    height: 180px;
+    width: 130px;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: 2s;
+}
+
+.deck-animate-front {
+    transform: rotateY(180deg);
+}
+
+.deck-animate.active {
+    animation: getcard 2.5s ease-in-out 1;
+}
+
+@keyframes getcard {
+    0% {
+        right: 0px;
+    }
+
+    40% {
+        right: 150px;
+        transform: rotateY(0deg)
+    }
+
+    75% {
+        right: 150px;
+        transform: rotateY(-180deg)
+    }
+
+    100% {
+        right: 150px;
+        transform: rotateY(-180deg)
+    }
 }

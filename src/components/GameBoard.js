@@ -55,7 +55,7 @@ class GameBoard extends Component {
         }
         this.isGameOver()
         this.spinArrow()
-        this.aiModule()
+        // this.aiModule()
     }
 
     aiModule() {
@@ -172,13 +172,15 @@ class GameBoard extends Component {
         }
         playerClone['onHand'] = onHand
         this.setState({ [player]: playerClone })
+        this.randomNextCard(player)
     }
 
     gameFlow() {
         this.nextRound()
         this.switchPlayerOnMove()
         this.addTotalMana()
-        this.getNewCard()
+        this.getCardAnimation(this.state.playerTarget)
+        setTimeout(() => { this.getNewCard() }, 2500)
         this.clearHands()
         this.clearMove()
         this.setAiTurn()
@@ -216,16 +218,45 @@ class GameBoard extends Component {
         this.setState((state) => ({ numberOfRound: state.numberOfRound + 0.5 }))
     }
 
+    randomNextCard(player) {
+        this.setState((state) => {
+            const playerClone = cloneDeep(state[player])
+            const random = Math.random() * (playerClone.cards.length - 1)
+            const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
+            playerClone['nextCard'] = randomCard
+            return { [player]: playerClone }
+        })
+    }
+
+    getCardAnimation(player) {
+        if (this.state[player].onHand.length < 6) {
+            if (player === 'playerOne') {
+                const index = 0
+                const card = document.querySelectorAll('.deck-animate')
+                card[index].classList.add('active')
+                setTimeout(() => {
+                    card[index].classList.remove('active')
+                }, 2500)
+            } else {
+                const index = 1
+                const card = document.querySelectorAll('.deck-animate')
+                card[index].classList.add('active')
+                setTimeout(() => {
+                    card[index].classList.remove('active')
+                }, 2500)
+            }
+        }
+    }
+
     getNewCard() {
         this.setState((state) => {
             if (state[state.playerOnMove].onHand.length < 6) {
                 const playerClone = cloneDeep(state[state.playerOnMove])
-                const random = Math.random() * (playerClone.cards.length - 1)
-                const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
-                playerClone.onHand.push(randomCard)
+                playerClone.onHand.push(state[state.playerOnMove].nextCard)
                 return { [state.playerOnMove]: playerClone }
             }
         })
+        this.randomNextCard(this.state.playerOnMove)
     }
 
     clearHands() {
@@ -594,6 +625,24 @@ class Deck extends Component {
     render() {
         return (
             <div className="deck" id={this.props.id}>
+                <div className='deck-animate'>
+                    <div className='deck-animate-back'>
+                        <img src={cardReverse} alt='card reverse'></img>
+                    </div>
+                    <div className='deck-animate-front'>
+                        <div className="onhand-card" id={this.props.hero.nextCard?.id} key={uuid()}>
+                            <div className="onhand-card-top">
+                                <div className="onhand-cost" key={uuid()}>{this.props.hero.nextCard?.cost} <img src={costIcon} alt='mana'></img></div>
+                            </div>
+                            <div className="onhand-name" key={uuid()}>{this.props.hero.nextCard?.name}</div>
+                            <p className="onhand-description" key={uuid()}>{ }</p>
+                            <div className="onhand-card-bottom">
+                                <div className="onhand-attack" key={uuid()}>{this.props.hero.nextCard?.attack}<img src={attackIcon} alt='sword'></img></div>
+                                <div className="onhand-hp" key={uuid()}>{this.props.hero.nextCard?.hp}<img src={hpIcon} alt='heart'></img></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <img src={cardReverse} alt='card reverse'></img>
                 <div className="deck-left">Cards left:&nbsp;{this.props.hero.cards.length}</div>
             </div>)

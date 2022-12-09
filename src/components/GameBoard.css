@@ -356,11 +356,11 @@
 
     75% {
         right: 150px;
-        transform: rotateY(-180deg)
+        transform: rotateY(180deg)
     }
 
     100% {
         right: 150px;
-        transform: rotateY(-180deg)
+        transform: rotateY(180deg)
     }
 }

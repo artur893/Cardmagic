@@ -120,6 +120,23 @@ class GameBoard extends Component {
     }
 
     aiAttack() {
+        const indexes = this.findCardsAbleToMove()
+        indexes.forEach((index, i) => {
+            this.pickCardToAttackAI(index, i)
+            setTimeout(() => {
+                this.setState((state) => {
+                    const enemyIndexes = this.findEnemyCardsToBeAttacked(state)
+                    if (enemyIndexes.length > 0) {
+                        return this.attackEnemyCardAI(state, enemyIndexes)
+                    } else {
+                        return this.attackEnemyHeroAI(state)
+                    }
+                })
+            }, i * 200 + 100)
+        })
+    }
+
+    findCardsAbleToMove() {
         const indexes = []
         const playerClone = cloneDeep(this.state.playerTwo)
 
@@ -128,49 +145,56 @@ class GameBoard extends Component {
                 indexes.push(i)
             }
         })
+        return indexes
+    }
 
-        indexes.forEach((index, i) => {
-            setTimeout(() => {
-                this.setState((state) => {
-                    const clone = cloneDeep(state.playerTwo)
-                    const cardToAttack = state.playerTwo.onTable[index]
-                    clone['cardToAttack'] = cardToAttack
-                    return { playerTwo: clone }
-                })
-            }, i * 200)
-            setTimeout(() => {
-                this.setState((state) => {
-                    const enemyClone = cloneDeep(state.playerOne)
-                    const playerClone = cloneDeep(state.playerTwo)
-                    const enemyIndexes = []
-                    enemyClone.onTable.forEach((field, i) => {
-                        if (field) {
-                            enemyIndexes.push(i)
-                        }
-                    })
-                    const index = Math.floor(Math.random() * enemyIndexes.length)
-                    if (enemyIndexes.length > 0) {
-                        playerClone.cardToAttack.attackEnemy(enemyClone.onTable[enemyIndexes[index]])
-                        const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
-                        playerClone.onTable[attackerIndex] = playerClone.cardToAttack
-                        playerClone.onTable[attackerIndex]['isMadeMove'] = true
-                        return {
-                            playerOne: enemyClone,
-                            playerTwo: playerClone
-                        }
-                    } else {
-                        playerClone.cardToAttack.attackEnemy(enemyClone)
-                        const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
-                        playerClone.onTable[attackerIndex] = playerClone.cardToAttack
-                        playerClone.onTable[attackerIndex]['isMadeMove'] = true
-                        return {
-                            playerOne: enemyClone,
-                            playerTwo: playerClone
-                        }
-                    }
-                })
-            }, i * 200 + 100)
+    pickCardToAttackAI(index, i) {
+        setTimeout(() => {
+            this.setState((state) => {
+                const clone = cloneDeep(state.playerTwo)
+                const cardToAttack = state.playerTwo.onTable[index]
+                clone['cardToAttack'] = cardToAttack
+                return { playerTwo: clone }
+            })
+        }, i * 200)
+    }
+
+    findEnemyCardsToBeAttacked(state) {
+        const enemyIndexes = []
+        const enemyClone = cloneDeep(state.playerOne)
+        enemyClone.onTable.forEach((field, i) => {
+            if (field) {
+                enemyIndexes.push(i)
+            }
         })
+        return enemyIndexes
+    }
+
+    attackEnemyCardAI(state, enemyIndexes) {
+        const playerClone = cloneDeep(state.playerTwo)
+        const enemyClone = cloneDeep(state.playerOne)
+        const index = Math.floor(Math.random() * enemyIndexes.length)
+        playerClone.cardToAttack.attackEnemy(enemyClone.onTable[enemyIndexes[index]])
+        const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
+        playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+        playerClone.onTable[attackerIndex]['isMadeMove'] = true
+        return {
+            playerOne: enemyClone,
+            playerTwo: playerClone
+        }
+    }
+
+    attackEnemyHeroAI(state) {
+        const playerClone = cloneDeep(state.playerTwo)
+        const enemyClone = cloneDeep(state.playerOne)
+        playerClone.cardToAttack.attackEnemy(enemyClone)
+        const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
+        playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+        playerClone.onTable[attackerIndex]['isMadeMove'] = true
+        return {
+            playerOne: enemyClone,
+            playerTwo: playerClone
+        }
     }
     //*************************************************************************
     //******************************** GAMEFLOW *******************************

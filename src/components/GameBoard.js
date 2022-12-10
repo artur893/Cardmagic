@@ -55,7 +55,7 @@ class GameBoard extends Component {
         }
         this.isGameOver()
         this.spinArrow()
-        this.aiModule()
+        this.aiModuleHard()
     }
 
     initStartCards(player) {
@@ -75,7 +75,7 @@ class GameBoard extends Component {
     //******************************** AI MODULE *******************************
     //**************************************************************************
 
-    aiModule() {
+    aiModuleEasy() {
         if (this.state.isAiTurn) {
             this.setState({ isAiTurn: false })
             setTimeout(() => this.aiPickCard(), 3000)
@@ -85,6 +85,65 @@ class GameBoard extends Component {
             setTimeout(() => this.gameFlow(), 6000)
         }
     }
+
+    aiModuleHard() {
+        if (this.state.isAiTurn) {
+            this.setState({ isAiTurn: false })
+            this.aiPlayCards()
+        }
+    }
+
+    aiPlayCards() {
+        const cards = this.aiPickCardsAbleToPlay()
+        const bestCards = this.aiPickBestCardsToPlay(cards)
+        console.log(bestCards)
+    }
+
+    aiPickCardsAbleToPlay() {
+        const cards = []
+        this.state.playerTwo?.onHand.forEach((card) => {
+            if (card.cost <= this.state.playerTwo.mana) {
+                cards.push(cloneDeep(card))
+            }
+        })
+        return cards
+    }
+
+    aiPickBestCardsToPlay(cards) {
+        const possibleCombinations = []
+        for (let i = 1; i <= cards.length; i++) {
+            const result = this.combinations(cards, i)
+            possibleCombinations.push(result)
+        }
+        return possibleCombinations
+    }
+
+    combinations(set, k) {
+        let i, j, combs, head, tailcombs;
+        if (k > set.length || k <= 0) {
+            return [];
+        }
+        if (k === set.length) {
+            return [set];
+        }
+        if (k === 1) {
+            combs = [];
+            for (i = 0; i < set.length; i++) {
+                combs.push([set[i]]);
+            }
+            return combs;
+        }
+        combs = [];
+        for (i = 0; i < set.length - k + 1; i++) {
+            head = set.slice(i, i + 1);
+            tailcombs = this.combinations(set.slice(i + 1), k - 1);
+            for (j = 0; j < tailcombs.length; j++) {
+                combs.push(head.concat(tailcombs[j]));
+            }
+        }
+        return combs;
+    }
+
 
     aiPickCard() {
         const indexes = []
@@ -120,23 +179,23 @@ class GameBoard extends Component {
     }
 
     aiAttack() {
-        const indexes = this.findCardsAbleToMove()
+        const indexes = this.aiFindCardsAbleToMove()
         indexes.forEach((index, i) => {
-            this.pickCardToAttackAI(index, i)
+            this.aiPickCardToAttack(index, i)
             setTimeout(() => {
                 this.setState((state) => {
-                    const enemyIndexes = this.findEnemyCardsToBeAttacked(state)
+                    const enemyIndexes = this.aiFindEnemyCardsToBeAttacked(state)
                     if (enemyIndexes.length > 0) {
-                        return this.attackEnemyCardAI(state, enemyIndexes)
+                        return this.aiAttackEnemyCardAI(state, enemyIndexes)
                     } else {
-                        return this.attackEnemyHeroAI(state)
+                        return this.aiAttackEnemyHero(state)
                     }
                 })
             }, i * 200 + 100)
         })
     }
 
-    findCardsAbleToMove() {
+    aiFindCardsAbleToMove() {
         const indexes = []
         const playerClone = cloneDeep(this.state.playerTwo)
 
@@ -148,7 +207,7 @@ class GameBoard extends Component {
         return indexes
     }
 
-    pickCardToAttackAI(index, i) {
+    aiPickCardToAttack(index, i) {
         setTimeout(() => {
             this.setState((state) => {
                 const clone = cloneDeep(state.playerTwo)
@@ -159,7 +218,7 @@ class GameBoard extends Component {
         }, i * 200)
     }
 
-    findEnemyCardsToBeAttacked(state) {
+    aiFindEnemyCardsToBeAttacked(state) {
         const enemyIndexes = []
         const enemyClone = cloneDeep(state.playerOne)
         enemyClone.onTable.forEach((field, i) => {
@@ -170,7 +229,7 @@ class GameBoard extends Component {
         return enemyIndexes
     }
 
-    attackEnemyCardAI(state, enemyIndexes) {
+    aiAttackEnemyCardAI(state, enemyIndexes) {
         const playerClone = cloneDeep(state.playerTwo)
         const enemyClone = cloneDeep(state.playerOne)
         const index = Math.floor(Math.random() * enemyIndexes.length)
@@ -184,7 +243,7 @@ class GameBoard extends Component {
         }
     }
 
-    attackEnemyHeroAI(state) {
+    aiAttackEnemyHero(state) {
         const playerClone = cloneDeep(state.playerTwo)
         const enemyClone = cloneDeep(state.playerOne)
         playerClone.cardToAttack.attackEnemy(enemyClone)

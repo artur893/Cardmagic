@@ -78,7 +78,7 @@ class GameBoard extends Component {
     aiModuleEasy() {
         if (this.state.isAiTurn) {
             this.setState({ isAiTurn: false })
-            setTimeout(() => this.aiPickCard(), 3000)
+            setTimeout(() => this.aiPickRandomCard(), 3000)
             setTimeout(() => this.aiPutCardOnTable(), 3600)
             setTimeout(() => this.aiAttack(), 3900)
             setTimeout(() => this.killCards(), 5500)
@@ -95,8 +95,16 @@ class GameBoard extends Component {
 
     aiPlayCards() {
         const cards = this.aiPickCardsAbleToPlay()
-        const bestCards = this.aiPickBestCardsToPlay(cards)
-        console.log(bestCards)
+        const combinations = this.aiCreateCombinations(cards)
+        const possibleToPlay = this.aiIsEnoughMana(combinations)
+        this.aiSortCombinations(possibleToPlay)
+        if (possibleToPlay.length > 0) {
+            possibleToPlay[0].forEach((card, i) => {
+                setTimeout(() => { this.aiGrabCard(card) }, i * 500)
+                setTimeout(() => { this.aiPutCardOnTable() }, i * 500 + 300)
+            })
+        }
+        console.log(possibleToPlay)
     }
 
     aiPickCardsAbleToPlay() {
@@ -109,13 +117,47 @@ class GameBoard extends Component {
         return cards
     }
 
-    aiPickBestCardsToPlay(cards) {
+    aiCreateCombinations(cards) {
         const possibleCombinations = []
         for (let i = 1; i <= cards.length; i++) {
-            const result = this.combinations(cards, i)
-            possibleCombinations.push(result)
+            const combinations = this.combinations(cards, i)
+            possibleCombinations.push(combinations)
         }
         return possibleCombinations
+    }
+
+    aiIsEnoughMana(combinations) {
+        const combinationsEnoughMana = []
+        combinations.forEach((setOfComb) => {
+            setOfComb.forEach((comb) => {
+                let mana = this.state.playerTwo.mana
+                comb.forEach((card) => {
+                    mana = mana - card.cost
+                })
+                if (mana >= 0) {
+                    combinationsEnoughMana.push(comb)
+                }
+            })
+        })
+        return combinationsEnoughMana
+    }
+
+    aiSortCombinations(combinations) {
+        combinations.sort((a, b) => {
+            let scoreA = 0
+            let scoreB = 0
+            a.forEach((card) => {
+                scoreA = scoreA + card.attack + card.hp
+            })
+            b.forEach((card) => {
+                scoreB = scoreB + card.attack + card.hp
+            })
+            if (scoreA > scoreB) {
+                return -1
+            } else {
+                return 1
+            }
+        })
     }
 
     combinations(set, k) {
@@ -144,8 +186,13 @@ class GameBoard extends Component {
         return combs;
     }
 
+    aiGrabCard(card) {
+        const playerClone = cloneDeep(this.state.playerTwo)
+        playerClone.inHand = card
+        this.setState({ playerTwo: playerClone })
+    }
 
-    aiPickCard() {
+    aiPickRandomCard() {
         const indexes = []
         this.state.playerTwo?.onHand.forEach((card, i) => {
             if (card.cost <= this.state.playerTwo.mana) {
@@ -168,13 +215,15 @@ class GameBoard extends Component {
                     indexes.push(i)
                 }
             })
-            const index = Math.floor(Math.random() * indexes.length)
-            clone.onTable[indexes[index]] = clone.inHand
-            clone.onTable[indexes[index]]['isMadeMove'] = true
-            clone['mana'] = clone.mana - clone.inHand.cost
-            this.removeCardOnHand(clone)
-            clone['inHand'] = null
-            this.setState({ playerTwo: clone })
+            if (indexes.length > 0) {
+                const index = Math.floor(Math.random() * indexes.length)
+                clone.onTable[indexes[index]] = clone.inHand
+                clone.onTable[indexes[index]]['isMadeMove'] = true
+                clone['mana'] = clone.mana - clone.inHand.cost
+                this.removeCardOnHand(clone)
+                clone['inHand'] = null
+                this.setState({ playerTwo: clone })
+            }
         }
     }
 

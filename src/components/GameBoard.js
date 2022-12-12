@@ -232,7 +232,11 @@ class GameBoard extends Component {
         const battlePairs = this.aiCreateBattlePairs(this.aiFindCardsAbleToMove(), this.aiFindEnemyCardsToBeAttacked(this.state))
         const scoredPairs = this.aiScorePairs(battlePairs)
         const bestPairs = this.aiPickBestPair(scoredPairs)
-        console.log(bestPairs)
+        bestPairs.forEach((pair, i) => {
+            console.log(pair[0])
+            console.log(pair[0].attacker.index)
+            this.aiPickCardToAttack(pair[0].attacker.index, i)
+        })
     }
 
     aiPickBestPair(pairs) {
@@ -347,10 +351,11 @@ class GameBoard extends Component {
             this.setState((state) => {
                 const clone = cloneDeep(state.playerTwo)
                 const cardToAttack = state.playerTwo.onTable[index]
+                console.log(cardToAttack)
                 clone['cardToAttack'] = cardToAttack
                 return { playerTwo: clone }
             })
-        }, i * 200)
+        }, i * 1200)
     }
 
     aiFindEnemyCardsToBeAttacked(state) {

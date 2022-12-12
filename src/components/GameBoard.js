@@ -230,10 +230,45 @@ class GameBoard extends Component {
 
     aiPreciseAttack() {
         const battlePairs = this.aiCreateBattlePairs(this.aiFindCardsAbleToMove(), this.aiFindEnemyCardsToBeAttacked(this.state))
-        const scoredPairs = this.aiCalculateAttack(battlePairs)
+        const scoredPairs = this.aiScorePairs(battlePairs)
+        const bestPairs = this.aiPickBestPair(scoredPairs)
+        console.log(bestPairs)
     }
 
-    aiCalculateAttack(battlePairs) {
+    aiPickBestPair(pairs) {
+        const bestPairs = []
+        pairs.forEach((card) => {
+            const surviveAndKill = []
+            const killAndDead = []
+            const survivedNotKill = []
+            card.forEach((pair) => {
+                if (pair.score.didSurvive === true && pair.score.didKilled === true) {
+                    surviveAndKill.push(pair)
+                }
+                if (pair.score.didKilled === true && pair.score.didSurvive === false) {
+                    killAndDead.push(pair)
+                }
+                if (pair.score.didSurvive === true && pair.score.didKilled === false) {
+                    survivedNotKill.push(pair)
+                }
+            })
+            if (surviveAndKill.length > 0) {
+                bestPairs.push(surviveAndKill)
+            }
+            if (surviveAndKill.length === 0 && survivedNotKill.length > 0) {
+                bestPairs.push(killAndDead)
+            }
+            if (surviveAndKill.length === 0 && survivedNotKill.length === 0 && killAndDead.length > 0) {
+                bestPairs.push(killAndDead)
+            }
+        })
+        bestPairs.forEach((pair) => {
+            pair.sort((a, b) => b.score.opponentValue - a.score.opponentValue)
+        })
+        return bestPairs
+    }
+
+    aiScorePairs(battlePairs) {
         const allScoredPairs = []
         battlePairs.forEach((card) => {
             const scoredPairs = []
@@ -241,25 +276,27 @@ class GameBoard extends Component {
                 const score = {
                     didSurvive: null,
                     didKilled: null,
+                    opponentValue: null
                 }
                 if (pair.attacker.hp > pair.defendor.attack) {
-                    score.didSurvive = 1
+                    score.didSurvive = true
                 }
                 if (pair.attacker.hp <= pair.defendor.attack) {
-                    score.didSurvive = 0
+                    score.didSurvive = false
                 }
                 if (pair.attacker.attack >= pair.defendor.hp) {
-                    score.didKilled = 1
+                    score.didKilled = true
                 }
                 if (pair.attacker.attack < pair.defendor.hp) {
-                    score.didKilled = 0
+                    score.didKilled = false
                 }
+                score.opponentValue = pair.defendor.attack + pair.defendor.hp
                 pair['score'] = score
                 scoredPairs.push(pair)
             })
             allScoredPairs.push(scoredPairs)
         })
-        console.log(allScoredPairs)
+        return allScoredPairs
     }
 
     aiCreateBattlePairs(attacker, defendor) {

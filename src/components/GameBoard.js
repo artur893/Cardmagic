@@ -86,23 +86,28 @@ class GameBoard extends Component {
         }
     }
 
-    aiModuleHard() {
+    async aiModuleHard() {
         if (this.state.isAiTurn) {
             this.setState({ isAiTurn: false })
-            this.aiPlayCards()
-            this.aiPreciseAttack()
+            await this.aiPlayCards()
+            await this.aiPreciseAttack()
         }
     }
 
-    aiPlayCards() {
+    async aiPlayCards() {
         const cards = this.aiPickCardsAbleToPlay()
         const combinations = this.aiCreateCombinations(cards)
         const possibleToPlay = this.aiIsEnoughMana(combinations)
         this.aiSortCombinations(possibleToPlay)
         if (possibleToPlay.length > 0) {
+            let wait
             possibleToPlay[0].forEach((card, i) => {
-                setTimeout(() => { this.aiGrabCard(card) }, i * 500)
-                setTimeout(() => { this.aiPutCardOnTable() }, i * 500 + 300)
+                setTimeout(() => { this.aiGrabCard(card) }, i * 2000)
+                setTimeout(() => { this.aiPutCardOnTable() }, i * 2000 + 1000)
+                wait = i
+            })
+            return new Promise((resolve) => {
+                setTimeout(() => resolve(), (wait * 2000) + 2000)
             })
         }
     }
@@ -228,14 +233,15 @@ class GameBoard extends Component {
         }
     }
 
-    aiPreciseAttack() {
+    async aiPreciseAttack() {
         const battlePairs = this.aiCreateBattlePairs(this.aiFindCardsAbleToMove(), this.aiFindEnemyCardsToBeAttacked(this.state))
         const scoredPairs = this.aiScorePairs(battlePairs)
         const bestPairs = this.aiPickBestPair(scoredPairs)
         bestPairs.forEach((pair, i) => {
-            console.log(pair[0])
-            console.log(pair[0].attacker.index)
-            this.aiPickCardToAttack(pair[0].attacker.index, i)
+            setTimeout(() => {
+                this.aiPickCardToAttack(pair[0].attacker.index, i)
+            }, i * 2000)
+
         })
     }
 
@@ -346,16 +352,14 @@ class GameBoard extends Component {
         return indexes
     }
 
-    aiPickCardToAttack(index, i) {
-        setTimeout(() => {
-            this.setState((state) => {
-                const clone = cloneDeep(state.playerTwo)
-                const cardToAttack = state.playerTwo.onTable[index]
-                console.log(cardToAttack)
-                clone['cardToAttack'] = cardToAttack
-                return { playerTwo: clone }
-            })
-        }, i * 1200)
+    aiPickCardToAttack(index) {
+        this.setState((state) => {
+            const clone = cloneDeep(state.playerTwo)
+            const cardToAttack = state.playerTwo.onTable[index]
+            console.log(cardToAttack)
+            clone['cardToAttack'] = cardToAttack
+            return { playerTwo: clone }
+        })
     }
 
     aiFindEnemyCardsToBeAttacked(state) {

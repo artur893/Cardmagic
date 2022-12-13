@@ -234,32 +234,41 @@ class GameBoard extends Component {
     }
 
     async aiPreciseAttack() {
-        const battlePairs = this.aiCreateBattlePairs(this.aiFindCardsAbleToMove(), this.aiFindEnemyCardsToBeAttacked(this.state))
-        const scoredPairs = this.aiScorePairs(battlePairs)
-        const bestPairs = this.aiPickBestPair(scoredPairs)
-        bestPairs.forEach((pair, i) => {
+        const cardsAbleToMove = this.aiFindCardsAbleToMove()
+        cardsAbleToMove.forEach((card, i) => {
             setTimeout(() => {
-                this.aiPickCardToAttack(pair[0].attacker.index, i)
+                this.aiPickCardToAttack(card.index, i)
             }, i * 2000)
-            setTimeout(() => { this.aiAttackCard(pair) }, (i * 2000) + 1000)
+            setTimeout(() => {
+                const cardsToBeAttacked = this.aiFindEnemyCardsToBeAttacked(this.state)
+                const battlePairs = this.aiCreateBattlePairs(card, cardsToBeAttacked)
+                const scoredPairs = this.aiScorePairs(battlePairs)
+                const bestPairs = this.aiPickBestPair(scoredPairs)
+                this.aiAttackCard(bestPairs)
+            }, (i * 2000) + 1000)
             setTimeout(() => { this.killCards() }, (i * 2000) + 1500)
-
         })
     }
 
     aiAttackCard(pair) {
-        this.setState((state) => {
-            const playerClone = cloneDeep(state.playerTwo)
-            const enemyClone = cloneDeep(state.playerOne)
-            playerClone.cardToAttack.attackEnemy(enemyClone.onTable[pair[0].defendor.index])
-            const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
-            playerClone.onTable[attackerIndex] = playerClone.cardToAttack
-            playerClone.onTable[attackerIndex]['isMadeMove'] = true
-            return {
-                playerOne: enemyClone,
-                playerTwo: playerClone
-            }
-        })
+        if (pair.length > 0) {
+            this.setState((state) => {
+                const playerClone = cloneDeep(state.playerTwo)
+                const enemyClone = cloneDeep(state.playerOne)
+                playerClone.cardToAttack.attackEnemy(enemyClone.onTable[pair[0][0].defendor.index])
+                const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
+                playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+                playerClone.onTable[attackerIndex]['isMadeMove'] = true
+                return {
+                    playerOne: enemyClone,
+                    playerTwo: playerClone
+                }
+            })
+        } else {
+            this.setState((state) => {
+                return this.aiAttackEnemyHero(state)
+            })
+        }
     }
 
     aiPickBestPair(pairs) {
@@ -272,7 +281,7 @@ class GameBoard extends Component {
                 if (pair.score.didSurvive === true && pair.score.didKilled === true) {
                     surviveAndKill.push(pair)
                 }
-                if (pair.score.didKilled === true && pair.score.didSurvive === false) {
+                if (pair.score.didSurvive === false && pair.score.didKilled === true) {
                     killAndDead.push(pair)
                 }
                 if (pair.score.didSurvive === true && pair.score.didKilled === false) {
@@ -282,11 +291,11 @@ class GameBoard extends Component {
             if (surviveAndKill.length > 0) {
                 bestPairs.push(surviveAndKill)
             }
-            if (surviveAndKill.length === 0 && survivedNotKill.length > 0) {
+            if (surviveAndKill.length === 0 && killAndDead.length > 0) {
                 bestPairs.push(killAndDead)
             }
-            if (surviveAndKill.length === 0 && survivedNotKill.length === 0 && killAndDead.length > 0) {
-                bestPairs.push(killAndDead)
+            if (surviveAndKill.length === 0 && killAndDead.length === 0 && survivedNotKill.length > 0) {
+                bestPairs.push(survivedNotKill)
             }
         })
         bestPairs.forEach((pair) => {
@@ -328,13 +337,11 @@ class GameBoard extends Component {
 
     aiCreateBattlePairs(attacker, defendor) {
         const battlePairs = []
-        attacker.forEach((card) => {
-            const cardPairs = []
-            defendor.forEach((defCard) => {
-                cardPairs.push({ attacker: card, defendor: defCard })
-            })
-            battlePairs.push(cardPairs)
+        const cardPairs = []
+        defendor.forEach((defCard) => {
+            cardPairs.push({ attacker: attacker, defendor: defCard })
         })
+        battlePairs.push(cardPairs)
         return battlePairs
     }
 

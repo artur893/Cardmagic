@@ -241,7 +241,24 @@ class GameBoard extends Component {
             setTimeout(() => {
                 this.aiPickCardToAttack(pair[0].attacker.index, i)
             }, i * 2000)
+            setTimeout(() => { this.aiAttackCard(pair) }, (i * 2000) + 1000)
+            setTimeout(() => { this.killCards() }, (i * 2000) + 1500)
 
+        })
+    }
+
+    aiAttackCard(pair) {
+        this.setState((state) => {
+            const playerClone = cloneDeep(state.playerTwo)
+            const enemyClone = cloneDeep(state.playerOne)
+            playerClone.cardToAttack.attackEnemy(enemyClone.onTable[pair[0].defendor.index])
+            const attackerIndex = playerClone.onTable.findIndex(card => card?.id === state.playerTwo.cardToAttack.id)
+            playerClone.onTable[attackerIndex] = playerClone.cardToAttack
+            playerClone.onTable[attackerIndex]['isMadeMove'] = true
+            return {
+                playerOne: enemyClone,
+                playerTwo: playerClone
+            }
         })
     }
 
@@ -356,7 +373,6 @@ class GameBoard extends Component {
         this.setState((state) => {
             const clone = cloneDeep(state.playerTwo)
             const cardToAttack = state.playerTwo.onTable[index]
-            console.log(cardToAttack)
             clone['cardToAttack'] = cardToAttack
             return { playerTwo: clone }
         })

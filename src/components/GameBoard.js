@@ -247,23 +247,31 @@ class GameBoard extends Component {
         cardsAbleToMove.forEach((card, i) => {
             setTimeout(() => {
                 this.aiPickCardToAttack(card.index, i)
-            }, i * 2000)
+            }, i * 3500)
+            setTimeout(() => {
+                this.aiAnimateAttack()
+            }, i * 3500 + 1000)
             setTimeout(() => {
                 const cardsToBeAttacked = this.aiFindEnemyCardsToBeAttacked(this.state)
                 const battlePairs = this.aiCreateBattlePairs(card, cardsToBeAttacked)
                 const scoredPairs = this.aiScorePairs(battlePairs)
                 const bestPairs = this.aiPickBestPair(scoredPairs)
                 this.aiAttackCard(bestPairs)
-            }, (i * 2000) + 1000)
-            setTimeout(() => { this.killCards() }, (i * 2000) + 1500)
+            }, (i * 3500) + 2000)
+            setTimeout(() => { this.killCards() }, (i * 3500) + 3000)
             wait = i
         })
         return new Promise((resolve) => {
-            setTimeout(() => resolve(), (wait * 2000) + 2000)
+            setTimeout(() => resolve(), (wait * 3500) + 4000)
         })
     }
 
-    aiAttackCard(pair) {
+    async aiAnimateAttack() {
+        const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
+        cardDom.classList.add('attack-animate-ai')
+    }
+
+    async aiAttackCard(pair) {
         if (pair.length > 0) {
             this.setState((state) => {
                 const playerClone = cloneDeep(state.playerTwo)
@@ -277,6 +285,8 @@ class GameBoard extends Component {
                     playerTwo: playerClone
                 }
             })
+            await this.wait(1)
+            this.animateLastDmg(this.state.playerOne.onTable[pair[0][0].defendor.index].id)
         } else {
             this.setState((state) => {
                 return this.aiAttackEnemyHero(state)
@@ -699,20 +709,23 @@ class GameBoard extends Component {
                 [this.state.playerOnMove]: playerClone
             })
         }
+        return e.target.id
     }
 
-    animateLastDmg() {
+    animateLastDmg(id) {
         const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
+        const enemyCardDom = document.getElementById(id)
         const resultDom = cardDom.querySelector('.onhand-hp-result')
-        console.log(resultDom)
+        const enemyResultDom = enemyCardDom.querySelector('.onhand-hp-result')
         resultDom.classList.add('active')
-        setTimeout(() => { resultDom.classList.add('active') }, 2000)
+        enemyResultDom.classList.add('active')
+        setTimeout(() => { resultDom.classList.remove('active') }, 2000)
+        setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
     }
 
     async animateAttack() {
         const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
         cardDom.classList.add('attack-animate')
-        console.log(cardDom)
         return new Promise((resolve) => {
             setTimeout(() => { resolve() }, 1000)
         })
@@ -726,10 +739,10 @@ class GameBoard extends Component {
             if (e.target.id === 'player-one' || e.target.id === 'player-two') {
                 this.attackEnemyHero(enemyClone, playerClone)
             } else {
-                await this.attackEnemyCard(event, enemyClone, playerClone)
+                const id = await this.attackEnemyCard(event, enemyClone, playerClone)
                 await this.wait(1)
-                this.animateLastDmg()
-                setTimeout(() => this.killCards(), 3000)
+                this.animateLastDmg(id)
+                setTimeout(() => this.killCards(), 2000)
             }
         }
     }

@@ -89,9 +89,16 @@ class GameBoard extends Component {
     async aiModuleHard() {
         if (this.state.isAiTurn) {
             this.setState({ isAiTurn: false })
+            await this.wait(3000)
             await this.aiPlayCards()
             await this.aiPreciseAttack()
         }
+    }
+
+    async wait(time) {
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(), time)
+        })
     }
 
     async aiPlayCards() {

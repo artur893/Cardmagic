@@ -92,6 +92,7 @@ class GameBoard extends Component {
             await this.wait(3000)
             await this.aiPlayCards()
             await this.aiPreciseAttack()
+            this.gameFlow()
         }
     }
 
@@ -242,6 +243,7 @@ class GameBoard extends Component {
 
     async aiPreciseAttack() {
         const cardsAbleToMove = this.aiFindCardsAbleToMove()
+        let wait = 0
         cardsAbleToMove.forEach((card, i) => {
             setTimeout(() => {
                 this.aiPickCardToAttack(card.index, i)
@@ -253,7 +255,11 @@ class GameBoard extends Component {
                 const bestPairs = this.aiPickBestPair(scoredPairs)
                 this.aiAttackCard(bestPairs)
             }, (i * 2000) + 1000)
-            setTimeout(() => { this.killCards() }, (i * 2000) + 1500)
+            setTimeout(() => { this.killCards() }, (i * 2000) + 1500) 
+            wait = i
+        })
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(), (wait * 2000) + 2000)
         })
     }
 

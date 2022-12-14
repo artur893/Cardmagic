@@ -255,7 +255,7 @@ class GameBoard extends Component {
                 const bestPairs = this.aiPickBestPair(scoredPairs)
                 this.aiAttackCard(bestPairs)
             }, (i * 2000) + 1000)
-            setTimeout(() => { this.killCards() }, (i * 2000) + 1500) 
+            setTimeout(() => { this.killCards() }, (i * 2000) + 1500)
             wait = i
         })
         return new Promise((resolve) => {
@@ -676,7 +676,7 @@ class GameBoard extends Component {
         }
     }
 
-    attackEnemyCard(e, enemyClone, playerClone) {
+    async attackEnemyCard(e, enemyClone, playerClone) {
         const index = enemyClone.onTable.findIndex(card => {
             if (card) {
                 return card.id === e.target.id
@@ -691,6 +691,7 @@ class GameBoard extends Component {
                 }
                 return card
             })
+            await this.animateAttack()
             playerClone.onTable[attackerIndex] = playerClone.cardToAttack
             playerClone.onTable[attackerIndex]['isMadeMove'] = true
             this.setState({
@@ -699,6 +700,15 @@ class GameBoard extends Component {
             })
             setTimeout(() => this.killCards(), 1000)
         }
+    }
+
+    async animateAttack() {
+        const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
+        cardDom.classList.add('attack-animate')
+        console.log(cardDom)
+        return new Promise((resolve) => {
+            setTimeout(() => { resolve() }, 2000)
+        })
     }
 
     targetAttackedEnemy(e, table) {

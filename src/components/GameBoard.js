@@ -698,8 +698,15 @@ class GameBoard extends Component {
                 [this.state.playerTarget]: enemyClone,
                 [this.state.playerOnMove]: playerClone
             })
-            setTimeout(() => this.killCards(), 1000)
         }
+    }
+
+    animateLastDmg() {
+        const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
+        const resultDom = cardDom.querySelector('.onhand-hp-result')
+        console.log(resultDom)
+        resultDom.classList.add('active')
+        setTimeout(() => { resultDom.classList.add('active') }, 2000)
     }
 
     async animateAttack() {
@@ -707,11 +714,11 @@ class GameBoard extends Component {
         cardDom.classList.add('attack-animate')
         console.log(cardDom)
         return new Promise((resolve) => {
-            setTimeout(() => { resolve() }, 2000)
+            setTimeout(() => { resolve() }, 1000)
         })
     }
 
-    targetAttackedEnemy(e, table) {
+    async targetAttackedEnemy(e, table) {
         const event = e
         if (table === this.state.tableToAttack) {
             const enemyClone = cloneDeep(this.state[this.state.playerTarget])
@@ -719,7 +726,10 @@ class GameBoard extends Component {
             if (e.target.id === 'player-one' || e.target.id === 'player-two') {
                 this.attackEnemyHero(enemyClone, playerClone)
             } else {
-                this.attackEnemyCard(event, enemyClone, playerClone)
+                await this.attackEnemyCard(event, enemyClone, playerClone)
+                await this.wait(1)
+                this.animateLastDmg()
+                setTimeout(() => this.killCards(), 3000)
             }
         }
     }
@@ -881,7 +891,9 @@ class CardTable extends Component {
                         <p className="onhand-description" key={uuid()}>{ }</p>
                         <div className="onhand-card-bottom">
                             <div className="onhand-attack" key={uuid()}>{this.props.onTable[index].attack}<img src={attackIcon} alt='sword'></img></div>
-                            <div className="onhand-hp" key={uuid()}>{this.props.onTable[index].hp}<img src={hpIcon} alt='heart'></img></div>
+                            <div className="onhand-hp" key={uuid()}>{this.props.onTable[index].hp}<img src={hpIcon} alt='heart'></img>
+                                <div className="onhand-hp-result">-{this.props.onTable[index].lastDmg}</div>
+                            </div>
                         </div>
                     </div>)
             }

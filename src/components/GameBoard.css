@@ -102,6 +102,7 @@
 .onhand-attack,
 .onhand-hp,
 .onhand-cost {
+    position: relative;
     font-size: 1.3rem;
     font-family: 'Roboto';
     font-weight: 900;
@@ -110,6 +111,20 @@
     align-items: center;
     cursor: default;
     pointer-events: none;
+}
+
+.onhand-hp-result {
+    pointer-events: none;
+    opacity: 0;
+    color: rgb(200, 0, 0);
+    font-size: 1.6rem;
+    bottom: 24px;
+    left: 0px;
+    position: absolute;
+}
+
+.onhand-hp-result.active {
+    animation: get-dmg 2s linear 1;
 }
 
 .onhand-cost>img {
@@ -387,4 +402,31 @@
     100% {
         bottom: 10px;
     }
+}
+
+@keyframes get-dmg {
+    0% {
+        opacity: 1;
+        bottom: 24px;
+        left: 0px;
+    }
+
+    25% {
+        opacity: 1;
+        bottom: 24px;
+        left: 5px;
+    }
+
+    75% {
+        opacity: 1;
+        bottom: 24px;
+        left: 15px;
+    }
+
+    100% {
+        opacity: 0;
+        bottom: 24px;
+        left: 20px;
+    }
+
 }

@@ -14,6 +14,8 @@ class Mob {
     attackEnemy(enemy) {
         enemy.hp = enemy.hp - this.attack
         this.hp = this.hp - enemy.attack
+        this.lastDmg = enemy.attack
+        enemy.lastDmg = this.attack
     }
 }
 

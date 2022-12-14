@@ -258,11 +258,15 @@ class GameBoard extends Component {
                 const bestPairs = this.aiPickBestPair(scoredPairs)
                 this.aiAttackCard(bestPairs)
             }, (i * 3500) + 2000)
-            setTimeout(() => { this.killCards() }, (i * 3500) + 3000)
+            setTimeout(() => { this.killCards() }, (i * 3500) + 4000)
             wait = i
         })
         return new Promise((resolve) => {
-            setTimeout(() => resolve(), (wait * 3500) + 4000)
+            let didThrow = 0
+            if (wait > 0) {
+                didThrow = 4000
+            }
+            setTimeout(() => resolve(), (wait * 3500) + didThrow)
         })
     }
 
@@ -670,8 +674,9 @@ class GameBoard extends Component {
         }
     }
 
-    attackEnemyHero(enemyClone, playerClone) {
+    async attackEnemyHero(enemyClone, playerClone) {
         if (!playerClone.cardToAttack.isMadeMove) {
+            await this.animateAttack()
             playerClone.cardToAttack.attackEnemy(enemyClone)
             this.setState({ [this.state.playerTarget]: enemyClone })
             const attackerIndex = playerClone.onTable.findIndex((card) => {

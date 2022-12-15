@@ -1,4 +1,5 @@
 .player {
+    position: relative;
     font-size: 2rem;
     width: 250px;
     height: 250px;
@@ -83,6 +84,20 @@
     width: 30px;
     margin-left: 4px;
     pointer-events: none;
+}
+
+.player-hp-result {
+    pointer-events: none;
+    opacity: 0;
+    color: rgb(255, 40, 40);
+    font-size: 2.6rem;
+    bottom: 8px;
+    left: 90px;
+    position: absolute;
+}
+
+.player-hp-result.active {
+    animation: get-dmg-hero 2s linear 1;
 }
 
 .onhand-cards {
@@ -450,6 +465,33 @@
         opacity: 0;
         bottom: 24px;
         left: 20px;
+    }
+
+}
+
+@keyframes get-dmg-hero {
+    0% {
+        opacity: 1;
+        bottom: 8px;
+        left: 90px;
+    }
+
+    25% {
+        opacity: 1;
+        bottom: 8px;
+        left: 95px;
+    }
+
+    75% {
+        opacity: 1;
+        bottom: 8px;
+        left: 105px;
+    }
+
+    100% {
+        opacity: 0;
+        bottom: 8px;
+        left: 110px;
     }
 
 }

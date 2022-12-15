@@ -246,7 +246,10 @@ class GameBoard extends Component {
         let wait = 0
         cardsAbleToMove.forEach((card, i) => {
             setTimeout(() => {
+                console.log('picking')
+                console.log(card)
                 this.aiPickCardToAttack(card.index, i)
+                console.log('after-picking')
             }, i * 3500)
             setTimeout(() => {
                 this.aiAnimateAttack()
@@ -271,8 +274,8 @@ class GameBoard extends Component {
     }
 
     async aiAnimateAttack() {
-        const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
-        cardDom.classList.add('attack-animate-ai')
+            const cardDom = document.getElementById(this.state.playerTwo.cardToAttack.id)
+            cardDom.classList.add('attack-animate-ai')
     }
 
     async aiAttackCard(pair) {
@@ -295,7 +298,16 @@ class GameBoard extends Component {
             this.setState((state) => {
                 return this.aiAttackEnemyHero(state)
             })
+            await this.wait(1)
+            this.animateHeroLastDmg()
         }
+    }
+
+    aiAnimateHeroLastDmg() {
+        const enemyCardDom = document.getElementById('player-one')
+        const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
+        enemyResultDom.classList.add('active')
+        setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
     }
 
     aiPickBestPair(pairs) {
@@ -408,6 +420,8 @@ class GameBoard extends Component {
             const clone = cloneDeep(state.playerTwo)
             const cardToAttack = state.playerTwo.onTable[index]
             clone['cardToAttack'] = cardToAttack
+            console.log('picking inside')
+            console.log(clone)
             return { playerTwo: clone }
         })
     }
@@ -728,6 +742,15 @@ class GameBoard extends Component {
         setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
     }
 
+    animateHeroLastDmg(e) {
+        const enemyCardDom = document.getElementById(e.target.id)
+        const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
+        console.log(enemyCardDom)
+        console.log(enemyResultDom)
+        enemyResultDom.classList.add('active')
+        setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
+    }
+
     async animateAttack() {
         const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
         cardDom.classList.add('attack-animate')
@@ -742,7 +765,8 @@ class GameBoard extends Component {
             const enemyClone = cloneDeep(this.state[this.state.playerTarget])
             const playerClone = cloneDeep(this.state[this.state.playerOnMove])
             if (e.target.id === 'player-one' || e.target.id === 'player-two') {
-                this.attackEnemyHero(enemyClone, playerClone)
+                await this.attackEnemyHero(enemyClone, playerClone)
+                this.animateHeroLastDmg(e)
             } else {
                 const id = await this.attackEnemyCard(event, enemyClone, playerClone)
                 await this.wait(1)
@@ -796,7 +820,9 @@ class Player extends Component {
 
                 <div className="player-icon"><img src={this.props.hero.icon} alt={this.props.hero.name}></img></div>
                 <div className='player-bottom'>
-                    <div className="player-hp">{this.props.hero.hp}<img src={hpIcon} alt='heart'></img></div>
+                    <div className="player-hp">{this.props.hero.hp}<img src={hpIcon} alt='heart'></img>
+                        <div className="player-hp-result">-{this.props.hero.lastDmg}</div>
+                    </div>
                     <div className="player-mana">{this.props.hero.mana}<img src={costIcon} alt='mana'></img></div>
                 </div>
             </div>

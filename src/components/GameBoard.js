@@ -246,10 +246,7 @@ class GameBoard extends Component {
         let wait = 0
         cardsAbleToMove.forEach((card, i) => {
             setTimeout(() => {
-                console.log('picking')
-                console.log(card)
                 this.aiPickCardToAttack(card.index, i)
-                console.log('after-picking')
             }, i * 3500)
             setTimeout(() => {
                 this.aiAnimateAttack()
@@ -262,12 +259,12 @@ class GameBoard extends Component {
                 this.aiAttackCard(bestPairs)
             }, (i * 3500) + 2000)
             setTimeout(() => { this.killCards() }, (i * 3500) + 4000)
-            wait = i
+            wait = i + 1
         })
         return new Promise((resolve) => {
             let didThrow = 0
-            if (wait > 0) {
-                didThrow = 4000
+            if (wait > 1) {
+                didThrow = 4500
             }
             setTimeout(() => resolve(), (wait * 3500) + didThrow)
         })
@@ -299,7 +296,7 @@ class GameBoard extends Component {
                 return this.aiAttackEnemyHero(state)
             })
             await this.wait(1)
-            this.animateHeroLastDmg()
+            this.aiAnimateHeroLastDmg()
         }
     }
 
@@ -420,8 +417,6 @@ class GameBoard extends Component {
             const clone = cloneDeep(state.playerTwo)
             const cardToAttack = state.playerTwo.onTable[index]
             clone['cardToAttack'] = cardToAttack
-            console.log('picking inside')
-            console.log(clone)
             return { playerTwo: clone }
         })
     }
@@ -745,8 +740,6 @@ class GameBoard extends Component {
     animateHeroLastDmg(e) {
         const enemyCardDom = document.getElementById(e.target.id)
         const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
-        console.log(enemyCardDom)
-        console.log(enemyResultDom)
         enemyResultDom.classList.add('active')
         setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
     }

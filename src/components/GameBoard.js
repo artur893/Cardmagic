@@ -271,8 +271,8 @@ class GameBoard extends Component {
     }
 
     async aiAnimateAttack() {
-            const cardDom = document.getElementById(this.state.playerTwo.cardToAttack.id)
-            cardDom.classList.add('attack-animate-ai')
+        const cardDom = document.getElementById(this.state.playerTwo.cardToAttack.id)
+        cardDom.classList.add('attack-animate-ai')
     }
 
     async aiAttackCard(pair) {
@@ -509,10 +509,14 @@ class GameBoard extends Component {
         this.setState((state) => {
             if (state.playerOnMove === 'playerOne') {
                 const playerOne = cloneDeep(state.playerOne)
-                playerOne['totalMana'] = playerOne.totalMana + 1
+                if (playerOne.totalMana < 10) {
+                    playerOne['totalMana'] = playerOne.totalMana + 1
+                }
                 playerOne['mana'] = playerOne.totalMana
                 const playerTwo = cloneDeep(state.playerTwo)
-                playerTwo['totalMana'] = playerTwo.totalMana + 1
+                if (playerTwo.totalMana < 10) {
+                    playerTwo['totalMana'] = playerTwo.totalMana + 1
+                }
                 playerTwo['mana'] = playerTwo.totalMana
                 return {
                     playerOne: playerOne,

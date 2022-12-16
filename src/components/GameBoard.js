@@ -639,6 +639,16 @@ class GameBoard extends Component {
         }
     }
 
+    displayButton() {
+        if (Number.isInteger(this.state.numberOfRound)) {
+            return <button onClick={() => {
+                this.gameFlow()
+            }}>NEXT ROUND</button>
+        } else {
+            return <button>WAIT</button>
+        }
+    }
+
     //*************************************************************************
     //************************** PLAYER GAME CONTROL **************************
     //*************************************************************************
@@ -779,7 +789,7 @@ class GameBoard extends Component {
                 <>
                     <div className="round-control">
                         <img src={arrowImg} alt='arrow' className="nospin"></img>
-                        <button onClick={this.gameFlow}>NEXT ROUND</button>
+                        {this.displayButton()}
                     </div>
                     <CardTable id='card-table-one' hero={this.state.playerOne} playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
                         putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} killCard={this.killCard}

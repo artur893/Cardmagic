@@ -493,7 +493,7 @@ class GameBoard extends Component {
     }
 
     completeButton() {
-        if (this.state.numberOfRound > 0.5) {
+        if (this.state.numberOfRound > 0.5 && !this.state.isGameOver) {
             const canMakeMove = this.state.playerOne.onTable.every((card) => card?.isMadeMove === undefined || card?.isMadeMove === true)
             const canPlayCard = this.state.playerOne.onHand.every((card) => card.cost > this.state.playerOne.mana)
             const btn = document.querySelector('.nextRoundBtn')
@@ -507,7 +507,7 @@ class GameBoard extends Component {
 
     isGameOver() {
         if ((this.state.playerOne?.hp <= 0 && !this.state.isGameOver) || (this.state.playerTwo?.hp <= 0 && !this.state.isGameOver)) {
-            this.setState({ isGameOver: true })
+            setTimeout(() => this.setState({ isGameOver: true }), 2100)
         }
     }
 
@@ -593,7 +593,7 @@ class GameBoard extends Component {
             const random = Math.random() * (playerClone.cards.length - 1)
             const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
             playerClone['nextCard'] = randomCard
-            return { [player]: playerClone }    
+            return { [player]: playerClone }
         })
     }
 

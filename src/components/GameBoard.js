@@ -573,8 +573,10 @@ class GameBoard extends Component {
                 const index = 0
                 const card = document.querySelectorAll('.deck-animate')
                 card[index].classList.add('active')
+                document.querySelector('.game-container').classList.add('blocked')
                 setTimeout(() => {
                     card[index].classList.remove('active')
+                    document.querySelector('.game-container').classList.remove('blocked')
                 }, 2500)
             } else {
                 const index = 1
@@ -674,11 +676,13 @@ class GameBoard extends Component {
     //*************************************************************************
 
     pickCardToPlay(e, player) {
-        const index = this.state[player].onHand.findIndex(card => card.id === e.target.id)
-        const inHand = this.state[player].onHand[index]
-        const playerClone = cloneDeep(this.state[player])
-        playerClone['inHand'] = inHand
-        this.setState({ [player]: playerClone })
+        if (this.state.playerOnMove === player && this.state.playerOnMove === 'playerOne') {
+            const index = this.state[player].onHand.findIndex(card => card.id === e.target.id)
+            const inHand = this.state[player].onHand[index]
+            const playerClone = cloneDeep(this.state[player])
+            playerClone['inHand'] = inHand
+            this.setState({ [player]: playerClone })
+        }
     }
 
     putCardOnTable(e, player, cardTable) {
@@ -703,7 +707,7 @@ class GameBoard extends Component {
     }
 
     pickCardToAttack(e, table) {
-        if (table === this.state.tableToPick) {
+        if ((table === this.state.tableToPick) && (this.state.playerOnMove === 'playerOne')) {
             const index = this.state[this.state.playerOnMove].onTable.findIndex(card => {
                 if (card) {
                     return card.id === e.target.id
@@ -800,18 +804,20 @@ class GameBoard extends Component {
     }
 
     async targetAttackedEnemy(e, table) {
-        const event = e
-        if (table === this.state.tableToAttack) {
-            const enemyClone = cloneDeep(this.state[this.state.playerTarget])
-            const playerClone = cloneDeep(this.state[this.state.playerOnMove])
-            if (e.target.id === 'player-one' || e.target.id === 'player-two') {
-                await this.attackEnemyHero(enemyClone, playerClone)
-                this.animateHeroLastDmg(e)
-            } else {
-                const id = await this.attackEnemyCard(event, enemyClone, playerClone)
-                await this.wait(1)
-                this.animateLastDmg(id)
-                setTimeout(() => this.killCards(), 1000)
+        if (this.state.playerOnMove === 'playerOne') {
+            const event = e
+            if ((table === this.state.tableToAttack) && (this.state[this.state.playerOnMove].cardToAttack?.isMadeMove === false)) {
+                const enemyClone = cloneDeep(this.state[this.state.playerTarget])
+                const playerClone = cloneDeep(this.state[this.state.playerOnMove])
+                if (e.target.id === 'player-one' || e.target.id === 'player-two') {
+                    await this.attackEnemyHero(enemyClone, playerClone)
+                    this.animateHeroLastDmg(e)
+                } else {
+                    const id = await this.attackEnemyCard(event, enemyClone, playerClone)
+                    await this.wait(1)
+                    this.animateLastDmg(id)
+                    setTimeout(() => this.killCards(), 1000)
+                }
             }
         }
     }

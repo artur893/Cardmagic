@@ -558,7 +558,7 @@ class GameBoard extends Component {
 
     getNewCard() {
         this.setState((state) => {
-            if (state[state.playerOnMove].onHand.length < 6) {
+            if (state[state.playerOnMove].onHand.length < 6 && state[state.playerOnMove].nextCard) {
                 const playerClone = cloneDeep(state[state.playerOnMove])
                 playerClone.onHand.push(state[state.playerOnMove].nextCard)
                 return { [state.playerOnMove]: playerClone }
@@ -568,7 +568,7 @@ class GameBoard extends Component {
     }
 
     getCardAnimation(player) {
-        if (this.state[player].onHand.length < 6) {
+        if (this.state[player].onHand.length < 6 && this.state[player].nextCard) {
             if (player === 'playerOne') {
                 const index = 0
                 const card = document.querySelectorAll('.deck-animate')
@@ -593,7 +593,7 @@ class GameBoard extends Component {
             const random = Math.random() * (playerClone.cards.length - 1)
             const randomCard = playerClone.cards.splice(random.toFixed(0), 1)[0]
             playerClone['nextCard'] = randomCard
-            return { [player]: playerClone }
+            return { [player]: playerClone }    
         })
     }
 

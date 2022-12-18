@@ -483,7 +483,9 @@ class GameBoard extends Component {
 
     flipButton() {
         const btn = document.querySelector('.roundBtn')
+        const frontBtn = document.querySelector('.nextRoundBtn')
         if (btn.className === 'roundBtn flipped') {
+            frontBtn.disabled = false
             setTimeout(() => { btn.classList.remove('flipped') }, 2600)
         } else {
             btn.classList.add('flipped')
@@ -810,7 +812,10 @@ class GameBoard extends Component {
                     <div className="round-control">
                         <img src={arrowImg} alt='arrow' className="nospin"></img>
                         <div className='roundBtn flipped'>
-                            <button className='nextRoundBtn' onClick={() => { this.gameFlow() }}>NEXT ROUND</button>
+                            <button className='nextRoundBtn' onClick={() => {
+                                this.gameFlow()
+                                document.querySelector('.nextRoundBtn').disabled = true
+                            }}>NEXT ROUND</button>
                             <button className='waitRoundBtn'>WAIT</button>
                         </div>
                     </div>

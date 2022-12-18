@@ -999,6 +999,15 @@ class CardTable extends Component {
 }
 
 class Deck extends Component {
+
+    isNextCard() {
+        if (this.props.hero.nextCard) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
     render() {
         return (
             <div className="deck" id={this.props.id}>
@@ -1021,7 +1030,7 @@ class Deck extends Component {
                     </div>
                 </div>
                 <img src={cardReverse} alt='card reverse'></img>
-                <div className="deck-left">Cards left:&nbsp;{this.props.hero.cards.length}</div>
+                <div className="deck-left">Cards left:&nbsp;{this.props.hero.cards.length + this.isNextCard()}</div>
             </div>)
     }
 }

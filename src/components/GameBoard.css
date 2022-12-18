@@ -32,7 +32,7 @@
 #player-two.active {
     background: linear-gradient(0deg, var(--color4), rgb(255, 0, 0));
     background-size: 400% 400%;
-    animation: heroDmg 2.1s ease 1;
+    animation: heroDmg 1.1s ease 1;
 }
 
 @keyframes heroDmg {
@@ -114,7 +114,7 @@
 }
 
 .player-hp-result.active {
-    animation: get-dmg-hero 2s linear 1;
+    animation: get-dmg-hero 1.1s linear 1;
 }
 
 .onhand-cards {
@@ -156,7 +156,7 @@
 }
 
 .onhand-hp-result.active {
-    animation: get-dmg 2s linear 1;
+    animation: get-dmg 1.1s linear 1;
 }
 
 .onhand-cost>img {
@@ -197,7 +197,7 @@
 .onhand-card.damaged-animate {
     background: linear-gradient(0deg, var(--cardBg), rgb(255, 0, 0));
     background-size: 400% 400%;
-    animation: heroDmg 2.1s ease 1;
+    animation: heroDmg 1.1s ease 1;
 }
 
 .onhand-card.attack-animate {
@@ -217,7 +217,7 @@
 .onhand-card.used.damaged-animate {
     background: linear-gradient(0deg, gray, rgb(255, 0, 0));
     background-size: 400% 400%;
-    animation: heroDmg 2.1s ease 1;
+    animation: heroDmg 1.1s ease 1;
 }
 
 .onhand-card.inhand {

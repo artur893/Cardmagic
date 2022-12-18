@@ -259,13 +259,13 @@ class GameBoard extends Component {
                 const bestPairs = this.aiPickBestPair(scoredPairs)
                 this.aiAttackCard(bestPairs)
             }, (i * 3500) + 2000)
-            setTimeout(() => { this.killCards() }, (i * 3500) + 4000)
+            setTimeout(() => { this.killCards() }, (i * 3500) + 3000)
             wait = i + 1
         })
         return new Promise((resolve) => {
             let didThrow = 0
             if (wait > 1) {
-                didThrow = 4500
+                didThrow = 1000
             }
             setTimeout(() => resolve(), (wait * 3500) + didThrow)
         })
@@ -305,9 +305,9 @@ class GameBoard extends Component {
         const enemyCardDom = document.getElementById('player-one')
         const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
         enemyCardDom.classList.add('active')
-        setTimeout(() => { enemyCardDom.classList.remove('active') }, 2000)
+        setTimeout(() => { enemyCardDom.classList.remove('active') }, 1000)
         enemyResultDom.classList.add('active')
-        setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
+        setTimeout(() => { enemyResultDom.classList.remove('active') }, 1000)
     }
 
     aiPickBestPair(pairs) {
@@ -775,7 +775,7 @@ class GameBoard extends Component {
             cardDom.classList.remove('damaged-animate')
             enemyCardDom.classList.remove('damaged-animate')
             document.querySelector('.game-container').classList.remove('blocked')
-        }, 2000)
+        }, 1000)
     }
 
     animateHeroLastDmg(e) {
@@ -787,7 +787,7 @@ class GameBoard extends Component {
             enemyResultDom.classList.remove('active')
             enemyCardDom.classList.remove('active')
             document.querySelector('.game-container').classList.remove('blocked')
-        }, 2000)
+        }, 1000)
     }
 
     async animateAttack() {
@@ -811,7 +811,7 @@ class GameBoard extends Component {
                 const id = await this.attackEnemyCard(event, enemyClone, playerClone)
                 await this.wait(1)
                 this.animateLastDmg(id)
-                setTimeout(() => this.killCards(), 2000)
+                setTimeout(() => this.killCards(), 1000)
             }
         }
     }

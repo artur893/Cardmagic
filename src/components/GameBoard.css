@@ -32,7 +32,7 @@
 #player-two.active {
     background: linear-gradient(0deg, var(--color4), rgb(255, 0, 0));
     background-size: 400% 400%;
-    animation: heroDmg 2s ease 1;
+    animation: heroDmg 2.1s ease 1;
 }
 
 @keyframes heroDmg {

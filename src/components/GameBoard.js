@@ -767,22 +767,29 @@ class GameBoard extends Component {
         const enemyResultDom = enemyCardDom.querySelector('.onhand-hp-result')
         resultDom.classList.add('active')
         enemyResultDom.classList.add('active')
-        setTimeout(() => { resultDom.classList.remove('active') }, 2000)
-        setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
+        setTimeout(() => {
+            resultDom.classList.remove('active')
+            enemyResultDom.classList.remove('active')
+            document.querySelector('.game-container').classList.remove('blocked')
+        }, 2000)
     }
 
     animateHeroLastDmg(e) {
         const enemyCardDom = document.getElementById(e.target.id)
         const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
         enemyResultDom.classList.add('active')
-        setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
         enemyCardDom.classList.add('active')
-        setTimeout(() => { enemyCardDom.classList.remove('active') }, 2000)
+        setTimeout(() => {
+            enemyResultDom.classList.remove('active')
+            enemyCardDom.classList.remove('active')
+            document.querySelector('.game-container').classList.remove('blocked')
+        }, 2000)
     }
 
     async animateAttack() {
         const cardDom = document.getElementById(this.state[this.state.playerOnMove].cardToAttack.id)
         cardDom.classList.add('attack-animate')
+        document.querySelector('.game-container').classList.add('blocked')
         return new Promise((resolve) => {
             setTimeout(() => { resolve() }, 1000)
         })

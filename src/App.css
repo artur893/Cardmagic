@@ -19,6 +19,10 @@
     background: linear-gradient(var(--color1), var(--color3));
 }
 
+.game-container.blocked {
+    pointer-events: none;
+}
+
 .game-container.game-mode {
     display: grid;
     grid-template-rows: 9fr 8fr 8fr 9fr;

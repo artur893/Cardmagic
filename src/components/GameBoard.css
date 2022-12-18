@@ -28,6 +28,23 @@
     grid-row: 3 / 5;
 }
 
+#player-one.active,
+#player-two.active {
+    background: linear-gradient(0deg, var(--color4), rgb(255, 0, 0));
+    background-size: 400% 400%;
+    animation: heroDmg 2s ease 1;
+}
+
+@keyframes heroDmg {
+    0% {
+        background-position: 50% 10%
+    }
+
+    100% {
+        background-position: 50% 100%
+    }
+}
+
 #player-two {
     justify-self: center;
     grid-column: 1;

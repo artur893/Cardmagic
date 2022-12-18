@@ -303,6 +303,8 @@ class GameBoard extends Component {
     aiAnimateHeroLastDmg() {
         const enemyCardDom = document.getElementById('player-one')
         const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
+        enemyCardDom.classList.add('active')
+        setTimeout(() => { enemyCardDom.classList.remove('active') }, 2000)
         enemyResultDom.classList.add('active')
         setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
     }
@@ -756,6 +758,8 @@ class GameBoard extends Component {
         const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
         enemyResultDom.classList.add('active')
         setTimeout(() => { enemyResultDom.classList.remove('active') }, 2000)
+        enemyCardDom.classList.add('active')
+        setTimeout(() => { enemyCardDom.classList.remove('active') }, 2000)
     }
 
     async animateAttack() {

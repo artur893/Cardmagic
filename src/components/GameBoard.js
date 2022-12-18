@@ -56,6 +56,7 @@ class GameBoard extends Component {
         this.isGameOver()
         this.spinArrow()
         this.aiModuleHard()
+        this.completeButton()
     }
 
     initStartCards(player) {
@@ -486,6 +487,19 @@ class GameBoard extends Component {
             setTimeout(() => { btn.classList.remove('flipped') }, 2600)
         } else {
             btn.classList.add('flipped')
+        }
+    }
+
+    completeButton() {
+        if (this.state.numberOfRound > 0.5) {
+            const canMakeMove = this.state.playerOne.onTable.every((card) => card?.isMadeMove === undefined || card?.isMadeMove === true)
+            const canPlayCard = this.state.playerOne.onHand.every((card) => card.cost > this.state.playerOne.mana)
+            const btn = document.querySelector('.nextRoundBtn')
+            if (btn && canMakeMove && canPlayCard) {
+                btn.classList.add('complete')
+            } else {
+                btn.classList.remove('complete')
+            }
         }
     }
 

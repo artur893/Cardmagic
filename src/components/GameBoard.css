@@ -285,6 +285,16 @@
 
 .waitRoundBtn {
     transform: rotateX(180deg);
+    background-color: hsl(0, 0%, 40%);
+}
+
+.nextRoundBtn {
+    background-color: var(--color4);
+}
+
+.nextRoundBtn.complete {
+    background-color: hsl(120, 100%, 40%);
+    transform: scale(1.1);
 }
 
 .roundBtn {
@@ -303,7 +313,6 @@
     margin: 0 0 0 140px;
     height: 40px;
     width: 140px;
-    background-color: var(--color4);
     border: solid 2px black;
     border-radius: 10px;
     box-shadow: 0 2px 10px 0 black;

@@ -108,14 +108,14 @@ const rawCards = [{
     type: 'mob'
 }, {
     name: 'Diler',
-    attack: 2,
-    hp: 2,
+    attack: 3,
+    hp: 4,
     cost: 4,
     skill: null,
     type: 'mob'
 }, {
     name: 'Ślepy snajper',
-    attack: 10,
+    attack: 6,
     hp: 4,
     cost: 5,
     skill: null,

@@ -471,10 +471,22 @@ class GameBoard extends Component {
         this.switchPlayerOnMove()
         this.addTotalMana()
         this.getCardAnimation(this.state.playerTarget)
-        setTimeout(() => { this.getNewCard() }, 2500)
+        setTimeout(() => {
+            this.getNewCard()
+        }, 2500)
+        this.flipButton()
         this.clearHands()
         this.clearMove()
         this.setAiTurn()
+    }
+
+    flipButton() {
+        const btn = document.querySelector('.roundBtn')
+        if (btn.className === 'roundBtn flipped') {
+            setTimeout(() => { btn.classList.remove('flipped') }, 2600)
+        } else {
+            btn.classList.add('flipped')
+        }
     }
 
     isGameOver() {
@@ -641,16 +653,6 @@ class GameBoard extends Component {
         }
     }
 
-    displayButton() {
-        if (Number.isInteger(this.state.numberOfRound)) {
-            return <button onClick={() => {
-                this.gameFlow()
-            }}>NEXT ROUND</button>
-        } else {
-            return <button>WAIT</button>
-        }
-    }
-
     //*************************************************************************
     //************************** PLAYER GAME CONTROL **************************
     //*************************************************************************
@@ -793,7 +795,10 @@ class GameBoard extends Component {
                 <>
                     <div className="round-control">
                         <img src={arrowImg} alt='arrow' className="nospin"></img>
-                        {this.displayButton()}
+                        <div className='roundBtn flipped'>
+                            <button className='nextRoundBtn' onClick={() => { this.gameFlow() }}>NEXT ROUND</button>
+                            <button className='waitRoundBtn'>WAIT</button>
+                        </div>
                     </div>
                     <CardTable id='card-table-one' hero={this.state.playerOne} playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
                         putCardOnTable={this.putCardOnTable} onTable={this.state.playerOne.onTable} killCard={this.killCard}

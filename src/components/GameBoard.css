@@ -276,13 +276,30 @@
 }
 
 .round-control {
+    position: relative;
     display: flex;
     align-items: center;
     grid-column: 3;
     grid-row: 2 / 4;
 }
 
-.round-control>button {
+.waitRoundBtn {
+    transform: rotateX(180deg);
+}
+
+.roundBtn {
+    position: absolute;
+    top: -20px;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: 500ms;
+}
+
+.roundBtn.flipped {
+    transform: rotateX(180deg);
+}
+
+.roundBtn>button {
     margin: 0 0 0 140px;
     height: 40px;
     width: 140px;
@@ -294,13 +311,15 @@
     font-weight: 700;
     font-size: 1rem;
     transition: 500ms;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
 }
 
-.round-control>button:hover {
+.roundBtn>button:hover {
     box-shadow: none;
 }
 
-.round-control>button:active {
+.roundBtn>button:active {
     background-color: var(--color3);
 }
 

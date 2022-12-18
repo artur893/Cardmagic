@@ -767,9 +767,13 @@ class GameBoard extends Component {
         const enemyResultDom = enemyCardDom.querySelector('.onhand-hp-result')
         resultDom.classList.add('active')
         enemyResultDom.classList.add('active')
+        cardDom.classList.add('damaged-animate')
+        enemyCardDom.classList.add('damaged-animate')
         setTimeout(() => {
             resultDom.classList.remove('active')
             enemyResultDom.classList.remove('active')
+            cardDom.classList.remove('damaged-animate')
+            enemyCardDom.classList.remove('damaged-animate')
             document.querySelector('.game-container').classList.remove('blocked')
         }, 2000)
     }

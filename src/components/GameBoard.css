@@ -194,6 +194,12 @@
     transition: 200ms;
 }
 
+.onhand-card.damaged-animate {
+    background: linear-gradient(0deg, var(--cardBg), rgb(255, 0, 0));
+    background-size: 400% 400%;
+    animation: heroDmg 2.1s ease 1;
+}
+
 .onhand-card.attack-animate {
     position: absolute;
     animation: card-attack 1s ease-in-out 1;
@@ -206,6 +212,12 @@
 
 .onhand-card.used {
     background-color: gray;
+}
+
+.onhand-card.used.damaged-animate {
+    background: linear-gradient(0deg, gray, rgb(255, 0, 0));
+    background-size: 400% 400%;
+    animation: heroDmg 2.1s ease 1;
 }
 
 .onhand-card.inhand {

@@ -6,6 +6,7 @@ import { HeroPick } from './components/HeroPick'
 import { heroes } from "./components/heroesData";
 import { cardsOne, cardsTwo } from "./components/cardsData"
 import { GameBoard } from "./components/GameBoard";
+import { cloneDeep } from 'lodash';
 
 class App extends Component {
     constructor(props) {
@@ -39,12 +40,12 @@ class App extends Component {
 
     pickHero(hero) {
         if (!this.state.playerOne) {
-            const playerOne = hero
+            const playerOne = cloneDeep(hero)
             playerOne['cards'] = this.state.cardsPlayerOne
             playerOne['onTable'] = new Array(6).fill(null)
             this.setState({ playerOne: playerOne })
         } else if (this.state.playerOne) {
-            const playerTwo = hero
+            const playerTwo = cloneDeep(hero)
             playerTwo['cards'] = this.state.cardsPlayerTwo
             playerTwo['onTable'] = new Array(6).fill(null)
             this.setState({ playerTwo: playerTwo })

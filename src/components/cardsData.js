@@ -31,8 +31,6 @@ function populateCards() {
         const mob = new Mob(card.name, card.attack, card.hp, card.cost, card.skill, card.type)
         cardsTwo.push(mob)
     })
-    console.log(cardsOne)
-    console.log(cardsTwo)
 }
 
 const rawCards = [{

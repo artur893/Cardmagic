@@ -1,8 +1,8 @@
 .player {
     position: relative;
     font-size: 2rem;
-    width: 250px;
-    height: 250px;
+    width: 260px;
+    height: 280px;
     border-radius: 50% 50% 0 0;
     border: solid 2px;
     box-shadow: 0 10px 10px 0;
@@ -115,6 +115,23 @@
 
 .player-hp-result.active {
     animation: get-dmg-hero 1.1s linear 1;
+}
+
+.player-spell {
+    font-family: 'Rakkas';
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    background-color: var(--color3);
+    border: solid 2px black;
+    transition: 200ms;
+}
+
+.player-spell:hover {
+    color: var(--colorFont);
 }
 
 .onhand-cards {
@@ -551,4 +568,21 @@
         left: 110px;
     }
 
+}
+
+.flames {
+    opacity: 0;
+    position: absolute;
+    height: 200px;
+    width: 958px;
+    pointer-events: none;
+    transition: 500ms;
+}
+
+.flames.active {
+    opacity: 1;
+}
+
+.flames.card-table-one {
+    transform: rotateX(180deg);
 }

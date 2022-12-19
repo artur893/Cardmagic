@@ -17,6 +17,7 @@
     width: 100vw;
     height: calc(100vh - 100px);
     background: linear-gradient(var(--color1), var(--color3));
+    cursor: default;
 }
 
 .game-container.blocked {

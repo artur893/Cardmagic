@@ -7,6 +7,7 @@ import hpIcon from './images/heart.png'
 import costIcon from './images/mana.png'
 import attackIcon from './images/sword.png'
 import cardReverse from './images/cardReverse.jpg'
+import flames from './images/flames.gif'
 
 class GameBoard extends Component {
     constructor(props) {
@@ -52,6 +53,12 @@ class GameBoard extends Component {
                 this.initStartCards('playerTwo')
                 setTimeout(this.gameFlow, 500)
             }
+        }
+        if (this.state.playerOne?.skill) {
+            this.state.playerOne.skill = this.state.playerOne.skill.bind(this)
+        }
+        if (this.state.playerTwo?.skill) {
+            this.state.playerTwo.skill = this.state.playerOne.skill.bind(this)
         }
         this.isGameOver()
         this.spinArrow()
@@ -877,6 +884,7 @@ class Player extends Component {
                     </div>
                     <div className="player-mana">{this.props.hero.mana}<img src={costIcon} alt='mana'></img></div>
                 </div>
+                <div className='player-spell' onClick={() => this.props.hero.skill()}>{this.props.hero.skillName}</div>
             </div>
         )
     }
@@ -1011,6 +1019,7 @@ class CardTable extends Component {
                     {this.displayCard(4)}</div>
                 <div className="card-field" id="card-field-6" index='5' onClick={(e) => this.props.putCardOnTable(e, this.props.playerOnMove, this.props.id)}>
                     {this.displayCard(5)}</div>
+                <img className={'flames ' + this.props.id} src={flames} alt='flames'></img>
             </div>)
     }
 }

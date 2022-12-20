@@ -1,8 +1,8 @@
 .player {
     position: relative;
     font-size: 2rem;
-    width: 260px;
-    height: 280px;
+    width: 14vw;
+    height: 14vw;
     border-radius: 50% 50% 0 0;
     border: solid 2px;
     box-shadow: 0 10px 10px 0;
@@ -69,7 +69,7 @@
 
 .player-icon>img {
     margin: 30px 0 0 0;
-    width: 160px;
+    width: 8vw;
     pointer-events: none;
 }
 
@@ -91,6 +91,7 @@
 }
 
 .player-hp {
+    position: relative;
     font-family: 'Roboto';
     font-weight: 900;
     display: flex;
@@ -110,8 +111,7 @@
     opacity: 0;
     color: rgb(255, 40, 40);
     font-size: 2.6rem;
-    bottom: 8px;
-    left: 90px;
+    left: 80px;
     position: absolute;
 }
 
@@ -558,26 +558,22 @@
 @keyframes get-dmg-hero {
     0% {
         opacity: 1;
-        bottom: 8px;
-        left: 90px;
+        left: 80px;
     }
 
     25% {
         opacity: 1;
-        bottom: 8px;
-        left: 95px;
+        left: 85px;
     }
 
     75% {
         opacity: 1;
-        bottom: 8px;
-        left: 105px;
+        left: 95px;
     }
 
     100% {
         opacity: 0;
-        bottom: 8px;
-        left: 110px;
+        left: 95px;
     }
 
 }

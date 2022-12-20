@@ -578,6 +578,86 @@
 
 }
 
+@media (max-width: 1500px) {
+
+    .onhand-attack,
+    .onhand-hp,
+    .onhand-cost {
+        font-size: 0.9rem;
+    }
+
+    .onhand-hp-result {
+        font-size: 1rem;
+    }
+
+    .onhand-name {
+        font-size: 0.8rem;
+    }
+
+    .onhand-cost>img,
+    .onhand-attack>img,
+    .onhand-hp>img {
+        width: 16px;
+    }
+
+    .player {
+        font-size: 1.2rem;
+    }
+
+    .player-hp-result {
+        font-size: 1.3rem;
+    }
+
+    .player-spell {
+        font-size: 1.0rem;
+    }
+
+    .player-hp>img,
+    .player-mana>img {
+        width: 18px;
+    }
+}
+
+@media (max-width: 1620px) and (min-width: 1501px) {
+
+    .onhand-attack,
+    .onhand-hp,
+    .onhand-cost {
+        font-size: 1rem;
+    }
+
+    .onhand-hp-result {
+        font-size: 1.1rem;
+    }
+
+    .onhand-name {
+        font-size: 0.9rem;
+    }
+
+    .onhand-cost>img,
+    .onhand-attack>img,
+    .onhand-hp>img {
+        width: 20px;
+    }
+
+    .player {
+        font-size: 1.4rem;
+    }
+
+    .player-hp-result {
+        font-size: 1.5rem;
+    }
+
+    .player-spell {
+        font-size: 1.3rem;
+    }
+
+    .player-hp>img,
+    .player-mana>img {
+        width: 22px;
+    }
+}
+
 .flames {
     opacity: 0;
     position: absolute;

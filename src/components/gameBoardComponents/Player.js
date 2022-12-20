@@ -19,7 +19,7 @@ class Player extends Component {
                     <div className="player-mana">{this.props.hero.mana}<img src={costIcon} alt='mana'></img></div>
                 </div>
                 <div className='player-spell' onClick={() => {
-                    if (this.props.hero.player === this.props.playerOnMove) {
+                    if ((this.props.hero.player === this.props.playerOnMove) && (this.props.hero.player === 'playerOne')) {
                         this.props.hero.skill()
                     }
                 }}>{this.props.hero.skillName}</div>

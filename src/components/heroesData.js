@@ -29,7 +29,7 @@ const heroes = [{
     hp: 30,
     skillName: 'Medytuj',
     skillText: 'Dodaj sobie 1pkt maksymalnej many',
-    skill: 'method here',
+    skill: meditate,
     totalMana: 0,
     mana: 0,
     icon: monkIcon,
@@ -85,21 +85,89 @@ function deal1DmgAll() {
 }
 
 function setSkillUsed() {
-    const clonePlayerOne = cloneDeep(this.state[this.state.playerOnMove])
-    clonePlayerOne.skillAvailable = false
     this.setState((state) => {
-        return { [state.playerOnMove]: clonePlayerOne }
+        const clonePlayer = cloneDeep(state[this.state.playerOnMove])
+        clonePlayer.skillAvailable = false
+        return { [state.playerOnMove]: clonePlayer }
+    })
+}
+
+function skillCost() {
+    this.setState((state) => {
+        const clonePlayer = cloneDeep(state[this.state.playerOnMove])
+        clonePlayer.mana = clonePlayer.mana - 2
+        return { [state.playerOnMove]: clonePlayer }
+    })
+}
+
+function animateMeditate(player) {
+    const avatar = document.getElementById(player)
+    avatar.classList.add('meditate')
+    setTimeout(() => avatar.classList.remove('meditate'), 1000)
+    console.log(avatar)
+}
+
+function animateDmg() {
+    const cardTable = document.querySelectorAll('.card-table')
+    cardTable.forEach((table) => {
+        const card = table.querySelector('.onhand-card')
+        if (card) {
+            card.classList.add('damaged-animate')
+            setTimeout(() => {card.classList.remove('damaged-animate')}, 1000)
+        }
+    })
+}
+
+function killCards() {
+    this.setState((state) => {
+        const clonePlayer = cloneDeep(state[state.playerOnMove])
+        const cloneTarget = cloneDeep(state[state.playerTarget])
+        cloneTarget?.onTable.forEach((card) => {
+            if (card?.hp <= 0) {
+                const index = cloneTarget.onTable.findIndex(cardToIndex => cardToIndex?.id === card.id)
+                cloneTarget.onTable[index] = null
+            }
+        })
+        clonePlayer?.onTable.forEach((card) => {
+            if (card?.hp <= 0) {
+                const index = clonePlayer.onTable.findIndex(cardToIndex => cardToIndex?.id === card.id)
+                clonePlayer.onTable[index] = null
+            }
+        })
+        return { [state.playerTarget]: cloneTarget, [state.playerOnMove]: clonePlayer }
     })
 }
 
 function waveOfFlames() {
-    if (this.state[this.state.playerOnMove].skillAvailable) {
+    if (this.state[this.state.playerOnMove].skillAvailable && this.state[this.state.playerOnMove].mana >= 2) {
         const dealDmg = deal1DmgAll.bind(this)
         const setSkillUnavailable = setSkillUsed.bind(this)
+        const cost = skillCost.bind(this)
+        const kill = killCards.bind(this)
         blockEvents(1000)
         activeFlamesAnimation()
         dealDmg()
+        setTimeout(() => {animateDmg()}, 100)
         setSkillUnavailable()
+        cost()
+        setTimeout(() => {kill()}, 1000)
+    }
+}
+
+function meditate() {
+    if (this.state[this.state.playerOnMove].skillAvailable && this.state[this.state.playerOnMove].mana >= 2) {
+        const animate = animateMeditate.bind(this)
+        const setSkillUnavailable = setSkillUsed.bind(this)
+        const cost = skillCost.bind(this)
+        const clonePlayer = cloneDeep(this.state[this.state.playerOnMove])
+        animate(clonePlayer.playerId)
+        clonePlayer.totalMana = clonePlayer.totalMana + 1
+        console.log(clonePlayer)
+        this.setState((state) => {
+            return { [state.playerOnMove]: clonePlayer }
+        })
+        setSkillUnavailable()
+        cost()
     }
 }
 

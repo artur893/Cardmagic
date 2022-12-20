@@ -44,12 +44,14 @@ class App extends Component {
             playerOne['cards'] = this.state.cardsPlayerOne
             playerOne['onTable'] = new Array(6).fill(null)
             playerOne['player'] = 'playerOne'
+            playerOne['playerId'] = 'player-one'
             this.setState({ playerOne: playerOne })
         } else if (this.state.playerOne) {
             const playerTwo = cloneDeep(hero)
             playerTwo['cards'] = this.state.cardsPlayerTwo
             playerTwo['onTable'] = new Array(6).fill(null)
             playerTwo['player'] = 'playerTwo'
+            playerTwo['playerId'] = 'player-two'
             this.setState({ playerTwo: playerTwo })
             this.setState({ activeView: 'gameBoard' })
         }

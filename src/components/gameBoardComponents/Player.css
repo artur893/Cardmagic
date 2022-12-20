@@ -11,7 +11,6 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    transition: 1s;
 }
 
 .player-bottom {
@@ -38,7 +37,7 @@
 
 #player-one.meditate,
 #player-two.meditate {
-    background-color: rgb(0, 0, 255);
+    animation: meditate 2s ease 1;
 }
 
 #player-two {
@@ -139,6 +138,21 @@
 
     100% {
         background-position: 50% 100%
+    }
+}
+
+@keyframes meditate {
+    0% {
+        background-color: var(--color4);
+    }
+
+    50% {
+        background-color: rgb(0, 0, 255);
+        
+    }
+
+    100% {
+        background-color: var(--color4);
     }
 }
 

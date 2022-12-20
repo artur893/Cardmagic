@@ -103,8 +103,7 @@ function skillCost() {
 function animateMeditate(player) {
     const avatar = document.getElementById(player)
     avatar.classList.add('meditate')
-    setTimeout(() => avatar.classList.remove('meditate'), 1000)
-    console.log(avatar)
+    setTimeout(() => avatar.classList.remove('meditate'), 2000)
 }
 
 function animateDmg() {
@@ -162,7 +161,6 @@ function meditate() {
         const clonePlayer = cloneDeep(this.state[this.state.playerOnMove])
         animate(clonePlayer.playerId)
         clonePlayer.totalMana = clonePlayer.totalMana + 1
-        console.log(clonePlayer)
         this.setState((state) => {
             return { [state.playerOnMove]: clonePlayer }
         })

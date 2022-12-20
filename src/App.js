@@ -56,7 +56,7 @@ class App extends Component {
     render() {
         return (
             <>
-                <Header />
+                <Header activeView={this.state.activeView} />
                 <div className="game-container">
                     <Menu activeView={this.state.activeView} setActiveView={this.setActiveView} />
                     <HeroPick activeView={this.state.activeView} heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />

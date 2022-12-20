@@ -1,6 +1,6 @@
-h1 {
+.heropick-h1 {
     color: var(--colorFont);
-    margin: 80px;
+    margin: 10vh;
     font-size: 3rem;
     font-family: 'Bungee';
 }

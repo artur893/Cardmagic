@@ -3,6 +3,7 @@ import './Header.css'
 
 class Header extends Component {
     render() {
+        if(this.props.activeView === 'menu' || this.props.activeView === 'heroPick')
         return (
             <header>
                 CardMagic

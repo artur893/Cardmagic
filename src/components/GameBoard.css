@@ -52,11 +52,13 @@
 }
 
 #player-one-cards {
+    align-self: flex-start;
     grid-column: 2;
     grid-row: 4;
 }
 
 #player-two-cards {
+    align-self: flex-end;
     grid-column: 2;
     grid-row: 1;
 }
@@ -146,6 +148,10 @@
     font-family: 'Rakkas';
     cursor: default;
     pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .onhand-attack,
@@ -202,8 +208,8 @@
     border: solid 2px black;
     border-radius: 10px;
     box-shadow: 0 0 10px 0;
-    height: 180px;
-    width: 130px;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -270,12 +276,14 @@
 }
 
 .card-table {
+    position: relative;
     border: solid 1px;
     border-radius: 20px;
-    height: 100%;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     background: linear-gradient(to right, hsl(60, 10%, 50%), hsl(60, 10%, 60%), hsl(60, 10%, 50%));
+    aspect-ratio: 18 / 4;
+    width: 100%;
 }
 
 #card-table-one {
@@ -283,6 +291,7 @@
     grid-row: 3;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+    align-self: flex-start;
 }
 
 #card-table-two {
@@ -290,6 +299,7 @@
     grid-row: 2;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+    align-self: flex-end;
 }
 
 .card-field {
@@ -392,12 +402,12 @@
 
 .deck {
     position: relative;
-    margin: 0 0 3px 50px;
+    margin: 0 0 0 50px;
     border: solid 2px black;
     border-radius: 10px;
     box-shadow: 0 0 10px 0;
-    height: 180px;
-    width: 130px;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -406,8 +416,8 @@
 
 .deck>img {
     position: absolute;
-    height: 180px;
-    width: 130px;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
 }
 
 .deck:hover>.deck-left {
@@ -425,18 +435,20 @@
 #player-one-deck {
     grid-column: 3;
     grid-row: 4;
+    align-self: flex-start;
 }
 
 #player-two-deck {
     grid-column: 3;
     grid-row: 1;
+    align-self: flex-end;
 }
 
 .deck-animate {
     border: solid 2px black;
     border-radius: 10px;
-    height: 180px;
-    width: 130px;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
 }
 
 .deck-animate,
@@ -444,8 +456,8 @@
 .deck-animate-front,
 .deck-animate-back {
     position: absolute;
-    height: 180px;
-    width: 130px;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
     backface-visibility: hidden;
     transform-style: preserve-3d;
     transition: 2s;
@@ -465,17 +477,17 @@
     }
 
     40% {
-        right: 150px;
+        right: 8vw;
         transform: rotateY(0deg)
     }
 
     75% {
-        right: 150px;
+        right: 8vw;
         transform: rotateY(180deg)
     }
 
     100% {
-        right: 150px;
+        right: 8vw;
         transform: rotateY(180deg)
     }
 }
@@ -573,8 +585,8 @@
 .flames {
     opacity: 0;
     position: absolute;
-    height: 200px;
-    width: 958px;
+    height: 100%;
+    width: 100%;
     pointer-events: none;
     transition: 500ms;
 }
@@ -585,4 +597,11 @@
 
 .flames.card-table-one {
     transform: rotateX(180deg);
+    left: 0px;
+    top: 0px;
+}
+
+.flames.card-table-two {
+    left: 0px;
+    bottom: 0px;
 }

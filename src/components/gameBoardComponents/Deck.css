@@ -1,0 +1,91 @@
+.deck {
+    position: relative;
+    margin: 0 0 0 50px;
+    border: solid 2px black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto';
+}
+
+.deck>img {
+    position: absolute;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
+}
+
+.deck:hover>.deck-left {
+    color: var(--colorFont);
+    position: absolute;
+    font-weight: 700;
+    width: 120px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: default;
+}
+
+#player-one-deck {
+    grid-column: 3;
+    grid-row: 4;
+    align-self: flex-start;
+}
+
+#player-two-deck {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: flex-end;
+}
+
+.deck-animate {
+    border: solid 2px black;
+    border-radius: 10px;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
+}
+
+.deck-animate,
+.deck-animate-back>img,
+.deck-animate-front,
+.deck-animate-back {
+    position: absolute;
+    aspect-ratio: 3 / 4;
+    width: 7vw;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: 2s;
+}
+
+.deck-animate-front {
+    transform: rotateY(180deg);
+}
+
+.deck-animate.active {
+    animation: getcard 2.5s ease-in-out 1;
+}
+
+@keyframes getcard {
+    0% {
+        right: 0px;
+    }
+
+    40% {
+        right: 8vw;
+        transform: rotateY(0deg)
+    }
+
+    75% {
+        right: 8vw;
+        transform: rotateY(180deg)
+    }
+
+    100% {
+        right: 8vw;
+        transform: rotateY(180deg)
+    }
+}

@@ -275,45 +275,6 @@
     pointer-events: none;
 }
 
-.card-table {
-    position: relative;
-    border: solid 1px;
-    border-radius: 20px;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    background: linear-gradient(to right, hsl(60, 10%, 50%), hsl(60, 10%, 60%), hsl(60, 10%, 50%));
-    aspect-ratio: 18 / 4;
-    width: 100%;
-}
-
-#card-table-one {
-    grid-column: 2;
-    grid-row: 3;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    align-self: flex-start;
-}
-
-#card-table-two {
-    grid-column: 2;
-    grid-row: 2;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    align-self: flex-end;
-}
-
-.card-field {
-    position: relative;
-    border-right: solid 1px hsl(0, 0%, 10%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-field:last-child {
-    border: none;
-}
-
 .round-control {
     position: relative;
     display: flex;
@@ -400,97 +361,7 @@
     align-items: center;
 }
 
-.deck {
-    position: relative;
-    margin: 0 0 0 50px;
-    border: solid 2px black;
-    border-radius: 10px;
-    box-shadow: 0 0 10px 0;
-    aspect-ratio: 3 / 4;
-    width: 7vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Roboto';
-}
 
-.deck>img {
-    position: absolute;
-    aspect-ratio: 3 / 4;
-    width: 7vw;
-}
-
-.deck:hover>.deck-left {
-    color: var(--colorFont);
-    position: absolute;
-    font-weight: 700;
-    width: 120px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: default;
-}
-
-#player-one-deck {
-    grid-column: 3;
-    grid-row: 4;
-    align-self: flex-start;
-}
-
-#player-two-deck {
-    grid-column: 3;
-    grid-row: 1;
-    align-self: flex-end;
-}
-
-.deck-animate {
-    border: solid 2px black;
-    border-radius: 10px;
-    aspect-ratio: 3 / 4;
-    width: 7vw;
-}
-
-.deck-animate,
-.deck-animate-back>img,
-.deck-animate-front,
-.deck-animate-back {
-    position: absolute;
-    aspect-ratio: 3 / 4;
-    width: 7vw;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
-    transition: 2s;
-}
-
-.deck-animate-front {
-    transform: rotateY(180deg);
-}
-
-.deck-animate.active {
-    animation: getcard 2.5s ease-in-out 1;
-}
-
-@keyframes getcard {
-    0% {
-        right: 0px;
-    }
-
-    40% {
-        right: 8vw;
-        transform: rotateY(0deg)
-    }
-
-    75% {
-        right: 8vw;
-        transform: rotateY(180deg)
-    }
-
-    100% {
-        right: 8vw;
-        transform: rotateY(180deg)
-    }
-}
 
 @keyframes card-attack {
     0% {
@@ -618,7 +489,7 @@
     }
 }
 
-@media (max-width: 1620px) and (min-width: 1501px) {
+@media (max-width: 1850px) and (min-width: 1501px) {
 
     .onhand-attack,
     .onhand-hp,

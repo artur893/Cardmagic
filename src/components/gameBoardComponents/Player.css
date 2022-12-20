@@ -1,0 +1,177 @@
+.player {
+    position: relative;
+    font-size: 2rem;
+    width: 14vw;
+    height: 14vw;
+    border-radius: 50% 50% 0 0;
+    border: solid 2px;
+    box-shadow: 0 10px 10px 0;
+    background-color: var(--color4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.player-bottom {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 10px 0;
+    pointer-events: none;
+}
+
+#player-one {
+    justify-self: center;
+    grid-column: 1;
+    grid-row: 3 / 5;
+}
+
+#player-one.active,
+#player-two.active {
+    background: linear-gradient(0deg, var(--color4), rgb(255, 0, 0));
+    background-size: 400% 400%;
+    animation: heroDmg 1.1s ease 1;
+}
+
+#player-two {
+    justify-self: center;
+    grid-column: 1;
+    grid-row: 1 / 3;
+}
+
+#player-one-cards {
+    align-self: flex-start;
+    grid-column: 2;
+    grid-row: 4;
+}
+
+#player-two-cards {
+    align-self: flex-end;
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.player-icon {
+    pointer-events: none;
+}
+
+.player-icon>img {
+    margin: 30px 0 0 0;
+    width: 8vw;
+    pointer-events: none;
+}
+
+.player-mana {
+    font-family: 'Roboto';
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    cursor: default;
+}
+
+.player-mana>img {
+    width: 30px;
+    margin: 0 0 4px 4px;
+    pointer-events: none;
+    cursor: default;
+}
+
+.player-hp {
+    position: relative;
+    font-family: 'Roboto';
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.player-hp>img {
+    width: 30px;
+    margin-left: 4px;
+    pointer-events: none;
+}
+
+.player-hp-result {
+    pointer-events: none;
+    opacity: 0;
+    color: rgb(255, 40, 40);
+    font-size: 2.6rem;
+    left: 80px;
+    position: absolute;
+}
+
+.player-hp-result.active {
+    animation: get-dmg-hero 1.1s linear 1;
+}
+
+.player-spell {
+    font-family: 'Rakkas';
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    background-color: var(--color3);
+    border: solid 2px black;
+    transition: 200ms;
+}
+
+.player-spell:hover {
+    color: var(--colorFont);
+}
+
+@keyframes heroDmg {
+    0% {
+        background-position: 50% 10%
+    }
+
+    100% {
+        background-position: 50% 100%
+    }
+}
+
+@media (max-width: 1500px) {
+
+    .player {
+        font-size: 1.2rem;
+    }
+
+    .player-hp-result {
+        font-size: 1.3rem;
+    }
+
+    .player-spell {
+        font-size: 1.0rem;
+    }
+
+    .player-hp>img,
+    .player-mana>img {
+        width: 18px;
+    }
+}
+
+@media (max-width: 1850px) and (min-width: 1501px) {
+
+    .player {
+        font-size: 1.4rem;
+    }
+
+    .player-hp-result {
+        font-size: 1.5rem;
+    }
+
+    .player-spell {
+        font-size: 1.3rem;
+    }
+
+    .player-hp>img,
+    .player-mana>img {
+        width: 22px;
+    }
+}

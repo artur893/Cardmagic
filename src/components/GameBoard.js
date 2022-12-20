@@ -1,13 +1,11 @@
 import { Component } from "react";
 import './GameBoard.css'
 import { cloneDeep } from 'lodash';
-import { v4 as uuid } from 'uuid';
 import arrowImg from './images/arrow.png'
-import hpIcon from './images/heart.png'
-import costIcon from './images/mana.png'
-import attackIcon from './images/sword.png'
 import { Deck } from './gameBoardComponents/Deck.js'
 import { CardTable } from './gameBoardComponents/CardTable.js'
+import { OnHandCards } from './gameBoardComponents/OnHandCards.js'
+import { Player } from './gameBoardComponents/Player.js'
 
 class GameBoard extends Component {
     constructor(props) {
@@ -868,95 +866,5 @@ class GameBoard extends Component {
         }
     }
 }
-
-class Player extends Component {
-    render() {
-        return (
-            <div className="player" id={this.props.id}
-                onClick={(e) => {
-                    this.props.targetAttackedEnemy(e, this.props.table)
-                }}>
-
-                <div className="player-icon"><img src={this.props.hero.icon} alt={this.props.hero.name}></img></div>
-                <div className='player-bottom'>
-                    <div className="player-hp">{this.props.hero.hp}<img src={hpIcon} alt='heart'></img>
-                        <div className="player-hp-result">-{this.props.hero.lastDmg}</div>
-                    </div>
-                    <div className="player-mana">{this.props.hero.mana}<img src={costIcon} alt='mana'></img></div>
-                </div>
-                <div className='player-spell' onClick={() => this.props.hero.skill()}>{this.props.hero.skillName}</div>
-            </div>
-        )
-    }
-}
-
-class OnHandCards extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = { isHeroDataLoaded: false }
-    }
-
-    componentDidMount() {
-        this.setState({ isHeroDataLoaded: true })
-        this.screenGameMode()
-    }
-
-    componentDidUpdate() {
-        this.markCardInHand()
-    }
-
-    markCardInHand() {
-        this.props.hero.onHand.forEach((card) => {
-            if (card?.id === this.props.hero?.inHand?.id && this.props.hero.mana >= card?.cost) {
-                const cardToMark = document.getElementById(card.id)
-                cardToMark.classList.add('inhand')
-            }
-            if (card?.id === this.props.hero?.inHand?.id && this.props.hero.mana < card?.cost) {
-                const cardToMark = document.getElementById(card.id)
-                cardToMark.classList.add('inhand-red')
-            }
-        })
-    }
-
-    screenGameMode() {
-        const gameContainer = document.querySelector('.game-container')
-        gameContainer.classList.add('game-mode')
-    }
-
-    populateCards() {
-        if (this.state.isHeroDataLoaded) {
-            const onHand = this.props.hero.onHand.map((card) => {
-                return (
-                    <div className="onhand-card" id={card.id} key={uuid()} onClick={(e) => this.props.pickCardToPlay(e, this.props.player)}>
-                        <div className="onhand-card-top">
-                            <div className="onhand-cost" key={uuid()}>{card.cost} <img src={costIcon} alt='mana'></img></div>
-                        </div>
-                        <div className="onhand-name" key={uuid()}>{card.name}</div>
-                        <p className="onhand-description" key={uuid()}>{ }</p>
-                        <div className="onhand-card-bottom">
-                            <div className="onhand-attack" key={uuid()}>{card.attack}<img src={attackIcon} alt='sword'></img></div>
-                            <div className="onhand-hp" key={uuid()}>{card.hp}<img src={hpIcon} alt='heart'></img></div>
-                        </div>
-                    </div>)
-            })
-            return onHand
-        }
-    }
-
-    render() {
-        if (this.props.isHeroesPicked) {
-            return (
-                <div className="onhand-cards" id={this.props.id}>
-                    {this.populateCards()}
-                </div>
-            )
-        }
-    }
-}
-
-
-
-
 
 export { GameBoard }

@@ -46,11 +46,21 @@ const heroes = [{
     attack: 0
 }]
 
-function waveOfFlames() {
+function blockEvents(time) {
+    document.querySelector('.game-container').classList.add('blocked')
+    setTimeout(() => {
+        document.querySelector('.game-container').classList.remove('blocked')
+    }, time)
+}
+
+function activeFlamesAnimation() {
     const flames = document.querySelectorAll('.flames')
     flames.forEach((flame) => flame.classList.add('active'))
     setTimeout(() => { flames.forEach((flame) => flame.classList.remove('active')) }, 1000)
-    const clonePlayerOne = cloneDeep(this.state.playerOne)
+}
+
+function deal1DmgAll() {
+    const clonePlayerOne = cloneDeep(this.state[this.state.playerOnMove])
     const playerOneCards = clonePlayerOne.onTable.map((card) => {
         if (card) {
             card.hp = card.hp - 1
@@ -58,7 +68,7 @@ function waveOfFlames() {
         } else return card
     })
     clonePlayerOne.onTable = playerOneCards
-    const clonePlayerTwo = cloneDeep(this.state.playerTwo)
+    const clonePlayerTwo = cloneDeep(this.state[this.state.playerTarget])
     const playerTwoCards = clonePlayerTwo.onTable.map((card) => {
         if (card) {
             card.hp = card.hp - 1
@@ -66,10 +76,31 @@ function waveOfFlames() {
         } else return card
     })
     clonePlayerTwo.onTable = playerTwoCards
-    this.setState({
-        playerOne: clonePlayerOne,
-        playerTwo: clonePlayerTwo
+    this.setState((state) => {
+        return {
+            [state.playerOnMove]: clonePlayerOne,
+            [state.playerTarget]: clonePlayerTwo
+        }
     })
+}
+
+function setSkillUsed() {
+    const clonePlayerOne = cloneDeep(this.state[this.state.playerOnMove])
+    clonePlayerOne.skillAvailable = false
+    this.setState((state) => {
+        return { [state.playerOnMove]: clonePlayerOne }
+    })
+}
+
+function waveOfFlames() {
+    if (this.state[this.state.playerOnMove].skillAvailable) {
+        const dealDmg = deal1DmgAll.bind(this)
+        const setSkillUnavailable = setSkillUsed.bind(this)
+        blockEvents(1000)
+        activeFlamesAnimation()
+        dealDmg()
+        setSkillUnavailable()
+    }
 }
 
 export { heroes }

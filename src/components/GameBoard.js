@@ -53,10 +53,15 @@ class GameBoard extends Component {
             }
         }
         if (this.state.playerOne?.skill) {
-            this.state.playerOne.skill = this.state.playerOne.skill.bind(this)
+            this.setState((state) => {
+                state.playerOne.skill = state.playerOne.skill.bind(this)
+            })
+
         }
         if (this.state.playerTwo?.skill) {
-            this.state.playerTwo.skill = this.state.playerOne.skill.bind(this)
+            this.setState((state) => {
+                state.playerTwo.skill = state.playerOne.skill.bind(this)
+            })
         }
         this.isGameOver()
         this.spinArrow()
@@ -424,10 +429,20 @@ class GameBoard extends Component {
         setTimeout(() => {
             this.getNewCard()
         }, 2500)
+        this.resetHeroSkill()
         this.flipButton()
         this.clearHands()
         this.clearMove()
         this.setAiTurn()
+    }
+
+    resetHeroSkill() {
+        this.setState((state) => {
+            const playerOnMove = state.playerOnMove
+            const playerClone = state[state.playerOnMove]
+            playerClone.skillAvailable = true
+            return { [playerOnMove]: playerClone }
+        })
     }
 
     flipButton() {
@@ -791,8 +806,10 @@ class GameBoard extends Component {
                     <CardTable id='card-table-two' hero={this.state.playerTwo} playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
                         putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable} killCard={this.killCard}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
-                    <Player hero={this.state.playerOne} id='player-one' table='card-table-one' targetAttackedEnemy={this.targetAttackedEnemy} />
-                    <Player hero={this.state.playerTwo} id='player-two' table='card-table-two' targetAttackedEnemy={this.targetAttackedEnemy} />
+                    <Player hero={this.state.playerOne} id='player-one' table='card-table-one' 
+                    targetAttackedEnemy={this.targetAttackedEnemy} playerOnMove={this.state.playerOnMove}/>
+                    <Player hero={this.state.playerTwo} id='player-two' table='card-table-two' 
+                    targetAttackedEnemy={this.targetAttackedEnemy} playerOnMove={this.state.playerOnMove}/>
                     <OnHandCards hero={this.state.playerOne} isHeroesPicked={this.props.isHeroesPicked}
                         id='player-one-cards' pickCardToPlay={this.pickCardToPlay} player={'playerOne'} />
                     <OnHandCards hero={this.state.playerTwo} isHeroesPicked={this.props.isHeroesPicked}

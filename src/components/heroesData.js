@@ -8,8 +8,8 @@ const heroes = [{
     name: 'Wojownik',
     hp: 30,
     skillName: 'Szarżuj',
-    skillText: 'Zadaj 2pkt obrażeń wybranej karcie',
-    skill: 'method here',
+    skillText: 'Zadaj 2pkt obrażeń przeciwnemu bohaterowi',
+    skill: charge,
     totalMana: 0,
     mana: 0,
     icon: warriorIcon,
@@ -38,8 +38,8 @@ const heroes = [{
     name: 'Wampir',
     hp: 30,
     skillName: 'Ugryzienie',
-    skillText: 'Zadaj 1pkt obrażeń, ulecz się 1hp',
-    skill: 'method here',
+    skillText: 'Zadaj 1pkt obrażeń przeciwnikowi, ulecz się 1hp',
+    skill: meditate,
     totalMana: 0,
     mana: 0,
     icon: vampireIcon,
@@ -106,13 +106,19 @@ function animateMeditate(player) {
     setTimeout(() => avatar.classList.remove('meditate'), 2000)
 }
 
+function animateCharge(player) {
+    const avatar = document.getElementById(player)
+    avatar.classList.add('charge')
+    setTimeout(() => avatar.classList.remove('charge'), 3000)
+}
+
 function animateDmg() {
     const cardTable = document.querySelectorAll('.card-table')
     cardTable.forEach((table) => {
         const card = table.querySelector('.onhand-card')
         if (card) {
             card.classList.add('damaged-animate')
-            setTimeout(() => {card.classList.remove('damaged-animate')}, 1000)
+            setTimeout(() => { card.classList.remove('damaged-animate') }, 1000)
         }
     })
 }
@@ -137,6 +143,13 @@ function killCards() {
     })
 }
 
+function charge() {
+    const clonePlayer = cloneDeep(this.state[this.state.playerOnMove])
+    const animate = animateCharge.bind(this)
+    animate(clonePlayer.playerId)
+
+}
+
 function waveOfFlames() {
     if (this.state[this.state.playerOnMove].skillAvailable && this.state[this.state.playerOnMove].mana >= 2) {
         const dealDmg = deal1DmgAll.bind(this)
@@ -146,10 +159,10 @@ function waveOfFlames() {
         blockEvents(1000)
         activeFlamesAnimation()
         dealDmg()
-        setTimeout(() => {animateDmg()}, 100)
+        setTimeout(() => { animateDmg() }, 100)
         setSkillUnavailable()
         cost()
-        setTimeout(() => {kill()}, 1000)
+        setTimeout(() => { kill() }, 1000)
     }
 }
 

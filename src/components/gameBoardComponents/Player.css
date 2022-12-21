@@ -40,6 +40,12 @@
     animation: meditate 2s ease 1;
 }
 
+#player-one.charge,
+#player-two.charge {
+    z-index: 1;
+    animation: charge 3s ease 1;
+}
+
 #player-two {
     justify-self: center;
     grid-column: 1;
@@ -148,11 +154,56 @@
 
     50% {
         background-color: rgb(0, 0, 255);
-        
+
     }
 
     100% {
         background-color: var(--color4);
+    }
+}
+
+@keyframes charge {
+    0% {
+        bottom: 0%;
+    }
+
+    10% {
+        left: -2%;
+        bottom: -4%;
+        background-color: rgba(255, 0, 0, 0.200);
+    }
+
+    20% {
+        left: 2%;
+        bottom: -8%;
+        background-color: rgba(255, 0, 0, 0.300);
+    }
+
+    30% {
+        left: -2%;
+        bottom: -12%;
+        background-color: rgba(255, 0, 0, 0.500);
+    }
+
+    40% {
+        left: 2%;
+        bottom: -14%;
+        background-color: rgba(255, 0, 0, 0.700);
+    }
+
+    50% {
+        left: 0%;
+        bottom: -15%;
+        background-color: rgba(255, 0, 0, 1);
+    }
+
+    60% {
+        bottom: 50%;
+        background-color: rgba(255, 0, 0, 1);
+    }
+
+    100% {
+        bottom: 0%;
     }
 }
 

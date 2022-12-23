@@ -123,6 +123,17 @@ function animateDmg() {
     })
 }
 
+function animateHeroLastDmg() {
+    const enemyCardDom = document.getElementById('player-two')
+    const enemyResultDom = enemyCardDom.querySelector('.player-hp-result')
+    enemyResultDom.classList.add('active')
+    enemyCardDom.classList.add('active')
+    setTimeout(() => {
+        enemyResultDom.classList.remove('active')
+        enemyCardDom.classList.remove('active')
+    }, 1000)
+}
+
 function killCards() {
     this.setState((state) => {
         const clonePlayer = cloneDeep(state[state.playerOnMove])
@@ -143,11 +154,29 @@ function killCards() {
     })
 }
 
-function charge() {
-    const clonePlayer = cloneDeep(this.state[this.state.playerOnMove])
-    const animate = animateCharge.bind(this)
-    animate(clonePlayer.playerId)
+function dealHero1Dmg() {
+    const cloneEnemy = cloneDeep(this.state[this.state.playerTarget])
+    cloneEnemy.hp = cloneEnemy.hp - 2
+    cloneEnemy.lastDmg = 2
+    this.setState({ playerTwo: cloneEnemy })
+}
 
+function charge() {
+    if (this.state[this.state.playerOnMove].skillAvailable && this.state[this.state.playerOnMove].mana >= 2) {
+        const clonePlayer = cloneDeep(this.state[this.state.playerOnMove])
+        const animate = animateCharge.bind(this)
+        const setSkillUnavailable = setSkillUsed.bind(this)
+        const cost = skillCost.bind(this)
+        const dealDmg = dealHero1Dmg.bind(this)
+        animate(clonePlayer.playerId)
+        setTimeout(() => {
+            animateHeroLastDmg()
+            dealDmg()
+        }, 1800)
+        blockEvents(3000)
+        setSkillUnavailable()
+        cost()
+    }
 }
 
 function waveOfFlames() {

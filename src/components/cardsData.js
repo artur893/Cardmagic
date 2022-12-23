@@ -56,7 +56,7 @@ const rawCards = [{
     skill: null,
     type: 'mob'
 }, {
-    name: 'Humpbacked Angel',
+    name: 'Wooden knight',
     attack: 2,
     hp: 2,
     cost: 2,

@@ -39,7 +39,7 @@ const heroes = [{
     hp: 30,
     skillName: 'Ugryzienie',
     skillText: 'Zadaj 1pkt obrażeń przeciwnikowi, ulecz się 1hp',
-    skill: meditate,
+    skill: bite,
     totalMana: 0,
     mana: 0,
     icon: vampireIcon,
@@ -112,6 +112,12 @@ function animateCharge(player) {
     setTimeout(() => avatar.classList.remove('charge'), 3000)
 }
 
+function animateBite(player) {
+    const avatar = document.getElementById(player)
+    avatar.classList.add('bite')
+    setTimeout(() => avatar.classList.remove('bite'), 3000)
+}
+
 function animateDmg() {
     const cardTable = document.querySelectorAll('.card-table')
     cardTable.forEach((table) => {
@@ -154,24 +160,50 @@ function killCards() {
     })
 }
 
-function dealHero1Dmg() {
+function dealHeroDmg(dmg) {
     const cloneEnemy = cloneDeep(this.state[this.state.playerTarget])
-    cloneEnemy.hp = cloneEnemy.hp - 2
-    cloneEnemy.lastDmg = 2
+    cloneEnemy.hp = cloneEnemy.hp - dmg
+    cloneEnemy.lastDmg = dmg
     this.setState({ playerTwo: cloneEnemy })
+}
+
+function heal() {
+    this.setState((state) => {
+        const clonePlayer = cloneDeep(state[state.playerOnMove])
+        clonePlayer.hp = clonePlayer.hp + 1
+        return { playerOne: clonePlayer }
+    })
+}
+
+function bite() {
+    if (this.state[this.state.playerOnMove].skillAvailable && this.state[this.state.playerOnMove].mana >= 2) {
+        const animate = animateBite.bind(this)
+        const setSkillUnavailable = setSkillUsed.bind(this)
+        const cost = skillCost.bind(this)
+        const dealDmg = dealHeroDmg.bind(this)
+        const healSelf = heal.bind(this)
+        animate(this.state[this.state.playerOnMove].playerId)
+        setTimeout(() => {
+            dealDmg(1)
+            animateHeroLastDmg()
+            healSelf()
+        }, 1800)
+        blockEvents(3000)
+        setSkillUnavailable()
+        cost()
+    }
 }
 
 function charge() {
     if (this.state[this.state.playerOnMove].skillAvailable && this.state[this.state.playerOnMove].mana >= 2) {
-        const clonePlayer = cloneDeep(this.state[this.state.playerOnMove])
         const animate = animateCharge.bind(this)
         const setSkillUnavailable = setSkillUsed.bind(this)
         const cost = skillCost.bind(this)
-        const dealDmg = dealHero1Dmg.bind(this)
-        animate(clonePlayer.playerId)
+        const dealDmg = dealHeroDmg.bind(this)
+        animate(this.state[this.state.playerOnMove].playerId)
         setTimeout(() => {
+            dealDmg(2)
             animateHeroLastDmg()
-            dealDmg()
         }, 1800)
         blockEvents(3000)
         setSkillUnavailable()

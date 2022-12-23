@@ -42,77 +42,77 @@ const rawCards = [{
     type: 'mob'
 },
 {
-    name: 'Ratlerek',
+    name: 'Ratler',
     attack: 2,
     hp: 1,
     cost: 1,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Słomiany Rycerz',
+    name: 'Straw knight',
     attack: 1,
     hp: 1,
     cost: 1,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Garbaty Anioł',
+    name: 'Humpbacked Angel',
     attack: 2,
     hp: 2,
     cost: 2,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Karzeł Rambo',
+    name: 'Dwarf Rambo',
     attack: 3,
     hp: 1,
     cost: 2,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Bramkarz',
+    name: 'Guard',
     attack: 2,
     hp: 3,
     cost: 2,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Policjant',
+    name: 'Policeman',
     attack: 3,
     hp: 3,
     cost: 3,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Moździerz',
+    name: 'Mortar',
     attack: 1,
     hp: 5,
     cost: 3,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Chirurg',
+    name: 'Surgeon',
     attack: 3,
     hp: 3,
     cost: 3,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Operator SWAT',
+    name: 'SWAT Operator',
     attack: 4,
     hp: 4,
     cost: 4,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Diler',
+    name: 'Doberman',
     attack: 3,
     hp: 4,
     cost: 4,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Ślepy snajper',
+    name: 'Blind sniper',
     attack: 6,
     hp: 4,
     cost: 5,
@@ -126,14 +126,14 @@ const rawCards = [{
     skill: null,
     type: 'mob'
 }, {
-    name: 'Smok',
+    name: 'Golden dragon',
     attack: 6,
     hp: 6,
     cost: 6,
     skill: null,
     type: 'mob'
 }, {
-    name: 'Bóg',
+    name: 'Black dragon',
     attack: 8,
     hp: 8,
     cost: 7,

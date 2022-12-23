@@ -5,40 +5,40 @@ import vampireIcon from './images/vampire.png'
 import { cloneDeep } from 'lodash'
 
 const heroes = [{
-    name: 'Wojownik',
+    name: 'Warrior',
     hp: 30,
-    skillName: 'Szarżuj',
-    skillText: 'Zadaj 2pkt obrażeń przeciwnemu bohaterowi',
+    skillName: 'Charge',
+    skillText: 'Deal 2 dmg to opponent hero',
     skill: charge,
     totalMana: 0,
     mana: 0,
     icon: warriorIcon,
     attack: 0
 }, {
-    name: 'Czarodziej',
+    name: 'Wizard',
     hp: 30,
-    skillName: 'Fala ognia',
-    skillText: 'Zadaj 1pkt obrażeń każdej karcie',
+    skillName: 'Firewall',
+    skillText: 'Deal 1 dmg to every card on table',
     skill: waveOfFlames,
     totalMana: 0,
     mana: 0,
     icon: wizardIcon,
     attack: 0
 }, {
-    name: 'Mnich',
+    name: 'Monk',
     hp: 30,
-    skillName: 'Medytuj',
-    skillText: 'Dodaj sobie 1pkt maksymalnej many',
+    skillName: 'Meditate',
+    skillText: 'Add self 1 point max mana',
     skill: meditate,
     totalMana: 0,
     mana: 0,
     icon: monkIcon,
     attack: 0
 }, {
-    name: 'Wampir',
+    name: 'Vampire',
     hp: 30,
-    skillName: 'Ugryzienie',
-    skillText: 'Zadaj 1pkt obrażeń przeciwnikowi, ulecz się 1hp',
+    skillName: 'Bite',
+    skillText: 'Deal 1 dmg to opponent hero, heal self 1 hp',
     skill: bite,
     totalMana: 0,
     mana: 0,

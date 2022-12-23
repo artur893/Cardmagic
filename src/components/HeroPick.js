@@ -14,7 +14,7 @@ class HeroPick extends Component {
             if (this.props.activeView === 'heroPick') {
                 return (
                     <>
-                        <h1 className="heropick-h1">Wybierz bohatera</h1>
+                        <h1 className="heropick-h1">Pick your hero</h1>
                         <div className="heropick-cards-container">
                             {this.populateHeroes()}
                         </div>

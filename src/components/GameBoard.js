@@ -34,39 +34,41 @@ class GameBoard extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps !== this.props) {
-            this.setState({
-                isAiTurn: false,
-                isGameOver: false,
-                numberOfRound: 0.5,
-                playerOnMove: 'playerTwo',
-                tableToPick: 'card-table-one',
-                playerTarget: 'playerOne',
-                tableToAttack: 'card-table-two',
-                playerOne: this.props.players[0],
-                playerTwo: this.props.players[1]
-            })
-            if (this.props.isHeroesPicked) {
-                this.initStartCards('playerOne')
-                this.initStartCards('playerTwo')
-                setTimeout(this.gameFlow, 500)
+        if (this.props.activeView === 'gameBoard') {
+            if (prevProps !== this.props) {
+                this.setState({
+                    isAiTurn: false,
+                    isGameOver: false,
+                    numberOfRound: 0.5,
+                    playerOnMove: 'playerTwo',
+                    tableToPick: 'card-table-one',
+                    playerTarget: 'playerOne',
+                    tableToAttack: 'card-table-two',
+                    playerOne: this.props.players[0],
+                    playerTwo: this.props.players[1]
+                })
+                if (this.props.isHeroesPicked) {
+                    this.initStartCards('playerOne')
+                    this.initStartCards('playerTwo')
+                    setTimeout(this.gameFlow, 500)
+                }
             }
-        }
-        if (this.state.playerOne?.skill) {
-            this.setState((state) => {
-                state.playerOne.skill = state.playerOne.skill.bind(this)
-            })
+            if (this.state.playerOne?.skill) {
+                this.setState((state) => {
+                    state.playerOne.skill = state.playerOne.skill.bind(this)
+                })
 
+            }
+            if (this.state.playerTwo?.skill) {
+                this.setState((state) => {
+                    state.playerTwo.skill = state.playerOne.skill.bind(this)
+                })
+            }
+            this.isGameOver()
+            this.spinArrow()
+            this.aiModuleHard()
+            this.completeButton()
         }
-        if (this.state.playerTwo?.skill) {
-            this.setState((state) => {
-                state.playerTwo.skill = state.playerOne.skill.bind(this)
-            })
-        }
-        this.isGameOver()
-        this.spinArrow()
-        this.aiModuleHard()
-        this.completeButton()
     }
 
     initStartCards(player) {
@@ -463,7 +465,7 @@ class GameBoard extends Component {
             const btn = document.querySelector('.nextRoundBtn')
             if (btn && canMakeMove && canPlayCard) {
                 btn.classList.add('complete')
-            } else {
+            } else if (btn) {
                 btn.classList.remove('complete')
             }
         }

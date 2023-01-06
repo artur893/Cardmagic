@@ -1,0 +1,37 @@
+.how-to-play-container {
+    margin: 50px;
+    width: 50vw;
+    height: 70vh;
+    border: solid 1px black;
+    display: flex;
+}
+
+.how-to-play-list {
+    width: 20%;
+    border: solid 1px black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.how-to-play-list>li {
+    color: var(--colorFont);
+    font-family: 'Berkshire Swash';
+    font-size: 2rem;
+    margin: 10px;
+    transition: 200ms;
+}
+
+.how-to-play-list>li:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+.how-to-play-main {
+    color: var(--colorFont);
+    font-family: 'Rakkas';
+    font-size: 1.4rem;
+    margin: 10px;
+}

@@ -9,8 +9,8 @@ class Menu extends Component {
                     <button className="menu-button" onClick={() => this.props.setActiveView('heroPick')}>SINGLEPLAYER</button>
                     <button className="menu-button unactive">HOT SEAT</button>
                     <button className="menu-button unactive">MULTIPLAYER</button>
-                    <button className="menu-button unactive">HOW TO PLAY</button>
-                    <button className="menu-button unactive">AUTHOR</button>
+                    <button className="menu-button" onClick={() => this.props.setActiveView('howToPlay')}>HOW TO PLAY</button>
+                    <a href="https://github.com/artur893" className="menu-button">AUTHOR</a>
                 </div>
             )
         }

@@ -18,6 +18,14 @@
     border: solid 2px black;
 }
 
+a.menu-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    cursor: default;
+}
+
 .menu-button:hover {
     border: solid 2px white;
 }

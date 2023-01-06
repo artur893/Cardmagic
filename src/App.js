@@ -4,6 +4,7 @@ import { BackToMenu, Menu } from "./components/Menu";
 import { Header } from "./components/Header";
 import { HeroPick } from './components/HeroPick'
 import { heroes } from "./components/heroesData";
+import { HowToPlay } from './components/HowToPlay';
 import { cardsOne, cardsTwo } from "./components/cardsData"
 import { GameBoard } from "./components/GameBoard";
 import { cloneDeep } from 'lodash';
@@ -66,6 +67,7 @@ class App extends Component {
                     <HeroPick activeView={this.state.activeView} heroes={this.state.heroes} pickHero={this.pickHero} isHeroesPicked={this.state.isHeroesPicked} />
                     <GameBoard activeView={this.state.activeView} isHeroesPicked={this.state.isHeroesPicked}
                         players={[this.state.playerOne, this.state.playerTwo]} />
+                    <HowToPlay activeView={this.state.activeView} />
                     <BackToMenu setActiveView={this.setActiveView} cleanHeroes={this.cleanHeroes} />
                 </div>
             </>

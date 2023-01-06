@@ -806,9 +806,9 @@ class GameBoard extends Component {
                     <CardTable id='card-table-two' hero={this.state.playerTwo} playerOnMove={this.state.playerOnMove} playerTarget={this.state.playerTarget}
                         putCardOnTable={this.putCardOnTable} onTable={this.state.playerTwo.onTable} killCard={this.killCard}
                         pickCardToAttack={this.pickCardToAttack} targetAttackedEnemy={this.targetAttackedEnemy} />
-                    <Player hero={this.state.playerOne} id='player-one' table='card-table-one'
+                    <Player hero={this.state.playerOne} id='player-one' table='card-table-one' name='playerOne'
                         targetAttackedEnemy={this.targetAttackedEnemy} playerOnMove={this.state.playerOnMove} />
-                    <Player hero={this.state.playerTwo} id='player-two' table='card-table-two'
+                    <Player hero={this.state.playerTwo} id='player-two' table='card-table-two' name='playerTwo'
                         targetAttackedEnemy={this.targetAttackedEnemy} playerOnMove={this.state.playerOnMove} />
                     <OnHandCards hero={this.state.playerOne} isHeroesPicked={this.props.isHeroesPicked}
                         id='player-one-cards' pickCardToPlay={this.pickCardToPlay} player={'playerOne'} />

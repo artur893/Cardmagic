@@ -4,6 +4,15 @@ import hpIcon from '../images/heart.png'
 import costIcon from '../images/mana.png'
 
 class Player extends Component {
+
+    skillAvailable() {
+        if (this.props.hero.skillAvailable && (this.props.hero.mana >= 2) && (this.props.playerOnMove === this.props.name)) {
+            return 'player-spell available'
+        } else {
+            return 'player-spell'
+        }
+    }
+
     render() {
         return (
             <div className="player" id={this.props.id}
@@ -18,7 +27,7 @@ class Player extends Component {
                     </div>
                     <div className="player-mana">{this.props.hero.mana}<img src={costIcon} alt='mana'></img></div>
                 </div>
-                <div className='player-spell' onClick={() => {
+                <div className={this.skillAvailable()} onClick={() => {
                     if ((this.props.hero.player === this.props.playerOnMove) && (this.props.hero.player === 'playerOne')) {
                         this.props.hero.skill()
                     }

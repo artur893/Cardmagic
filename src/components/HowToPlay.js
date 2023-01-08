@@ -14,7 +14,9 @@ class HowToPlay extends Component {
                         <li>Gameflow</li>
                     </ul>
                     <div className="how-to-play-main">
-                        {basicsText}
+                        <p>{basicsText.p1}</p>
+                        <p>{basicsText.p2}</p>
+                        <p>{basicsText.p3}</p>
                     </div>
                 </div>
             )

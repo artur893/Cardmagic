@@ -3,6 +3,14 @@ import './HeroPick.css'
 
 class HeroPick extends Component {
 
+    displayPickText() {
+        if (this.props.playerOne) {
+            return 'Pick opponent hero'
+        } else {
+            return 'Pick your hero'
+        }
+    }
+
     populateHeroes() {
         const heroes = this.props.heroes.map((hero) => {
             return <Card hero={hero} key={hero.name} pickHero={this.props.pickHero} />
@@ -11,16 +19,16 @@ class HeroPick extends Component {
     }
 
     render() {
-            if (this.props.activeView === 'heroPick') {
-                return (
-                    <>
-                        <h1 className="heropick-h1">Pick your hero</h1>
-                        <div className="heropick-cards-container">
-                            {this.populateHeroes()}
-                        </div>
-                    </>
-                )
-            }
+        if (this.props.activeView === 'heroPick') {
+            return (
+                <>
+                    <h1 className="heropick-h1">{this.displayPickText()}</h1>
+                    <div className="heropick-cards-container">
+                        {this.populateHeroes()}
+                    </div>
+                </>
+            )
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+import { extend } from "lodash";
 import { Component } from "react";
 import './HowToPlay.css'
 import { basicsText } from './howToPlayContent'
@@ -14,13 +15,23 @@ class HowToPlay extends Component {
                         <li>Gameflow</li>
                     </ul>
                     <div className="how-to-play-main">
-                        <p>{basicsText.p1}</p>
-                        <p>{basicsText.p2}</p>
-                        <p>{basicsText.p3}</p>
+                        <Basics />
                     </div>
                 </div>
             )
         }
+    }
+}
+
+class Basics extends Component {
+    render() {
+        return (
+            <>
+                <p>{basicsText.p1}</p>
+                <p>{basicsText.p2}</p>
+                <p>{basicsText.p3}</p>
+            </>
+        )
     }
 }
 

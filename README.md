@@ -4,7 +4,7 @@
 
 Cardmagic is turn based strategical game, which requires a lot of logic thinking and planning skills from the player. In current stage of development, game is in first playable version.  
 
-Game currently offers:
+### Game currently offers:
 - singleplayer mode 
 - dynamic, animated user interface
 - competitive Player vs Computer gameplay

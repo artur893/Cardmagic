@@ -16,3 +16,19 @@ Cardmagic is turn based strategical game, which requires a lot of logic thinking
 # [PLAY NOW](http://playcardmagic.eu/)
 
 ![cardmagic screen](https://iili.io/H0utHmX.jpg)
+
+### Ideas and future features:
+- how to play guide
+- more unique cards
+- cards special powers
+- spell cards
+- user authorization 
+- gaining coins system
+- locked powerful cards unlocked by coins
+- customizable decks
+- different AI difficulty
+- story mode
+- realtime multiplayer
+- improved UI and animations
+- customizable themes and deck reverses
+- game sounds

@@ -13,7 +13,7 @@ Cardmagic is turn based strategical game, which requires a lot of logic thinking
 
 ### Could you beat AI? 
 
-# [PLAY NOW](http://playcardmagic.eu/)
+# [PLAY NOW](https://cardmagic-halemba.vercel.app)
 
 ![cardmagic screen](https://iili.io/H0utHmX.jpg)
 

@@ -1,4 +1,3 @@
-import { extend } from "lodash";
 import { Component } from "react";
 import './HowToPlay.css'
 import { basicsText } from './howToPlayContent'
